@@ -12,7 +12,8 @@
     minDelay: 1500,
     maxDelay: 3000,
     autoLearn: true,
-    enabled: true
+    enabled: true,
+    showFloatingDock: false
   };
   let questionBank = {};
   let currentSolveTimeout = null;
@@ -500,6 +501,9 @@
 
     const dock = document.createElement("div");
     dock.id = "autothi-floating-dock";
+    if (!settings.showFloatingDock) {
+      dock.className = "hidden";
+    }
     dock.innerHTML = `
       <div class="autothi-dock-container" id="autothi-container">
         <div class="autothi-dock-header" id="autothi-drag-header">

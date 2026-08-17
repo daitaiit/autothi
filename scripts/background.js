@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS = {
   maxDelay: 3000,
   autoLearn: true,
   enabled: true,
+  showFloatingDock: false,
   serverUrl: DEFAULT_SERVER_URL,
   autoCheckUpdate: true
 };

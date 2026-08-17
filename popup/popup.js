@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const chkAutoNext = document.getElementById("chk-auto-next");
   const chkAutoSubmit = document.getElementById("chk-auto-submit");
   const chkAutoLearn = document.getElementById("chk-auto-learn");
+  const chkShowDock = document.getElementById("chk-show-dock");
   const rngDelay = document.getElementById("rng-delay");
   const valDelay = document.getElementById("val-delay");
 
@@ -67,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   chkAutoNext.checked = settings.autoNext !== false;
   chkAutoSubmit.checked = !!settings.autoSubmit;
   chkAutoLearn.checked = settings.autoLearn !== false;
+  chkShowDock.checked = !!settings.showFloatingDock;
   rngDelay.value = settings.minDelay || 2000;
   valDelay.innerText = (rngDelay.value / 1000).toFixed(1) + "s";
 
@@ -300,6 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       autoNext: chkAutoNext.checked,
       autoSubmit: chkAutoSubmit.checked,
       autoLearn: chkAutoLearn.checked,
+      showFloatingDock: chkShowDock.checked,
       minDelay: parseInt(rngDelay.value),
       maxDelay: parseInt(rngDelay.value) + 1500,
       enabled: true
