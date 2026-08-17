@@ -525,7 +525,7 @@
     log(`Đang giải: "${qData.questionText.slice(0, 45)}..."`, "info");
 
     let chosenIndex = -1;
-    let source = "AI";
+    let source = "AI chọn";
 
     // 1. Check local question bank first
     if (questionBank[cleanQ] && questionBank[cleanQ].correctAnswer) {
@@ -535,8 +535,8 @@
         return optNorm.includes(targetAnswer) || targetAnswer.includes(optNorm);
       });
       if (chosenIndex !== -1) {
-        source = "Ngân hàng đề (Đã lưu)";
-        log(`✓ Tìm thấy trong CSDL: Đáp án ${chosenIndex + 1}`, "success");
+        source = "AI chọn";
+        log(`✓ Tìm thấy đáp án: ${chosenIndex + 1}`, "success");
       }
     }
 
@@ -553,8 +553,8 @@
 
         if (response && response.success && response.data) {
           chosenIndex = response.data.best_index;
-          source = `Gemini AI (${Math.round((response.data.confidence || 0.95) * 100)}%)`;
-          log(`🤖 Gemini chọn: "${response.data.answer_text?.slice(0, 30)}..."`, "success");
+          source = "AI chọn";
+          log(`🤖 AI chọn: "${response.data.answer_text?.slice(0, 30)}..."`, "success");
         } else {
           log(`❌ Lỗi AI: ${response ? response.error : "Không có phản hồi"}`, "error");
         }
@@ -566,6 +566,7 @@
     // 3. Fallback: if index still -1, pick option with closest similarity
     if (chosenIndex === -1 && qData.options.length > 0) {
       chosenIndex = 0; // Default first option as last resort
+      source = "AI chọn";
       log("⚠️ Chọn đáp án mặc định.", "warn");
     }
 
@@ -577,7 +578,7 @@
     }
   }
 
-  function applyAnswer(optionData, mode, source) {
+  function applyAnswer(optionData, mode, source = "AI chọn") {
     const targetElement = optionData.element;
 
     // Highlight styling
@@ -594,8 +595,10 @@
     if (!existingBadge) {
       const badge = document.createElement("span");
       badge.className = "autothi-correct-badge";
-      badge.innerText = `✓ ${source}`;
+      badge.innerText = "✓ AI chọn";
       targetElement.appendChild(badge);
+    } else {
+      existingBadge.innerText = "✓ AI chọn";
     }
 
     // Scroll into view smoothly
