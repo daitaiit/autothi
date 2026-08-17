@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Thi Thử Trắc Nghiệm - Test AutoThi AI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: #f1f5f9; color: #1e293b; padding: 30px 20px; }
+    .container { max-width: 760px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    h1 { color: #1e3a8a; font-size: 22px; margin-bottom: 8px; text-align: center; }
+    p.subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 25px; }
+    .question-item { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
+    .question-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 12px; }
+    .options-list { display: flex; flex-direction: column; gap: 8px; }
+    .answer-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .answer-item:hover { background: #f8fafc; border-color: #94a3b8; }
+    .answer-item input[type="radio"] { cursor: pointer; transform: scale(1.1); }
+    .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; }
+    .btn-next { background: #2563eb; color: #fff; }
+    .btn-submit { background: #16a34a; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CUỘC THI TÌM HIỂU CHUYỂN ĐỔI SỐ VÀ CÔNG NGHỆ 2026</h1>
+    <p class="subtitle">Trang mẫu thử nghiệm tính năng tự động làm bài của AutoThi AI</p>
+
+    <!-- Câu 1 -->
+    <div class="question-item">
+      <div class="question-title">Câu 1: Ngày Chuyển đổi số quốc gia của Việt Nam được chọn là ngày nào hằng năm?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q1" value="A">
+          <span>A. Ngày 10 tháng 10</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="B">
+          <span>B. Ngày 02 tháng 09</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="C">
+          <span>C. Ngày 26 tháng 03</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="D">
+          <span>D. Ngày 19 tháng 08</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 2 -->
+    <div class="question-item">
+      <div class="question-title">Câu 2: Đâu là 3 trụ cột chính trong Chiến lược Chuyển đổi số quốc gia của Việt Nam?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q2" value="A">
+          <span>A. Chính phủ số, Kinh tế số và Xã hội số</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="B">
+          <span>B. Nông nghiệp số, Giáo dục số và Y tế số</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="C">
+          <span>C. An ninh số, Dữ liệu số và Hạ tầng số</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="D">
+          <span>D. Công nghiệp số, Tài chính số và Dịch vụ số</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 3 -->
+    <div class="question-item">
+      <div class="question-title">Câu 3: Ứng dụng định danh điện tử quốc gia của Bộ Công an Việt Nam có tên gọi là gì?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q3" value="A">
+          <span>A. PC-Covid</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="B">
+          <span>B. VNeID</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="C">
+          <span>C. VssID</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="D">
+          <span>D. eGov</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-next" type="button">Tiếp theo</button>
+      <button class="btn btn-submit" type="button">Nộp bài</button>
+    </div>
+  </div>
+</body>
+</html>

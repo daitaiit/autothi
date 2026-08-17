@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-08-17T16:30:00Z",
+  "announcement": "Đã cập nhật bộ đề Cuộc thi Chuyển đổi số Tỉnh Lâm Đồng 2026!",
+  "contests": [
+    {
+      "id": "lam_dong_2026",
+      "name": "Cuộc thi trực tuyến Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026",
+      "organizer": "Tỉnh Đoàn Lâm Đồng",
+      "domain_match": "chuyendoiso.cuocthi.vn",
+      "version": 1,
+      "total_questions": 3,
+      "updated_at": "17/08/2026",
+      "description": "Bộ đề thi chính thức gồm kiến thức chuyển đổi số, an toàn thông tin, VNeID và pháp luật.",
+      "questions": {
+        "ngày chuyển đổi số quốc gia của việt nam được chọn là ngày nào hằng năm?": {
+          "question": "Ngày Chuyển đổi số quốc gia của Việt Nam được chọn là ngày nào hằng năm?",
+          "correctAnswer": "Ngày 10 tháng 10",
+          "options": ["Ngày 10 tháng 10", "Ngày 02 tháng 09", "Ngày 26 tháng 03", "Ngày 19 tháng 08"]
+        },
+        "đâu là 3 trụ cột chính trong chiến lược chuyển đổi số quốc gia của việt nam?": {
+          "question": "Đâu là 3 trụ cột chính trong Chiến lược Chuyển đổi số quốc gia của Việt Nam?",
+          "correctAnswer": "Chính phủ số, Kinh tế số và Xã hội số",
+          "options": [
+            "Chính phủ số, Kinh tế số và Xã hội số",
+            "Nông nghiệp số, Giáo dục số và Y tế số",
+            "An ninh số, Dữ liệu số và Hạ tầng số",
+            "Công nghiệp số, Tài chính số và Dịch vụ số"
+          ]
+        },
+        "ứng dụng định danh điện tử quốc gia của bộ công an việt nam có tên gọi là gì?": {
+          "question": "Ứng dụng định danh điện tử quốc gia của Bộ Công an Việt Nam có tên gọi là gì?",
+          "correctAnswer": "VNeID",
+          "options": ["PC-Covid", "VNeID", "VssID", "eGov"]
+        }
+      }
+    }
+  ]
+}
