@@ -27,7 +27,7 @@
       "matches": ["<all_urls>"],
       "js": ["scripts/content.js"],
       "css": ["scripts/content.css"],
-      "run_at": "document_idle"
+      "run_at": "document_start"
     }
   ],
   "icons": {

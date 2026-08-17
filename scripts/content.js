@@ -4,11 +4,91 @@
   if (window.__AUTOTHI_INITIALIZED__) return;
   window.__AUTOTHI_INITIALIZED__ = true;
 
+  // -------------------------------------------------------------
+  // BYPASS ENGINE: Bẻ khóa chống F12, chống Copy, chống Chuột phải & chống phát hiện chuyển tab
+  // -------------------------------------------------------------
+  function bypassAntiCheatProtection() {
+    try {
+      // 1. Cho phép bôi đen, chọn văn bản và copy tự do
+      const style = document.createElement("style");
+      style.id = "autothi-bypass-styles";
+      style.innerHTML = `
+        *, html, body, div, span, p, label, b, strong, i, h1, h2, h3, h4, h5, h6, table, tr, td {
+          -webkit-user-select: text !important;
+          -moz-user-select: text !important;
+          -ms-user-select: text !important;
+          user-select: text !important;
+        }
+      `;
+      (document.head || document.documentElement).appendChild(style);
+
+      // 2. Hủy các hàm chặn chuột phải & copy on-event
+      const eventsToClear = ["oncontextmenu", "oncopy", "oncut", "onpaste", "onselectstart", "ondragstart"];
+      eventsToClear.forEach(evt => {
+        try {
+          window[evt] = null;
+          document[evt] = null;
+          if (document.body) document.body[evt] = null;
+        } catch (e) {}
+      });
+
+      // 3. Bẻ khóa phím tắt: F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+C, Ctrl+V, Ctrl+A
+      window.addEventListener("keydown", function (e) {
+        // F12 (123)
+        if (e.keyCode === 123) {
+          e.stopImmediatePropagation();
+          return true;
+        }
+        // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+        if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+          e.stopImmediatePropagation();
+          return true;
+        }
+        // Ctrl+U (View Source), Ctrl+C (Copy), Ctrl+V (Paste), Ctrl+A (Select All)
+        if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 65)) {
+          e.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+
+      // 4. Cho phép chuột phải & copy qua event capture
+      ["contextmenu", "copy", "cut", "selectstart"].forEach(evtName => {
+        window.addEventListener(evtName, function (e) {
+          e.stopImmediatePropagation();
+        }, true);
+      });
+
+      // 5. Chống phát hiện rời tab (Anti-Tab Switch Detection)
+      // Nhiều trang thi sẽ đếm số lần bạn thoát khỏi tab hoặc mở cửa sổ khác
+      try {
+        Object.defineProperty(document, "hidden", { get: () => false, configurable: true });
+        Object.defineProperty(document, "visibilityState", { get: () => "visible", configurable: true });
+        Object.defineProperty(document, "webkitVisibilityState", { get: () => "visible", configurable: true });
+        document.hasFocus = () => true;
+
+        window.addEventListener("visibilitychange", e => e.stopImmediatePropagation(), true);
+        window.addEventListener("webkitvisibilitychange", e => e.stopImmediatePropagation(), true);
+        window.addEventListener("blur", e => e.stopImmediatePropagation(), true);
+        window.addEventListener("focusout", e => e.stopImmediatePropagation(), true);
+      } catch (e) {}
+
+      console.log("🛡️ AutoThi: Đã kích hoạt chế độ gỡ bỏ chặn F12, Copy & chống phát hiện chuyển tab!");
+    } catch (err) {
+      console.warn("AutoThi bypass warning:", err);
+    }
+  }
+
+  // Run bypass immediately
+  bypassAntiCheatProtection();
+  document.addEventListener("DOMContentLoaded", bypassAntiCheatProtection);
+
   let isRunning = false;
   let settings = {
     mode: "auto", // 'auto' | 'highlight'
     autoNext: true,
-    autoSubmit: false,
+    autoSubmit: true,
+    autoPredict: true,
+    predictNumber: "",
     minDelay: 1500,
     maxDelay: 3000,
     autoLearn: true,

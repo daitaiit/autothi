@@ -5,10 +5,12 @@ const DEFAULT_SERVER_URL = "https://raw.githubusercontent.com/daitaiit/autothi/m
 
 const DEFAULT_SETTINGS = {
   apiKey: DEFAULT_API_KEY,
-  model: "gemini-1.5-flash",
+  model: "gemini-3.7-flash",
   mode: "auto", // 'auto' | 'highlight'
   autoNext: true,
-  autoSubmit: false,
+  autoSubmit: true,
+  autoPredict: true,
+  predictNumber: "",
   minDelay: 1500,
   maxDelay: 3000,
   autoLearn: true,
@@ -26,6 +28,10 @@ chrome.runtime.onInstalled.addListener(async () => {
   } else {
     const updated = { ...DEFAULT_SETTINGS, ...data.settings };
     if (!updated.apiKey) updated.apiKey = DEFAULT_API_KEY;
+    // Tự động chuyển đổi nếu model là bản 1.5/2.0 đã cũ
+    if (!updated.model || updated.model.includes("1.5") || updated.model.includes("2.0")) {
+      updated.model = "gemini-3.7-flash";
+    }
     await chrome.storage.local.set({ settings: updated });
   }
 
@@ -41,7 +47,12 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // Periodic background check
-chrome.runtime.onStartup.addListener(() => {
+chrome.runtime.onStartup.addListener(async () => {
+  const data = await chrome.storage.local.get("settings");
+  if (data.settings && (data.settings.model?.includes("1.5") || data.settings.model?.includes("2.0"))) {
+    data.settings.model = "gemini-3.7-flash";
+    await chrome.storage.local.set({ settings: data.settings });
+  }
   checkOnlineUpdates();
 });
 
@@ -226,7 +237,10 @@ async function installContestPackage(contest) {
 
 async function handleSolveQuestion({ questionText, options, apiKey, model }) {
   const key = apiKey || (await getSetting("apiKey")) || DEFAULT_API_KEY;
-  const targetModel = model || (await getSetting("model")) || "gemini-1.5-flash";
+  let targetModel = model || (await getSetting("model")) || "gemini-3.7-flash";
+  if (!targetModel || targetModel.includes("1.5") || targetModel.includes("2.0")) {
+    targetModel = "gemini-3.7-flash";
+  }
 
   const optionsFormatted = options
     .map((opt, idx) => `[${idx}] ${opt.text}`)
@@ -241,7 +255,7 @@ QUY TẮC BẮT BUỘC:
 {"best_index": <số nguyên từ 0 đến ${options.length - 1}>, "answer_text": "<nội dung đáp án đã chọn>", "confidence": <từ 0.0 đến 1.0>, "reason": "<giải thích ngắn gọn 1 câu>"}`;
 
   const prompt = `Câu hỏi:\n${questionText}\n\nCác lựa chọn:\n${optionsFormatted}`;
-  const modelsToTry = [targetModel, "gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
+  const modelsToTry = [targetModel, "gemini-3.7-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-flash-lite-latest"];
   const uniqueModels = [...new Set(modelsToTry)];
 
   let lastError = null;
