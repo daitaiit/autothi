@@ -1,18 +1,18 @@
 {
-  "version": "2.1.0",
-  "updated_at": "2026-08-17T16:53:30Z",
+  "version": "2.2.0",
+  "updated_at": "2026-08-17T17:11:00Z",
   "author": "Đại Tài",
-  "announcement": "Đã cập nhật trọn bộ 20/20 câu hỏi & đáp án chuẩn 100% Cuộc thi Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026!",
+  "announcement": "Đã cập nhật bộ đáp án mới nhất: 1A – 2C – 3D – 4C – 5A – 6C – 7C – 8A – 9C – 10A – 11B – 12D – 13A – 14B – 15C – 16A – 17D – 18D – 19C – 20A!",
   "contests": [
     {
       "id": "lam_dong_2026",
       "name": "Cuộc thi trực tuyến Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026",
       "organizer": "Tỉnh Đoàn Lâm Đồng",
       "domain_match": "chuyendoiso.cuocthi.vn",
-      "version": 3,
+      "version": 4,
       "total_questions": 20,
       "updated_at": "17/08/2026",
-      "description": "Trọn bộ 20 câu hỏi & đáp án chính xác 100% do Đại Tài biên soạn và cập nhật.",
+      "description": "Trọn bộ 20 câu hỏi & đáp án chuẩn (1A–2C–3D–4C–5A–6C–7C–8A–9C–10A–11B–12D–13A–14B–15C–16A–17D–18D–19C–20A) do Đại Tài cập nhật.",
       "questions": {
         "giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “học từ làm việc thực tế” được quy định triển khai như thế nào?": {
           "question": "Giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “Học từ làm việc thực tế” được quy định triển khai như thế nào?",
@@ -26,7 +26,7 @@
         },
         "kế hoạch triển khai phong trào “bình dân học vụ số” của tỉnh lâm đồng có ký hiệu là gì và ban hành vào ngày nào?": {
           "question": "Kế hoạch triển khai Phong trào “Bình dân học vụ số” của tỉnh Lâm Đồng có ký hiệu là gì và ban hành vào ngày nào?",
-          "correctAnswer": "Kế hoạch số 1410/KH-UBND ngày 08/08/2025",
+          "correctAnswer": "Kế hoạch số 13-KH/TU ngày 15/09/2025",
           "options": [
             "Kế hoạch số 1410/KH-UBND ngày 08/08/2025",
             "Kế hoạch số 6388/KH-UBND ngày 08/05/2026",
@@ -181,7 +181,7 @@
         },
         "theo kế hoạch số 3450/kh-ubnd ngày 18/3/2026 của ubnd tỉnh lâm đồng triển khai thực hiện nghị quyết số 57-nq/tw ngày 22/12/2024 của bộ chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh lâm đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?": {
           "question": "Theo Kế hoạch số 3450/KH-UBND ngày 18/3/2026 của UBND tỉnh Lâm Đồng triển khai thực hiện Nghị quyết số 57-NQ/TW ngày 22/12/2024 của Bộ Chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh Lâm Đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?",
-          "correctAnswer": "Từ 0,75 trở lên",
+          "correctAnswer": "Từ 0,65 trở lên",
           "options": [
             "Từ 0,75 trở lên",
             "Từ 0,55 trở lên",
