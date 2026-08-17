@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const modeAuto = document.getElementById("mode-auto");
   const modeHighlight = document.getElementById("mode-highlight");
   const chkAutoNext = document.getElementById("chk-auto-next");
+  const chkAutoSubmit = document.getElementById("chk-auto-submit");
+  const chkAutoPredict = document.getElementById("chk-auto-predict");
+  const txtPredictNumber = document.getElementById("txt-predict-number");
   const speedBtns = document.querySelectorAll(".speed-btn");
 
   const statusPill = document.getElementById("status-pill");
@@ -35,6 +38,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   setModeUI(currentMode);
 
   chkAutoNext.checked = settings.autoNext !== false;
+  chkAutoSubmit.checked = settings.autoSubmit !== false;
+  chkAutoPredict.checked = settings.autoPredict !== false;
+  txtPredictNumber.value = settings.predictNumber || "";
+
   currentDelay = settings.minDelay || 2200;
   setSpeedUI(currentDelay);
 
@@ -84,8 +91,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 4. Auto Next change
+  // 4. Settings change listeners
   chkAutoNext.addEventListener("change", saveSettings);
+  chkAutoSubmit.addEventListener("change", saveSettings);
+  chkAutoPredict.addEventListener("change", saveSettings);
+  txtPredictNumber.addEventListener("input", saveSettings);
 
   async function saveSettings() {
     const current = (await chrome.storage.local.get("settings")).settings || {};
@@ -93,6 +103,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       ...current,
       mode: currentMode,
       autoNext: chkAutoNext.checked,
+      autoSubmit: chkAutoSubmit.checked,
+      autoPredict: chkAutoPredict.checked,
+      predictNumber: txtPredictNumber.value.trim(),
       minDelay: currentDelay,
       maxDelay: currentDelay + 1200,
       enabled: true

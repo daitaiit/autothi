@@ -295,9 +295,24 @@
   async function processNextStep(mode) {
     if (!isRunning) return;
 
+    // Check & fill prediction input if present on current page
+    if (settings.autoPredict !== false) {
+      handlePredictionInput();
+    }
+
     const questions = findQuestionsOnPage();
     if (questions.length === 0) {
-      log("Không tìm thấy câu hỏi hoặc đã hoàn thành bài thi!", "warn");
+      // If no normal questions, check if only prediction input is left
+      const predicted = handlePredictionInput();
+      if (predicted) {
+        log("✓ Đã hoàn thành điền số dự đoán!", "success");
+      }
+
+      if (settings.autoSubmit) {
+        await trySubmitExam();
+      } else {
+        log("🎉 Đã hoàn thành bài làm!", "success");
+      }
       stopSolving();
       return;
     }
@@ -310,31 +325,119 @@
       await sleep(delay);
     }
 
+    // Fill prediction input again after questions
+    if (settings.autoPredict !== false) {
+      handlePredictionInput();
+    }
+
     // Auto next question / submit if enabled
-    if (settings.autoNext && isRunning) {
-      const nextBtn = findNextButton();
-      if (nextBtn) {
-        log("➡️ Đang chuyển sang câu tiếp theo...", "info");
-        const delay = getRandomDelay(1000, 2000);
-        currentSolveTimeout = setTimeout(() => {
-          triggerClick(nextBtn);
-          // Wait for DOM update and continue
-          setTimeout(() => {
-            if (isRunning) processNextStep(mode);
-          }, 1500);
-        }, delay);
-      } else {
-        log("🎉 Đã tới câu cuối cùng!", "success");
-        if (settings.autoSubmit) {
-          const submitBtn = findSubmitButton();
-          if (submitBtn) {
-            log("📝 Tự động nộp bài...", "info");
-            setTimeout(() => triggerClick(submitBtn), 2000);
-          }
-        }
-        stopSolving();
+    const nextBtn = findNextButton();
+    if (settings.autoNext && isRunning && nextBtn) {
+      log("➡️ Đang chuyển sang câu tiếp theo...", "info");
+      const delay = getRandomDelay(1000, 2000);
+      currentSolveTimeout = setTimeout(() => {
+        triggerClick(nextBtn);
+        setTimeout(() => {
+          if (isRunning) processNextStep(mode);
+        }, 1500);
+      }, delay);
+    } else {
+      log("🎉 Đã tới câu cuối cùng!", "success");
+      if (settings.autoSubmit) {
+        await trySubmitExam();
+      }
+      stopSolving();
+    }
+  }
+
+  function handlePredictionInput() {
+    const predictSelectors = [
+      'input[name*="dudoan"]',
+      'input[name*="du_doan"]',
+      'input[name*="predict"]',
+      'input[id*="dudoan"]',
+      'input[id*="du_doan"]',
+      'input[id*="predict"]',
+      'input[placeholder*="dự đoán" i]',
+      'input[placeholder*="người" i]',
+      'input[aria-label*="dự đoán" i]'
+    ];
+
+    let predictInput = null;
+    for (const sel of predictSelectors) {
+      const el = document.querySelector(sel);
+      if (el && isVisible(el)) {
+        predictInput = el;
+        break;
       }
     }
+
+    // Heuristic: check inputs inside block mentioning "dự đoán"
+    if (!predictInput) {
+      const blocks = document.querySelectorAll('.form-group, .question-item, .item-cau-hoi, div, p');
+      for (const block of blocks) {
+        if ((block.innerText || "").toLowerCase().includes("dự đoán số người") || (block.innerText || "").toLowerCase().includes("dự đoán số")) {
+          const inp = block.querySelector('input[type="number"], input[type="text"]');
+          if (inp && isVisible(inp)) {
+            predictInput = inp;
+            break;
+          }
+        }
+      }
+    }
+
+    if (predictInput) {
+      let val = settings.predictNumber ? settings.predictNumber.trim() : "";
+      if (!val) {
+        // Generate a realistic random prediction number (e.g. 1250 - 3800)
+        val = Math.floor(Math.random() * (3800 - 1250 + 1) + 1250).toString();
+      }
+
+      predictInput.value = val;
+      predictInput.dispatchEvent(new Event("input", { bubbles: true }));
+      predictInput.dispatchEvent(new Event("change", { bubbles: true }));
+      predictInput.classList.add("autothi-highlight-correct");
+      log(`✓ Tự động điền số dự đoán: ${val}`, "success");
+      return true;
+    }
+    return false;
+  }
+
+  async function trySubmitExam() {
+    const submitBtn = findSubmitButton();
+    if (submitBtn) {
+      log("📝 Tự động nộp bài trong giây lát...", "info");
+      await sleep(1500);
+      triggerClick(submitBtn);
+
+      // Check for confirmation modal (e.g. "Bạn có chắc chắn nộp bài?")
+      await sleep(800);
+      const confirmBtn = findModalConfirmButton();
+      if (confirmBtn) {
+        log("✓ Tự động bấm xác nhận nộp bài!", "success");
+        triggerClick(confirmBtn);
+      }
+      log("🎉 ĐÃ NỘP BÀI THÀNH CÔNG!", "success");
+    }
+  }
+
+  function findModalConfirmButton() {
+    const modalButtons = Array.from(document.querySelectorAll('.swal2-confirm, .modal .btn-primary, .modal .btn-success, .btn-confirm, .confirm, button.ok, .bootbox-accept'));
+    const confirmTexts = ["đồng ý", "xác nhận", "nộp bài", "chấp nhận", "ok", "yes", "có", "có"];
+
+    const found = modalButtons.find(b => {
+      const text = (b.innerText || b.value || "").toLowerCase().trim();
+      return confirmTexts.some(ct => text.includes(ct)) && isVisible(b);
+    });
+
+    if (found) return found;
+
+    // Search all visible buttons for confirm keywords in modals
+    const allBtns = Array.from(document.querySelectorAll('.modal button, .popup button, .dialog button, [role="dialog"] button'));
+    return allBtns.find(b => {
+      const text = (b.innerText || b.value || "").toLowerCase().trim();
+      return confirmTexts.some(ct => text.includes(ct)) && isVisible(b);
+    });
   }
 
   async function solveSingleQuestion(qData, mode) {

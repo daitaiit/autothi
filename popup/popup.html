@@ -81,6 +81,31 @@
 
       <div class="setting-row">
         <div class="setting-left">
+          <span class="setting-title">Tự động nộp bài khi làm xong</span>
+          <span class="setting-sub">Tự bấm nộp bài ở câu cuối cùng</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="chk-auto-submit" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row" style="align-items: flex-start;">
+        <div class="setting-left" style="flex: 1;">
+          <span class="setting-title">Tự điền số người dự đoán</span>
+          <span class="setting-sub">Tự nhập câu hỏi phụ dự đoán</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="number" id="txt-predict-number" class="mini-number-input" placeholder="Ngẫu nhiên" title="Nhập số dự đoán cụ thể hoặc để trống để tạo số ngẫu nhiên">
+          <label class="switch">
+            <input type="checkbox" id="chk-auto-predict" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-left">
           <span class="setting-title">Tốc độ làm bài</span>
           <span class="setting-sub">Mô phỏng như người thật</span>
         </div>
