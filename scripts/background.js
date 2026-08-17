@@ -28,23 +28,33 @@ chrome.runtime.onInstalled.addListener(async () => {
   } else {
     const updated = { ...DEFAULT_SETTINGS, ...data.settings };
     if (!updated.apiKey) updated.apiKey = DEFAULT_API_KEY;
-    // Tự động chuyển đổi nếu model là bản 1.5/2.0 đã cũ
     if (!updated.model || updated.model.includes("1.5") || updated.model.includes("2.0")) {
       updated.model = "gemini-3.7-flash";
     }
     await chrome.storage.local.set({ settings: updated });
   }
 
-  if (!data.questionBank) {
-    await chrome.storage.local.set({ questionBank: {} });
-  }
-  if (!data.installedContests) {
-    await chrome.storage.local.set({ installedContests: {} });
-  }
+  // Tải trực tiếp gói đề thi 19 câu hỏi vào máy
+  await loadDefaultQuestionBank();
 
   console.log("AutoThi AI Extension đã sẵn sàng!");
   checkOnlineUpdates();
 });
+
+async function loadDefaultQuestionBank() {
+  try {
+    const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
+    if (res.ok) {
+      const manifest = await res.json();
+      if (manifest.contests && manifest.contests[0]) {
+        await installContestPackage(manifest.contests[0]);
+        console.log("✓ Đã nạp sẵn trọn bộ 19 câu hỏi chính thức!");
+      }
+    }
+  } catch (e) {
+    console.log("Load initial bank notice:", e);
+  }
+}
 
 // Periodic background check
 chrome.runtime.onStartup.addListener(async () => {

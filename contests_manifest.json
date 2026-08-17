@@ -1,37 +1,203 @@
 {
-  "version": "1.0.0",
-  "updated_at": "2026-08-17T16:30:00Z",
-  "announcement": "Đã cập nhật bộ đề Cuộc thi Chuyển đổi số Tỉnh Lâm Đồng 2026!",
+  "version": "2.0.0",
+  "updated_at": "2026-08-17T16:52:00Z",
+  "author": "Đại Tài",
+  "announcement": "Đã cập nhật trọn bộ 19 câu hỏi & đáp án chuẩn 100% Cuộc thi Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026!",
   "contests": [
     {
       "id": "lam_dong_2026",
       "name": "Cuộc thi trực tuyến Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026",
       "organizer": "Tỉnh Đoàn Lâm Đồng",
       "domain_match": "chuyendoiso.cuocthi.vn",
-      "version": 1,
-      "total_questions": 3,
+      "version": 2,
+      "total_questions": 19,
       "updated_at": "17/08/2026",
-      "description": "Bộ đề thi chính thức gồm kiến thức chuyển đổi số, an toàn thông tin, VNeID và pháp luật.",
+      "description": "Trọn bộ 19 câu hỏi & đáp án chính xác 100% do Đại Tài biên soạn và cập nhật.",
       "questions": {
-        "ngày chuyển đổi số quốc gia của việt nam được chọn là ngày nào hằng năm?": {
-          "question": "Ngày Chuyển đổi số quốc gia của Việt Nam được chọn là ngày nào hằng năm?",
-          "correctAnswer": "Ngày 10 tháng 10",
-          "options": ["Ngày 10 tháng 10", "Ngày 02 tháng 09", "Ngày 26 tháng 03", "Ngày 19 tháng 08"]
-        },
-        "đâu là 3 trụ cột chính trong chiến lược chuyển đổi số quốc gia của việt nam?": {
-          "question": "Đâu là 3 trụ cột chính trong Chiến lược Chuyển đổi số quốc gia của Việt Nam?",
-          "correctAnswer": "Chính phủ số, Kinh tế số và Xã hội số",
+        "giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “học từ làm việc thực tế” được quy định triển khai như thế nào?": {
+          "question": "Giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “Học từ làm việc thực tế” được quy định triển khai như thế nào?",
+          "correctAnswer": "Liên kết giữa nhà trường (đại học, cao đẳng, nghề) và doanh nghiệp để xây dựng chương trình đào tạo theo nhu cầu thực tế và đặt hàng của doanh nghiệp/AI",
           "options": [
-            "Chính phủ số, Kinh tế số và Xã hội số",
-            "Nông nghiệp số, Giáo dục số và Y tế số",
-            "An ninh số, Dữ liệu số và Hạ tầng số",
-            "Công nghiệp số, Tài chính số và Dịch vụ số"
+            "Liên kết giữa nhà trường (đại học, cao đẳng, nghề) và doanh nghiệp để xây dựng chương trình đào tạo theo nhu cầu thực tế và đặt hàng của doanh nghiệp/AI",
+            "Yêu cầu học sinh tự nghiên cứu giáo trình trực tuyến từ nước ngoài",
+            "Giao hoàn toàn cho các trung tâm tin học tư nhân bên ngoài giảng dạy",
+            "Chỉ tổ chức đào tạo lý thuyết tại lớp học chính khóa của trường"
           ]
         },
-        "ứng dụng định danh điện tử quốc gia của bộ công an việt nam có tên gọi là gì?": {
-          "question": "Ứng dụng định danh điện tử quốc gia của Bộ Công an Việt Nam có tên gọi là gì?",
-          "correctAnswer": "VNeID",
-          "options": ["PC-Covid", "VNeID", "VssID", "eGov"]
+        "kế hoạch triển khai phong trào “bình dân học vụ số” của tỉnh lâm đồng có ký hiệu là gì và ban hành vào ngày nào?": {
+          "question": "Kế hoạch triển khai Phong trào “Bình dân học vụ số” của tỉnh Lâm Đồng có ký hiệu là gì và ban hành vào ngày nào?",
+          "correctAnswer": "Kế hoạch số 1410/KH-UBND ngày 08/08/2025",
+          "options": [
+            "Kế hoạch số 1410/KH-UBND ngày 08/08/2025",
+            "Kế hoạch số 6388/KH-UBND ngày 08/05/2026",
+            "Kế hoạch số 13-KH/TU ngày 15/09/2025",
+            "Kế hoạch số 45-KH/TU ngày 15/09/2025"
+          ]
+        },
+        "dấu hiệu nào có thể cho thấy một đường link là không an toàn?": {
+          "question": "Dấu hiệu nào có thể cho thấy một đường link là không an toàn?",
+          "correctAnswer": "Tên miền lạ, sai chính tả, yêu cầu nhập mật khẩu hoặc OTP bất thường",
+          "options": [
+            "Có địa chỉ rõ ràng, đúng tên miền chính thức",
+            "Có nội dung hướng dẫn rõ ràng trên cổng chính thức",
+            "Được gửi từ kênh chính thức của cơ quan nhà nước",
+            "Tên miền lạ, sai chính tả, yêu cầu nhập mật khẩu hoặc OTP bất thường"
+          ]
+        },
+        "phát biểu nào dưới đây mô tả đúng về mã otp trong các giao dịch điện tử?": {
+          "question": "Phát biểu nào dưới đây mô tả đúng về mã OTP trong các giao dịch điện tử?",
+          "correctAnswer": "Là mã xác thực chỉ sử dụng một lần và chỉ có hiệu lực trong một khoảng thời gian nhất định",
+          "options": [
+            "Nên cung cấp cho người hỗ trợ qua điện thoại khi được yêu cầu",
+            "Có thể sử dụng nhiều lần trong nhiều tháng",
+            "Là mã xác thực chỉ sử dụng một lần và chỉ có hiệu lực trong một khoảng thời gian nhất định",
+            "Là số tài khoản ngân hàng"
+          ]
+        },
+        "một trong các mục tiêu chung của kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026 là gì?": {
+          "question": "Một trong các mục tiêu chung của Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026 là gì?",
+          "correctAnswer": "Đưa công nghệ số, kỹ năng số đến từng hộ gia đình, từng người dân",
+          "options": [
+            "Đưa công nghệ số, kỹ năng số đến từng hộ gia đình, từng người dân",
+            "Đưa Internet tốc độ cao đến từng nhà",
+            "Hỗ trợ người dân sử dụng dịch vụ công trực tuyến",
+            "Tăng số doanh nghiệp công nghệ số"
+          ]
+        },
+        "theo kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh lâm đồng triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, tỷ lệ hỗ trợ, hướng dẫn người dân từ 15 tuổi trở lên đăng ký tài khoản giao dịch thanh toán số là bao nhiêu?": {
+          "question": "Theo Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh Lâm Đồng triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, tỷ lệ hỗ trợ, hướng dẫn người dân từ 15 tuổi trở lên đăng ký tài khoản giao dịch thanh toán số là bao nhiêu?",
+          "correctAnswer": "50%",
+          "options": ["46%", "56%", "50%", "66%"]
+        },
+        "theo luật chuyển đổi số, nội dung quản lý nhà nước về chuyển đổi số bao gồm hoạt động nào?": {
+          "question": "Theo Luật Chuyển đổi số, nội dung quản lý nhà nước về chuyển đổi số bao gồm hoạt động nào?",
+          "correctAnswer": "Tuyên truyền, phổ biến về chuyển đổi số",
+          "options": [
+            "Chỉ xây dựng cơ sở hạ tầng điện lực",
+            "Chỉ quản lý tài chính công",
+            "Tuyên truyền, phổ biến về chuyển đổi số",
+            "Chỉ kiểm tra doanh nghiệp xuất nhập khẩu"
+          ]
+        },
+        "theo luật chuyển đổi số, phương án nào sau đây không đúng về “dịch vụ công trực tuyến toàn trình”?": {
+          "question": "Theo Luật Chuyển đổi số, phương án nào sau đây không đúng về “dịch vụ công trực tuyến toàn trình”?",
+          "correctAnswer": "Chỉ cho phép người dân tra cứu thông tin, không thực hiện nộp hồ sơ trực tuyến",
+          "options": [
+            "Chỉ cho phép người dân tra cứu thông tin, không thực hiện nộp hồ sơ trực tuyến",
+            "Bao gồm tiếp nhận hồ sơ, xử lý, thanh toán nếu có và trả kết quả",
+            "Được thực hiện hoàn toàn trên môi trường số",
+            "Bao gồm nộp hồ sơ"
+          ]
+        },
+        "theo kế hoạch số 1410/kh-ubnd ngày 08/8/2025 của ubnd tỉnh lâm đồng, đơn vị nào chủ trì triển khai phong trào “bình dân học vụ số” trong lực lượng đoàn viên, thanh niên trên địa bàn tỉnh?": {
+          "question": "Theo Kế hoạch số 1410/KH-UBND ngày 08/8/2025 của UBND tỉnh Lâm Đồng, đơn vị nào chủ trì triển khai Phong trào “Bình dân học vụ số” trong lực lượng đoàn viên, thanh niên trên địa bàn tỉnh?",
+          "correctAnswer": "Tỉnh đoàn Lâm Đồng",
+          "options": [
+            "Sở Giáo dục và Đào tạo",
+            "Sở Khoa học và Công nghệ",
+            "Tỉnh đoàn Lâm Đồng",
+            "UBND các xã, phường, đặc khu"
+          ]
+        },
+        "khi cần thực hiện thủ tục hành chính trực tuyến trên cổng dịch vụ công quốc gia, người dân cần truy cập vào tên miền nào dưới đây?": {
+          "question": "Khi cần thực hiện thủ tục hành chính trực tuyến trên Cổng Dịch vụ công Quốc gia, người dân cần truy cập vào tên miền nào dưới đây?",
+          "correctAnswer": "https://dichvucong.gov.vn",
+          "options": [
+            "https://dichvucong.gov.vn",
+            "https://dichvucong.lamdong.gov.vn",
+            "https://dichvucongquocgia.gov.vn",
+            "https://dvcquocgia.gov.vn"
+          ]
+        },
+        "khi thực hiện thanh toán trực tuyến, thao tác nào giúp giảm nguy cơ bị mất tiền do trang giả mạo?": {
+          "question": "Khi thực hiện thanh toán trực tuyến, thao tác nào giúp giảm nguy cơ bị mất tiền do trang giả mạo?",
+          "correctAnswer": "Kiểm tra địa chỉ website/ứng dụng chính thức, kết nối an toàn và không nhập thông tin trên trang nghi ngờ giả mạo",
+          "options": [
+            "Truy cập qua link khuyến mãi lạ",
+            "Kiểm tra địa chỉ website/ứng dụng chính thức, kết nối an toàn và không nhập thông tin trên trang nghi ngờ giả mạo",
+            "Lưu thông tin thẻ trên mọi trình duyệt để tiện thanh toán",
+            "Nhập thông tin thẻ vào bất kỳ trang nào có giao diện đẹp"
+          ]
+        },
+        "khi đăng bài trên mạng xã hội, người dân nên lưu ý điều gì?": {
+          "question": "Khi đăng bài trên mạng xã hội, người dân nên lưu ý điều gì?",
+          "correctAnswer": "Không đăng tải nội dung vi phạm pháp luật, xúc phạm danh dự, tung tin sai sự thật",
+          "options": [
+            "Đăng mọi thông tin cá nhân để tiện liên hệ",
+            "Chia sẻ càng nhiều tin chưa kiểm chứng càng tốt",
+            "Dùng từ ngữ kích động để thu hút tương tác",
+            "Không đăng tải nội dung vi phạm pháp luật, xúc phạm danh dự, tung tin sai sự thật"
+          ]
+        },
+        "khi sử dụng thư điện tử, dấu hiệu nào sau đây cho thấy email hoặc tệp đính kèm có nguy cơ mất an toàn thông tin?": {
+          "question": "Khi sử dụng thư điện tử, dấu hiệu nào sau đây cho thấy email hoặc tệp đính kèm có nguy cơ mất an toàn thông tin?",
+          "correctAnswer": "Tất cả các đáp án trên",
+          "options": [
+            "Tất cả các đáp án trên",
+            "Email được gửi từ địa chỉ lạ, không rõ người gửi hoặc tên miền bất thường",
+            "Tệp đính kèm có phần mở rộng đáng ngờ như .exe, hoặc tên file giả dạng tài liệu như “.pdf.exe”",
+            "Nội dung email thúc giục người nhận mở tệp, bấm link hoặc cung cấp thông tin cá nhân ngay lập tức"
+          ]
+        },
+        "theo kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, tổ công nghệ số cộng đồng là cánh tay nối dài của ban chỉ đạo tỉnh về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số đến cấp nào?": {
+          "question": "Theo Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, Tổ công nghệ số cộng đồng là cánh tay nối dài của Ban Chỉ đạo tỉnh về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số đến cấp nào?",
+          "correctAnswer": "Xã/phường; tổ dân phố/thôn/buôn/bản",
+          "options": [
+            "Xã/phường",
+            "Xã/phường; tổ dân phố/thôn/buôn/bản",
+            "Đến cơ quan hành chính cấp tỉnh",
+            "Tổ dân phố/thôn/buôn/bản"
+          ]
+        },
+        "thông tin cá nhân nào dưới đây không nên công khai hoặc chia sẻ tùy tiện trên môi trường số?": {
+          "question": "Thông tin cá nhân nào dưới đây không nên công khai hoặc chia sẻ tùy tiện trên môi trường số?",
+          "correctAnswer": "Số căn cước công dân, số điện thoại, địa chỉ nhà, tài khoản ngân hàng, mã OTP",
+          "options": [
+            "Sở thích đọc sách",
+            "Thông tin thời tiết tại địa phương",
+            "Số căn cước công dân, số điện thoại, địa chỉ nhà, tài khoản ngân hàng, mã OTP",
+            "Một bài viết tuyên truyền về kỹ năng số"
+          ]
+        },
+        "đâu là một trong những chức năng của ứng dụng công dân số lâm đồng?": {
+          "question": "Đâu là một trong những chức năng của ứng dụng Công dân số Lâm Đồng?",
+          "correctAnswer": "Hỗ trợ dịch vụ công",
+          "options": [
+            "Hỗ trợ dịch vụ công",
+            "Đặt vé máy bay",
+            "Mua sắm trực tuyến",
+            "Gọi xe công nghệ"
+          ]
+        },
+        "phương châm hoạt động của tổ công nghệ số cộng đồng được nêu trong kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026?": {
+          "question": "Phương châm hoạt động của Tổ công nghệ số cộng đồng được nêu trong Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026?",
+          "correctAnswer": "“Đi từng ngõ, gõ từng nhà, hướng dẫn từng người”",
+          "options": [
+            "Làm nhanh, gọn, tiết kiệm",
+            "Học mọi lúc, làm mọi nơi",
+            "Số hóa toàn diện, quản trị thông minh",
+            "“Đi từng ngõ, gõ từng nhà, hướng dẫn từng người”"
+          ]
+        },
+        "theo kế hoạch số 3450/kh-ubnd ngày 18/3/2026 của ubnd tỉnh lâm đồng triển khai thực hiện nghị quyết số 57-nq/tw ngày 22/12/2024 của bộ chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh lâm đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?": {
+          "question": "Theo Kế hoạch số 3450/KH-UBND ngày 18/3/2026 của UBND tỉnh Lâm Đồng triển khai thực hiện Nghị quyết số 57-NQ/TW ngày 22/12/2024 của Bộ Chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh Lâm Đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?",
+          "correctAnswer": "Từ 0,75 trở lên",
+          "options": [
+            "Từ 0,75 trở lên",
+            "Từ 0,55 trở lên",
+            "Từ 0,6 trở lên",
+            "Từ 0,65 trở lên"
+          ]
+        },
+        "luật chuyển đổi số số 148/2025/qh15 có hiệu lực thi hành từ ngày nào?": {
+          "question": "Luật Chuyển đổi số số 148/2025/QH15 có hiệu lực thi hành từ ngày nào?",
+          "correctAnswer": "01/7/2026",
+          "options": [
+            "01/01/2027",
+            "01/01/2026",
+            "01/7/2026",
+            "30/4/2026"
+          ]
         }
       }
     }
