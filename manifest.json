@@ -2,7 +2,9 @@
   "manifest_version": 3,
   "name": "AutoThi AI - Trợ Lý Tự Động Làm Bài Thi & Trắc Nghiệm",
   "version": "1.0.0",
-  "description": "Tự động phân tích, giải đề và chọn đáp án trắc nghiệm chính xác bằng Gemini AI & Ngân hàng đề thông minh.",
+  "author": "Đại Tài",
+  "homepage_url": "https://github.com/daitaiit/autothi",
+  "description": "Tự động phân tích, giải đề và chọn đáp án trắc nghiệm chính xác bằng AI & Ngân hàng đề thông minh. Phát triển bởi Đại Tài.",
   "permissions": [
     "storage",
     "activeTab",
@@ -24,9 +26,15 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["scripts/content.js"],
-      "css": ["scripts/content.css"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "css": [
+        "scripts/content.css"
+      ],
       "run_at": "document_start"
     }
   ],
