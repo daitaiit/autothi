@@ -1,18 +1,18 @@
 {
-  "version": "2.0.0",
-  "updated_at": "2026-08-17T16:52:00Z",
+  "version": "2.1.0",
+  "updated_at": "2026-08-17T16:53:30Z",
   "author": "Đại Tài",
-  "announcement": "Đã cập nhật trọn bộ 19 câu hỏi & đáp án chuẩn 100% Cuộc thi Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026!",
+  "announcement": "Đã cập nhật trọn bộ 20/20 câu hỏi & đáp án chuẩn 100% Cuộc thi Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026!",
   "contests": [
     {
       "id": "lam_dong_2026",
       "name": "Cuộc thi trực tuyến Thanh niên số - Công dân số Tỉnh Lâm Đồng 2026",
       "organizer": "Tỉnh Đoàn Lâm Đồng",
       "domain_match": "chuyendoiso.cuocthi.vn",
-      "version": 2,
-      "total_questions": 19,
+      "version": 3,
+      "total_questions": 20,
       "updated_at": "17/08/2026",
-      "description": "Trọn bộ 19 câu hỏi & đáp án chính xác 100% do Đại Tài biên soạn và cập nhật.",
+      "description": "Trọn bộ 20 câu hỏi & đáp án chính xác 100% do Đại Tài biên soạn và cập nhật.",
       "questions": {
         "giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “học từ làm việc thực tế” được quy định triển khai như thế nào?": {
           "question": "Giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “Học từ làm việc thực tế” được quy định triển khai như thế nào?",
@@ -197,6 +197,16 @@
             "01/01/2026",
             "01/7/2026",
             "30/4/2026"
+          ]
+        },
+        "kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, nhấn mạnh nâng cao nhận thức về vai trò, trách nhiệm của lực lượng nào trong hoạt động chuyển đổi số cộng đồng dân cư?": {
+          "question": "Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, nhấn mạnh nâng cao nhận thức về vai trò, trách nhiệm của lực lượng nào trong hoạt động chuyển đổi số cộng đồng dân cư?",
+          "correctAnswer": "Đoàn viên, thanh niên",
+          "options": [
+            "Đoàn viên, thanh niên",
+            "Công nhân",
+            "Cựu chiến binh",
+            "Nông dân"
           ]
         }
       }
