@@ -103,7 +103,22 @@
     try {
       const data = await chrome.storage.local.get(["settings", "questionBank"]);
       if (data.settings) settings = { ...settings, ...data.settings };
-      if (data.questionBank) questionBank = data.questionBank || {};
+      if (data.questionBank && Object.keys(data.questionBank).length > 0) {
+        questionBank = data.questionBank;
+      } else {
+        // Fallback tự động nạp ngân hàng đề có sẵn nếu máy mới tinh chưa đồng bộ
+        try {
+          const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
+          if (res.ok) {
+            const manifest = await res.json();
+            if (manifest.contests && manifest.contests[0] && manifest.contests[0].questions) {
+              questionBank = manifest.contests[0].questions;
+              await chrome.storage.local.set({ questionBank });
+              console.log("✓ AutoThi: Đã nạp trọn bộ ngân hàng đề vào bộ nhớ cục bộ!");
+            }
+          }
+        } catch (manifestErr) {}
+      }
 
       createFloatingDock();
       setupObserver();
@@ -521,26 +536,23 @@
   }
 
   async function solveSingleQuestion(qData, mode) {
-    const cleanQ = normalizeText(qData.questionText);
     log(`Đang giải: "${qData.questionText.slice(0, 45)}..."`, "info");
 
     let chosenIndex = -1;
     let source = "AI chọn";
 
-    // 1. Check local question bank first
-    if (questionBank[cleanQ] && questionBank[cleanQ].correctAnswer) {
-      const targetAnswer = normalizeText(questionBank[cleanQ].correctAnswer);
-      chosenIndex = qData.options.findIndex(opt => {
-        const optNorm = normalizeText(opt.text);
-        return optNorm.includes(targetAnswer) || targetAnswer.includes(optNorm);
-      });
+    // 1. Kiểm tra ngân hàng đề (Fuzzy Matcher thông minh)
+    const bankMatch = findBestQuestionInBank(qData.questionText, questionBank);
+    if (bankMatch && bankMatch.entry && bankMatch.entry.correctAnswer) {
+      const targetAnswer = bankMatch.entry.correctAnswer;
+      chosenIndex = findBestMatchingOptionIndex(targetAnswer, qData.options);
       if (chosenIndex !== -1) {
         source = "AI chọn";
-        log(`✓ Tìm thấy đáp án: ${chosenIndex + 1}`, "success");
+        log(`✓ Tìm thấy đáp án chuẩn: Lựa chọn ${chosenIndex + 1} ("${qData.options[chosenIndex].text.slice(0, 30)}...")`, "success");
       }
     }
 
-    // 2. If not found in bank, call Gemini AI
+    // 2. Nếu ngân hàng chưa có, gọi Gemini AI
     if (chosenIndex === -1) {
       try {
         const response = await sendToBackground({
@@ -563,9 +575,9 @@
       }
     }
 
-    // 3. Fallback: if index still -1, pick option with closest similarity
+    // 3. Fallback an toàn nếu vẫn chưa chọn được
     if (chosenIndex === -1 && qData.options.length > 0) {
-      chosenIndex = 0; // Default first option as last resort
+      chosenIndex = 0;
       source = "AI chọn";
       log("⚠️ Chọn đáp án mặc định.", "warn");
     }
@@ -576,6 +588,94 @@
     } else {
       log("⚠️ Không chọn được đáp án phù hợp.", "warn");
     }
+  }
+
+  // -------------------------------------------------------------
+  // Thuật toán bóc tách & so khớp câu hỏi / đáp án linh hoạt 100%
+  // -------------------------------------------------------------
+  function cleanString(str) {
+    if (!str) return "";
+    return str
+      .toLowerCase()
+      .replace(/^(câu\s*\d+[\s:.-]*|bài\s*\d+[\s:.-]*|question\s*\d+[\s:.-]*)/gi, "")
+      .replace(/^(câu\s*hỏi\s*[\d]*[\s:.-]*)/gi, "")
+      .replace(/[“”"''`.,:;?!–—\-\(\)\[\]\/\\_]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function findBestQuestionInBank(domQuestionText, bank) {
+    if (!bank || Object.keys(bank).length === 0) return null;
+
+    const cleanDom = cleanString(domQuestionText);
+    const domWords = new Set(cleanDom.split(" ").filter(w => w.length > 1));
+
+    let bestEntry = null;
+    let maxScore = 0;
+
+    for (const [key, item] of Object.entries(bank)) {
+      const entry = item;
+      const cleanBank = cleanString(entry.question || key);
+
+      // Match tuyệt đối hoặc chứa nhau
+      if (cleanDom === cleanBank || cleanDom.includes(cleanBank) || cleanBank.includes(cleanDom)) {
+        return { entry, score: 1.0 };
+      }
+
+      // So khớp theo tỷ lệ từ khóa (Token overlap)
+      const bankWords = cleanBank.split(" ").filter(w => w.length > 1);
+      if (bankWords.length === 0) continue;
+
+      let overlap = 0;
+      for (const w of bankWords) {
+        if (domWords.has(w)) overlap++;
+      }
+
+      const score = overlap / bankWords.length;
+      if (score > maxScore && score >= 0.55) {
+        maxScore = score;
+        bestEntry = entry;
+      }
+    }
+
+    return bestEntry ? { entry: bestEntry, score: maxScore } : null;
+  }
+
+  function findBestMatchingOptionIndex(targetAnswerText, options) {
+    if (!targetAnswerText || !options || options.length === 0) return -1;
+
+    const cleanTarget = cleanString(targetAnswerText);
+    const targetWords = new Set(cleanTarget.split(" ").filter(w => w.length > 0));
+
+    let bestIdx = -1;
+    let maxScore = 0;
+
+    for (let i = 0; i < options.length; i++) {
+      const opt = options[i];
+      const cleanOpt = cleanString(opt.text);
+
+      // 1. Trùng khớp hoàn toàn hoặc chứa nhau
+      if (cleanOpt === cleanTarget || cleanOpt.includes(cleanTarget) || cleanTarget.includes(cleanOpt)) {
+        return i;
+      }
+
+      // 2. So khớp từ khóa
+      const optWords = cleanOpt.split(" ").filter(w => w.length > 0);
+      if (optWords.length === 0) continue;
+
+      let overlap = 0;
+      for (const w of optWords) {
+        if (targetWords.has(w)) overlap++;
+      }
+
+      const score = overlap / Math.max(optWords.length, targetWords.size);
+      if (score > maxScore && score >= 0.4) {
+        maxScore = score;
+        bestIdx = i;
+      }
+    }
+
+    return bestIdx !== -1 ? bestIdx : 0;
   }
 
   function applyAnswer(optionData, mode, source = "AI chọn") {
