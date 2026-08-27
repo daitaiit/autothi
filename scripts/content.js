@@ -111,8 +111,14 @@
           const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
           if (res.ok) {
             const manifest = await res.json();
-            if (manifest.contests && manifest.contests[0] && manifest.contests[0].questions) {
-              questionBank = manifest.contests[0].questions;
+            if (manifest.contests && Array.isArray(manifest.contests)) {
+              let mergedBank = {};
+              for (const contest of manifest.contests) {
+                if (contest.questions) {
+                  mergedBank = { ...mergedBank, ...contest.questions };
+                }
+              }
+              questionBank = mergedBank;
               await chrome.storage.local.set({ questionBank });
               console.log("✓ AutoThi: Đã nạp trọn bộ ngân hàng đề vào bộ nhớ cục bộ!");
             }

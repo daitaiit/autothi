@@ -34,12 +34,36 @@ chrome.runtime.onInstalled.addListener(async () => {
     await chrome.storage.local.set({ settings: updated });
   }
 
-  // Tải trực tiếp gói đề thi 19 câu hỏi vào máy
+  // Tải trực tiếp gói đề thi nội bộ và đồng bộ tự động từ GitHub
   await loadDefaultQuestionBank();
+  await syncLatestOnlineQuestions(true);
+
+  // Tạo định kỳ tự động cập nhật mỗi 15 phút
+  try {
+    chrome.alarms.create("AUTO_SYNC_ALARM", { periodInMinutes: 15 });
+  } catch (e) {}
 
   console.log("AutoThi AI Extension đã sẵn sàng!");
-  checkOnlineUpdates();
 });
+
+// Periodic background check & startup sync
+chrome.runtime.onStartup.addListener(async () => {
+  const data = await chrome.storage.local.get("settings");
+  if (data.settings && (data.settings.model?.includes("1.5") || data.settings.model?.includes("2.0"))) {
+    data.settings.model = "gemini-3.7-flash";
+    await chrome.storage.local.set({ settings: data.settings });
+  }
+  syncLatestOnlineQuestions(true);
+});
+
+// Alarm listener for automatic background updates
+if (chrome.alarms) {
+  chrome.alarms.onAlarm.addListener(alarm => {
+    if (alarm.name === "AUTO_SYNC_ALARM") {
+      syncLatestOnlineQuestions(true);
+    }
+  });
+}
 
 async function loadDefaultQuestionBank() {
   try {
@@ -57,16 +81,6 @@ async function loadDefaultQuestionBank() {
     console.log("Load initial bank notice:", e);
   }
 }
-
-// Periodic background check
-chrome.runtime.onStartup.addListener(async () => {
-  const data = await chrome.storage.local.get("settings");
-  if (data.settings && (data.settings.model?.includes("1.5") || data.settings.model?.includes("2.0"))) {
-    data.settings.model = "gemini-3.7-flash";
-    await chrome.storage.local.set({ settings: data.settings });
-  }
-  checkOnlineUpdates();
-});
 
 // Handle messages from content script & popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -92,7 +106,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === "CHECK_ONLINE_UPDATES") {
-    checkOnlineUpdates(request.serverUrl)
+    syncLatestOnlineQuestions(true, request.serverUrl)
       .then(result => sendResponse({ success: true, data: result }))
       .catch(error => sendResponse({ success: false, error: error.message }));
     return true;
@@ -107,21 +121,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 // -------------------------------------------------------------
-// Online Update & Question Package Management
+// Online Update & Question Package Management (Full Auto-Sync)
 // -------------------------------------------------------------
 
-async function checkOnlineUpdates(customUrl) {
+async function syncLatestOnlineQuestions(autoInstall = true, customUrl = null) {
   const serverUrl = customUrl || (await getSetting("serverUrl")) || DEFAULT_SERVER_URL;
-
-  if (!serverUrl || serverUrl.includes("username/autothi-data")) {
-    // If user hasn't configured custom server, return demo/offline structure
-    return {
-      isConfigured: false,
-      serverUrl,
-      announcement: "Chưa cấu hình URL máy chủ dữ liệu riêng hoặc đang dùng demo.",
-      contests: []
-    };
-  }
 
   try {
     const res = await fetch(serverUrl + (serverUrl.includes("?") ? "&" : "?") + "t=" + Date.now(), {
@@ -137,37 +141,59 @@ async function checkOnlineUpdates(customUrl) {
     const installed = storage.installedContests || {};
 
     let updateCount = 0;
-    const contestsWithStatus = (manifest.contests || []).map(contest => {
+    let autoInstalledCount = 0;
+
+    const contestsWithStatus = [];
+    for (const contest of (manifest.contests || [])) {
       const local = installed[contest.id];
       const hasUpdate = !local || (contest.version > (local.version || 0));
-      if (hasUpdate) updateCount++;
+      
+      if (hasUpdate) {
+        updateCount++;
+        if (autoInstall) {
+          try {
+            await installContestPackage(contest);
+            autoInstalledCount++;
+          } catch (instErr) {
+            console.warn("Lỗi tự động cài gói đề:", contest.id, instErr);
+          }
+        }
+      }
 
-      return {
+      contestsWithStatus.push({
         ...contest,
-        hasUpdate,
-        installedVersion: local ? local.version : 0,
-        isInstalled: !!local
-      };
-    });
+        hasUpdate: autoInstall ? false : hasUpdate,
+        installedVersion: contest.version,
+        isInstalled: true
+      });
+    }
 
-    // Update Extension Badge if there are updates
-    if (updateCount > 0) {
-      chrome.action.setBadgeText({ text: updateCount.toString() });
-      chrome.action.setBadgeBackgroundColor({ color: "#ef4444" });
-    } else {
-      chrome.action.setBadgeText({ text: "" });
+    // Sau khi tự động cập nhật xong, xóa thông báo badge
+    chrome.action.setBadgeText({ text: "" });
+
+    if (autoInstalledCount > 0) {
+      console.log(`🎉 AutoThi: Đã tự động cập nhật & nạp ${autoInstalledCount} bộ đề mới nhất từ máy chủ GitHub!`);
     }
 
     return {
       isConfigured: true,
       serverUrl,
       announcement: manifest.announcement || "",
-      updateCount,
+      updateCount: autoInstall ? 0 : updateCount,
+      autoInstalledCount,
       contests: contestsWithStatus
     };
   } catch (err) {
-    console.warn("Lỗi kiểm tra cập nhật:", err);
-    throw err;
+    console.warn("Lỗi kiểm tra cập nhật online (sử dụng dữ liệu offline có sẵn):", err);
+    // Fallback load local
+    await loadDefaultQuestionBank();
+    return {
+      isConfigured: true,
+      serverUrl,
+      announcement: "Đang sử dụng dữ liệu ngoại tuyến có sẵn.",
+      updateCount: 0,
+      contests: []
+    };
   }
 }
 
