@@ -214,8 +214,9 @@
     {
       "id": "bch_tw_khoa_xiv_2026",
       "name": "Nghị quyết Hội nghị lần thứ ba BCH Trung ương Đảng khóa XIV (27/8/2026)",
-      "organizer": "Tỉnh ủy Lâm Đồng",
-      "domain_match": "*",
+      "organizer": "Đảng ủy các cơ quan Đảng tỉnh Lâm Đồng",
+      "domain_match": "danguyccqdanglamdong.vn",
+      "contest_url": "https://nghiquyet.danguyccqdanglamdong.vn/cuoc-thi/nghi-quyet-hoi-nghi-lan-thu-ba-bch-trung-uong-dang-khoa-xiv-2782026-2.html",
       "version": 1,
       "total_questions": 5,
       "updated_at": "27/08/2026",
