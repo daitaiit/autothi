@@ -69,13 +69,35 @@ body {
   letter-spacing: -0.2px;
 }
 
+.brand-subtitle-wrapper {
+  width: 175px;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+}
+
 .brand-subtitle {
+  display: inline-block;
   font-size: 11px;
   color: var(--text-muted);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 170px;
+  padding-left: 100%;
+  animation: marquee-scroll 12s linear infinite;
+}
+
+.brand-subtitle:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .brand-update-info {
