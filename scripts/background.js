@@ -255,6 +255,7 @@ async function installContestPackage(contest) {
     name: contest.name,
     version: contest.version,
     updatedAt: new Date().toISOString(),
+    displayDate: contest.updated_at || "27/08/2026",
     totalQuestions: count
   };
 

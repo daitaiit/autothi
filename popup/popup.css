@@ -78,6 +78,25 @@ body {
   max-width: 170px;
 }
 
+.brand-update-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  padding: 1px 7px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 999px;
+  font-size: 10px;
+  color: #34d399;
+  font-weight: 500;
+  max-width: fit-content;
+}
+
+.update-clock-icon {
+  font-size: 9px;
+}
+
 .status-pill {
   display: flex;
   align-items: center;

@@ -208,6 +208,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         footerBankCount.innerText = `${count} câu hỏi`;
       }
 
+      const lastUpdatedText = document.getElementById("last-updated-text");
+      if (lastUpdatedText) {
+        const installedKeys = Object.keys(installedList || {});
+        if (installedKeys.length > 0) {
+          const latestContest = installedList[installedKeys[installedKeys.length - 1]];
+          lastUpdatedText.innerText = latestContest.displayDate || latestContest.updated_at || "27/08/2026";
+        } else {
+          lastUpdatedText.innerText = "27/08/2026";
+        }
+      }
+
       if (activeContestName) {
         const installedKeys = Object.keys(installedList || {});
         if (installedKeys.length > 0) {
