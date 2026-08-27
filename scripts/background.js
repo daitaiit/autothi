@@ -254,6 +254,8 @@ async function installContestPackage(contest) {
     id: contest.id,
     name: contest.name,
     version: contest.version,
+    domain_match: contest.domain_match || "",
+    contest_url: contest.contest_url || "",
     updatedAt: new Date().toISOString(),
     displayDate: contest.updated_at || "27/08/2026",
     totalQuestions: count

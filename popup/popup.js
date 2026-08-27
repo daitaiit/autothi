@@ -201,29 +201,58 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // 6. Bank UI
-    function updateBankUI(bank, installedList) {
+    // 6. Bank UI (Tự động nhận diện cuộc thi theo Tab web đang mở hoặc đề mới nhất)
+    async function updateBankUI(bank, installedList) {
       if (footerBankCount) {
         const count = Object.keys(bank || {}).length;
         footerBankCount.innerText = `${count} câu hỏi`;
       }
 
+      let currentUrl = "";
+      try {
+        const tabs = await new Promise(res => chrome.tabs.query({ active: true, currentWindow: true }, res));
+        if (tabs && tabs[0]) {
+          currentUrl = tabs[0].url || "";
+        }
+      } catch (e) {}
+
+      let targetContest = null;
+      const installedValues = Object.values(installedList || {});
+
+      // 1. Khớp theo tên miền của trang web người dùng đang mở
+      if (currentUrl) {
+        for (const c of installedValues) {
+          if (c.domain_match && c.domain_match !== "*" && currentUrl.toLowerCase().includes(c.domain_match.toLowerCase())) {
+            targetContest = c;
+            break;
+          }
+          if (c.contest_url && (currentUrl.toLowerCase().includes("danguyccqdanglamdong.vn") || currentUrl.toLowerCase().includes("chuyendoiso.cuocthi.vn"))) {
+            if (c.contest_url.toLowerCase().includes("danguyccqdanglamdong.vn") && currentUrl.toLowerCase().includes("danguyccqdanglamdong.vn")) {
+              targetContest = c;
+              break;
+            }
+          }
+        }
+      }
+
+      // 2. Nếu không mở trang web cụ thể, ưu tiên lấy cuộc thi mới nhất (bch_tw_khoa_xiv_2026 hoặc đề đầu tiên)
+      if (!targetContest) {
+        targetContest = installedList["bch_tw_khoa_xiv_2026"] || (installedValues.length > 0 ? installedValues[0] : null);
+      }
+
       const lastUpdatedText = document.getElementById("last-updated-text");
       if (lastUpdatedText) {
-        const installedKeys = Object.keys(installedList || {});
-        if (installedKeys.length > 0) {
-          const latestContest = installedList[installedKeys[installedKeys.length - 1]];
-          lastUpdatedText.innerText = latestContest.displayDate || latestContest.updated_at || "27/08/2026";
+        if (targetContest) {
+          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "27/08/2026";
         } else {
           lastUpdatedText.innerText = "27/08/2026";
         }
       }
 
       if (activeContestName) {
-        const installedKeys = Object.keys(installedList || {});
-        if (installedKeys.length > 0) {
-          const latestContest = installedList[installedKeys[installedKeys.length - 1]];
-          activeContestName.innerText = latestContest.name || "Đã sẵn sàng hỗ trợ làm bài";
+        if (targetContest) {
+          activeContestName.innerText = targetContest.name || "Đã sẵn sàng hỗ trợ làm bài";
+          activeContestName.title = targetContest.name || "";
         } else {
           activeContestName.innerText = "Đã sẵn sàng hỗ trợ làm bài";
         }
@@ -234,6 +263,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function checkForOnlineUpdates() {
       try {
         chrome.runtime.sendMessage({ action: "CHECK_ONLINE_UPDATES" }, async response => {
+          const st = await chrome.storage.local.get(["questionBank", "installedContests"]);
+          await updateBankUI(st.questionBank, st.installedContests);
+
           if (!response || !response.success || !updateBanner) return;
           const data = response.data;
           const contests = data.contests || [];
