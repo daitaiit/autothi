@@ -46,9 +46,11 @@ async function loadDefaultQuestionBank() {
     const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
     if (res.ok) {
       const manifest = await res.json();
-      if (manifest.contests && manifest.contests[0]) {
-        await installContestPackage(manifest.contests[0]);
-        console.log("✓ Đã nạp sẵn trọn bộ 19 câu hỏi chính thức!");
+      if (manifest.contests && Array.isArray(manifest.contests)) {
+        for (const contest of manifest.contests) {
+          await installContestPackage(contest);
+        }
+        console.log("✓ Đã nạp sẵn tất cả bộ đề thi chính thức!");
       }
     }
   } catch (e) {

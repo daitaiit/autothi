@@ -1,8 +1,8 @@
 {
-  "version": "2.2.0",
-  "updated_at": "2026-08-17T17:11:00Z",
+  "version": "2.3.0",
+  "updated_at": "2026-08-27T17:11:00Z",
   "author": "Đại Tài",
-  "announcement": "Đã cập nhật bộ đáp án mới nhất: 1A – 2C – 3D – 4C – 5A – 6C – 7C – 8A – 9C – 10A – 11B – 12D – 13A – 14B – 15C – 16A – 17D – 18D – 19C – 20A!",
+  "announcement": "Đã cập nhật bộ đề Cuộc thi Tìm hiểu Nghị quyết Hội nghị lần thứ ba BCH Trung ương Đảng khóa XIV (27/8/2026): 1A – 2B – 3A – 4C – 5B!",
   "contests": [
     {
       "id": "lam_dong_2026",
@@ -207,6 +207,68 @@
             "Công nhân",
             "Cựu chiến binh",
             "Nông dân"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bch_tw_khoa_xiv_2026",
+      "name": "Nghị quyết Hội nghị lần thứ ba BCH Trung ương Đảng khóa XIV (27/8/2026)",
+      "organizer": "Tỉnh ủy Lâm Đồng",
+      "domain_match": "*",
+      "version": 1,
+      "total_questions": 5,
+      "updated_at": "27/08/2026",
+      "description": "Trọn bộ 5 câu hỏi & đáp án chuẩn (1A – 2B – 3A – 4C – 5B) do Đại Tài cập nhật.",
+      "questions": {
+        "chương trình số 40-ctr/tu, ngày 24/8/2026 của ban chấp hành đảng bộ tỉnh về triển khai thực hiện nghị quyết số 20-nq/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng và chương trình hành động số 34-ctr/tw, ngày 28/7/2026 của bộ chính trị về xây dựng và phát triển việt nam trở thành quốc gia biển mạnh đề ra grdp đến năm 2030 phấn đấu đạt bao nhiêu?": {
+          "question": "Chương trình số 40-CTr/TU, ngày 24/8/2026 của Ban Chấp hành Đảng bộ tỉnh về triển khai thực hiện Nghị quyết số 20-NQ/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng và Chương trình hành động số 34-CTr/TW, ngày 28/7/2026 của Bộ Chính trị về xây dựng và phát triển Việt Nam trở thành quốc gia biển mạnh đề ra GRDP đến năm 2030 phấn đấu đạt bao nhiêu?",
+          "correctAnswer": "10,5%/năm",
+          "options": [
+            "10,5%/năm",
+            "9-10%/năm",
+            "10%/năm",
+            "8-9%/năm"
+          ]
+        },
+        "chương trình số 42-ctr/tu, ngày 24/8/2026 của ban chấp hành đảng bộ tỉnh lâm đồng triển khai thực hiện kết luận số 75-kl/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng khóa xiv và chương trình hành động số 31-ctr/tw, ngày 28/7/2026 của bộ chính trị về bảo vệ môi trường và chủ động ứng phó với biến đổi khí hậu trong thời kỳ mới đề ra bao nhiêu nhiệm vụ, giải pháp?": {
+          "question": "Chương trình số 42-CTr/TU, ngày 24/8/2026 của Ban Chấp hành Đảng bộ tỉnh Lâm Đồng triển khai thực hiện Kết luận số 75-KL/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng khóa XIV và Chương trình hành động số 31-CTr/TW, ngày 28/7/2026 của Bộ Chính trị về bảo vệ môi trường và chủ động ứng phó với biến đổi khí hậu trong thời kỳ mới đề ra bao nhiêu nhiệm vụ, giải pháp?",
+          "correctAnswer": "09",
+          "options": [
+            "06",
+            "09",
+            "07",
+            "08"
+          ]
+        },
+        "kế hoạch số 109-kh/tu, ngày 24/8/2026 của tỉnh uỷ lâm đồng về thực hiện nghị quyết số 18-nq/tw, ngày 28/7/2026 của ban chấp hành trung ương về xây dựng xã hội kỷ cương, an toàn, văn minh, hài hoà, phát triển, tỷ lệ kết nạp đảng viên mới hằng năm trong giai đoạn 2025-2030 đạt từ bao nhiêu % tổng số đảng viên?": {
+          "question": "Kế hoạch số 109-KH/TU, ngày 24/8/2026 của Tỉnh uỷ Lâm Đồng về thực hiện Nghị quyết số 18-NQ/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương về xây dựng xã hội kỷ cương, an toàn, văn minh, hài hoà, phát triển, tỷ lệ kết nạp đảng viên mới hằng năm trong giai đoạn 2025-2030 đạt từ bao nhiêu % tổng số đảng viên?",
+          "correctAnswer": "3-4%",
+          "options": [
+            "3-4%",
+            "4-5%",
+            "2-3%",
+            "5-6%"
+          ]
+        },
+        "chương trình số 41-ctr/tu, ngày 24/8/2026 của ban chấp hành đảng bộ tỉnh lâm đồng triển khai thực hiện nghị quyết số 21-nq/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng khóa xiv về quan điểm, định hướng sửa đổi luật đất đai và các luật có liên quan và kế hoạch số 07-kh/tw, ngày 28/7/2026 của bộ chính trị có bao nhiêu nhiệm vụ, giải pháp trọng tâm?": {
+          "question": "Chương trình số 41-CTr/TU, ngày 24/8/2026 của Ban Chấp hành Đảng bộ tỉnh Lâm Đồng triển khai thực hiện Nghị quyết số 21-NQ/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng Khóa XIV về quan điểm, định hướng sửa đổi luật đất đai và các luật có liên quan và Kế hoạch số 07-KH/TW, ngày 28/7/2026 của Bộ Chính trị có bao nhiêu nhiệm vụ, giải pháp trọng tâm?",
+          "correctAnswer": "09",
+          "options": [
+            "07",
+            "08",
+            "09",
+            "10"
+          ]
+        },
+        "theo kế hoạch 106-kh/tu, ngày 20/8/2026 của ban chấp hành đảng bộ tỉnh về thực hiện kết luận số 76-kl/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng khóa xiv, về tiếp tục hoàn thiện, vận hành hiệu quả mô hình tổ chức tổng thể của hệ thống chính trị, mô hình chính quyền địa phương 2 cấp thực hiện chủ trương của trung ương chuyển giao chức năng, nhiệm vụ tham mưu về lĩnh vực nào từ ban tuyên giáo và dân vận tỉnh ủy về đảng ủy mặt trận tổ quốc việt nam tỉnh?": {
+          "question": "Theo Kế hoạch 106-KH/TU, ngày 20/8/2026 của Ban Chấp hành Đảng bộ tỉnh về thực hiện Kết luận số 76-KL/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, về tiếp tục hoàn thiện, vận hành hiệu quả mô hình tổ chức tổng thể của hệ thống chính trị, mô hình chính quyền địa phương 2 cấp thực hiện chủ trương của Trung ương chuyển giao chức năng, nhiệm vụ tham mưu về lĩnh vực nào từ Ban Tuyên giáo và Dân vận Tỉnh ủy về Đảng ủy Mặt trận Tổ quốc Việt Nam tỉnh?",
+          "correctAnswer": "Công tác Dân vận",
+          "options": [
+            "Công tác Lý luận chính trị, lịch sử Đảng",
+            "Công tác Dân vận",
+            "Công tác Khoa giáo, văn hóa, văn nghệ",
+            "Công tác Tuyên truyền, báo chí, xuất bản"
           ]
         }
       }
