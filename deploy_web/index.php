@@ -225,9 +225,24 @@ B. Chính phủ
         <input type="password" id="txt-password" class="form-control" placeholder="Nhập mật khẩu quản trị...">
       </div>
 
-      <div class="form-group">
-        <label class="form-label">GitHub Token (Tùy chọn nếu chưa lưu trong config):</label>
+      <!-- Trạng thái GitHub Token khi đã lưu sẵn -->
+      <div id="login-token-saved-box" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span id="login-token-saved-label" style="color: #34d399; font-weight: 500;">🟢 GitHub Token: Đã lưu sẵn</span>
+          <button type="button" id="btn-toggle-change-token" style="background: none; border: none; color: #60a5fa; cursor: pointer; text-decoration: underline; font-size: 11px; padding: 0;">Đổi Token khác</button>
+        </div>
+      </div>
+
+      <!-- Ô nhập GitHub Token nếu chưa lưu hoặc muốn đổi -->
+      <div class="form-group" id="login-token-group">
+        <label class="form-label" style="display: flex; justify-content: space-between;">
+          <span>GitHub Token (PAT):</span>
+          <span style="font-weight: normal; color: #94a3b8; font-size: 11px;">Chỉ cần nhập 1 lần duy nhất</span>
+        </label>
         <input type="password" id="txt-login-token" class="form-control" placeholder="ghp_xxxx hoặc github_pat_xxxx">
+        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+          💡 Sau khi lưu, hệ thống sẽ <b>tự động lưu vĩnh viễn</b> trên server, các lần đăng nhập sau không cần nhập lại.
+        </div>
       </div>
 
       <div id="login-msg" style="color: #f87171; font-size: 12.5px; margin-bottom: 12px; text-align: center;"></div>
@@ -276,19 +291,22 @@ B. Chính phủ
         <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Quyền cần thiết: Contents (Read and Write)</p>
       </div>
 
-      <div class="alert-box info" style="font-size: 12px; line-height: 1.5;">
+      <div id="token-current-status" style="margin-bottom: 14px;"></div>
+
+      <div class="alert-box info" style="font-size: 12px; line-height: 1.5; margin-bottom: 14px;">
         Token dùng để tự động Commit & Push câu hỏi mới vào repo <b>daitaiit/autothi</b>. Bạn có thể tạo tại: <br>
-        <i>GitHub &gt; Settings &gt; Developer settings &gt; Personal access tokens</i>.
+        <i>GitHub &gt; Settings &gt; Developer settings &gt; Personal access tokens</i> (Quyền Contents: Read &amp; Write).
       </div>
 
       <div class="form-group">
-        <label class="form-label">Nhập GitHub Token (PAT):</label>
+        <label class="form-label">Nhập GitHub Token mới (PAT):</label>
         <input type="password" id="txt-token-input" class="form-control" placeholder="ghp_xxxxxxxxxxxxxx">
       </div>
 
       <div style="display: flex; gap: 10px; margin-top: 18px;">
         <button id="btn-close-token-modal" class="btn" style="flex: 1; background: rgba(255,255,255,0.08); color: #fff;">Đóng</button>
-        <button id="btn-save-token" class="btn btn-primary" style="flex: 1;">Lưu Token</button>
+        <button id="btn-clear-token" class="btn" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);">Xóa</button>
+        <button id="btn-save-token" class="btn btn-primary" style="flex: 1.5;">Lưu Vĩnh Viễn</button>
       </div>
     </div>
   </div>

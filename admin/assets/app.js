@@ -20,6 +20,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("btn-save-token").addEventListener("click", handleSaveToken);
   document.getElementById("btn-refresh-bank").addEventListener("click", loadContests);
 
+  const btnClearToken = document.getElementById("btn-clear-token");
+  if (btnClearToken) btnClearToken.addEventListener("click", handleClearToken);
+
+  const btnToggleToken = document.getElementById("btn-toggle-change-token");
+  if (btnToggleToken) {
+    btnToggleToken.addEventListener("click", () => {
+      const g = document.getElementById("login-token-group");
+      if (g) g.style.display = g.style.display === "none" ? "block" : "none";
+    });
+  }
+
   document.getElementById("btn-open-token-modal").addEventListener("click", () => {
     document.getElementById("token-modal").classList.remove("hidden");
   });
@@ -68,15 +79,62 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (txtBankSearch) txtBankSearch.addEventListener("input", renderGitHubBank);
   if (selBankFilterContest) selBankFilterContest.addEventListener("change", renderGitHubBank);
 
+  // Tự động sinh Slug khi người dùng gõ Tên cuộc thi
+  const txtContestName = document.getElementById("txt-contest-name");
+  const txtContestId = document.getElementById("txt-contest-id");
+  if (txtContestName && txtContestId) {
+    txtContestName.addEventListener("input", () => {
+      if (document.getElementById("sel-contest").value === "__new__") {
+        txtContestId.value = slugifyVietnamese(txtContestName.value);
+      }
+    });
+  }
+
+  // Tự động phân tích tiêu đề khi người dùng DÁN hoặc NHẬP đề thô
+  const txtRaw = document.getElementById("txt-raw-input");
+  if (txtRaw) {
+    const autoDetectContest = () => {
+      const sel = document.getElementById("sel-contest");
+      if (sel && sel.value === "__new__") {
+        const meta = extractContestMetaFromRawText(txtRaw.value);
+        if (meta) {
+          if (!txtContestName.value || txtContestName.dataset.autoFilled === "true") {
+            txtContestName.value = meta.name;
+            txtContestName.dataset.autoFilled = "true";
+          }
+          if (!txtContestId.value || txtContestId.dataset.autoFilled === "true") {
+            txtContestId.value = meta.id;
+            txtContestId.dataset.autoFilled = "true";
+          }
+          const txtDesc = document.getElementById("txt-contest-desc");
+          if (txtDesc && (!txtDesc.value || txtDesc.dataset.autoFilled === "true")) {
+            txtDesc.value = meta.desc;
+            txtDesc.dataset.autoFilled = "true";
+          }
+        }
+      }
+    };
+
+    txtRaw.addEventListener("input", autoDetectContest);
+    txtRaw.addEventListener("paste", () => setTimeout(autoDetectContest, 60));
+  }
+
   // Select contest handler in upload tab
   const selContest = document.getElementById("sel-contest");
   selContest.addEventListener("change", () => {
     const val = selContest.value;
     if (val === "__new__") {
       document.getElementById("new-contest-fields").style.display = "block";
-      document.getElementById("txt-contest-id").value = "";
-      document.getElementById("txt-contest-name").value = "";
-      document.getElementById("txt-contest-desc").value = "";
+      const meta = extractContestMetaFromRawText(document.getElementById("txt-raw-input")?.value || "");
+      if (meta) {
+        document.getElementById("txt-contest-id").value = meta.id;
+        document.getElementById("txt-contest-name").value = meta.name;
+        document.getElementById("txt-contest-desc").value = meta.desc;
+      } else {
+        document.getElementById("txt-contest-id").value = "";
+        document.getElementById("txt-contest-name").value = "";
+        document.getElementById("txt-contest-desc").value = "";
+      }
     } else {
       document.getElementById("new-contest-fields").style.display = "none";
       const found = availableContests.find(c => c.id === val);
@@ -89,16 +147,144 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
+// Helper: Chuyển tiếng Việt có dấu thành slug không dấu
+function slugifyVietnamese(text) {
+  if (!text) return "";
+  let str = text.toLowerCase();
+  str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+  str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+  str = str.replace(/đ/g, "d");
+  str = str.replace(/[^a-z0-9\s-]/g, "");
+  str = str.trim().replace(/[\s_]+/g, "-");
+  str = str.replace(/-+/g, "-");
+  return str;
+}
+
+// Helper: Tự động trích xuất Tên, Mã ID và Mô tả từ đoạn văn bản thô
+function extractContestMetaFromRawText(text) {
+  if (!text) return null;
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (lines.length === 0) return null;
+
+  // Lấy các dòng tiêu đề trước khi xuất hiện câu hỏi trắc nghiệm đầu tiên
+  let headerLines = [];
+  for (let line of lines.slice(0, 10)) {
+    if (/^(câu\s*\d+|bài\s*\d+|\d+[\.\:\)\/])/i.test(line)) {
+      break;
+    }
+    headerLines.push(line);
+  }
+
+  let title = "";
+  if (headerLines.length > 0) {
+    let foundLine = headerLines.find(l => /(cuộc\s*thi|hội\s*thi|đề\s*thi|tìm\s*hiểu|nghị\s*quyết|bộ\s*câu\s*hỏi|kiểm\s*tra|ôn\s*tập|hội\s*nghị)/i.test(l));
+    title = foundLine || headerLines[0];
+  }
+
+  if (!title) return null;
+
+  title = title.replace(/^(đề\s*thi|tên\s*cuộc\s*thi|chủ\s*đề|nội\s*dung|bộ\s*câu\s*hỏi\s*về)[\s\:\-]+/i, "").trim();
+  if (title.length > 120) title = title.substring(0, 120).trim();
+
+  let slug = slugifyVietnamese(title);
+  if (!slug) slug = "cuoc-thi-" + new Date().getFullYear();
+  const curYear = new Date().getFullYear().toString();
+  if (!slug.includes(curYear) && !slug.includes("202")) {
+    slug += "-" + curYear;
+  }
+
+  return {
+    name: title,
+    id: slug,
+    desc: `Trọn bộ câu hỏi và đáp án trắc nghiệm ${title}`
+  };
+}
+
+// Cập nhật trạng thái Token hiển thị trên giao diện
+function updateTokenStatus(hasToken, tokenMasked = "") {
+  const tag = document.getElementById("token-status-tag");
+  if (tag) {
+    if (hasToken) {
+      tag.className = "badge-tag";
+      tag.style.background = "rgba(16, 185, 129, 0.15)";
+      tag.style.color = "#34d399";
+      tag.style.borderColor = "rgba(16, 185, 129, 0.3)";
+      tag.innerHTML = `🟢 GitHub: Đã kết nối ${tokenMasked ? `(${tokenMasked})` : ""}`;
+    } else {
+      tag.className = "badge-tag";
+      tag.style.background = "rgba(245, 158, 11, 0.15)";
+      tag.style.color = "#fbbf24";
+      tag.style.borderColor = "rgba(245, 158, 11, 0.3)";
+      tag.innerHTML = "⚠️ GitHub: Chưa có Token";
+    }
+  }
+
+  // Token modal status box
+  const statusInfo = document.getElementById("token-current-status");
+  if (statusInfo) {
+    if (hasToken) {
+      statusInfo.innerHTML = `
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px;">
+          <div style="color: #34d399; font-weight: 600; margin-bottom: 3px;">🟢 Đã kích hoạt &amp; lưu vĩnh viễn trên máy chủ</div>
+          <div style="color: #cbd5e1;">Mã Token: <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #60a5fa;">${tokenMasked || "ghp_••••••••••••"}</code></div>
+          <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Mọi lần đăng nhập sau không cần nhập lại. Bạn có thể nhập mã mới để thay thế hoặc bấm nút Xóa.</div>
+        </div>
+      `;
+    } else {
+      statusInfo.innerHTML = `
+        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px;">
+          <div style="color: #fbbf24; font-weight: 600; margin-bottom: 3px;">⚠️ Chưa cấu hình GitHub Token</div>
+          <div style="color: #cbd5e1; font-size: 11.5px;">Nhập Token bên dưới một lần duy nhất để tự động đẩy câu hỏi vào repo <b>daitaiit/autothi</b>.</div>
+        </div>
+      `;
+    }
+  }
+
+  // Login modal token box
+  const savedBox = document.getElementById("login-token-saved-box");
+  const tokenGroup = document.getElementById("login-token-group");
+  const savedLabel = document.getElementById("login-token-saved-label");
+  if (savedBox && tokenGroup) {
+    if (hasToken) {
+      savedBox.style.display = "block";
+      tokenGroup.style.display = "none";
+      if (savedLabel) {
+        savedLabel.innerHTML = `🟢 <b>GitHub Token:</b> Đã lưu sẵn (${tokenMasked || "Đang hoạt động"})`;
+      }
+    } else {
+      const localPat = localStorage.getItem("autothi_github_pat");
+      if (localPat) {
+        savedBox.style.display = "block";
+        tokenGroup.style.display = "none";
+        if (savedLabel) {
+          savedLabel.innerHTML = `🟢 <b>GitHub Token:</b> Đã lưu từ trước (${localPat.substring(0, 8)}...${localPat.substring(localPat.length - 4)})`;
+        }
+        const txtLoginToken = document.getElementById("txt-login-token");
+        if (txtLoginToken) txtLoginToken.value = localPat;
+      } else {
+        savedBox.style.display = "none";
+        tokenGroup.style.display = "block";
+      }
+    }
+  }
+}
+
 // 1. Auth check
 async function checkAuth() {
   try {
     const res = await fetch("api.php?action=check_auth");
     const json = await res.json();
-    if (json.success && json.data.isLoggedIn) {
-      document.getElementById("login-modal").classList.add("hidden");
-      updateTokenStatus(json.data.hasGithubToken);
-    } else {
-      document.getElementById("login-modal").classList.remove("hidden");
+    if (json.success) {
+      updateTokenStatus(json.data.hasGithubToken, json.data.tokenMasked);
+      if (json.data.isLoggedIn) {
+        document.getElementById("login-modal").classList.add("hidden");
+      } else {
+        document.getElementById("login-modal").classList.remove("hidden");
+      }
     }
   } catch (e) {
     console.error("Lỗi kiểm tra đăng nhập:", e);
@@ -108,7 +294,7 @@ async function checkAuth() {
 async function handleLogin() {
   const usr = (document.getElementById("txt-username")?.value || "").trim();
   const pwd = document.getElementById("txt-password").value;
-  const token = document.getElementById("txt-login-token").value;
+  let token = (document.getElementById("txt-login-token")?.value || "").trim();
   const msgEl = document.getElementById("login-msg");
 
   if (!usr || !pwd) {
@@ -116,19 +302,30 @@ async function handleLogin() {
     return;
   }
 
+  // Tự động dùng token đã lưu ở localStorage nếu ô input trống
+  if (!token) {
+    token = localStorage.getItem("autothi_github_pat") || "";
+  }
+
   msgEl.innerText = "Đang kiểm tra...";
 
   try {
     const res = await fetch("api.php?action=login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        ...(token ? { "X-Github-Token": token } : {})
+      },
       body: JSON.stringify({ username: usr, password: pwd, github_token: token })
     });
     const json = await res.json();
     if (json.success) {
+      if (token) {
+        localStorage.setItem("autothi_github_pat", token);
+      }
       document.getElementById("login-modal").classList.add("hidden");
+      await checkAuth();
       await loadContests();
-      checkAuth();
     } else {
       msgEl.innerText = json.error || "Tài khoản hoặc mật khẩu không đúng!";
     }
@@ -465,6 +662,23 @@ async function handleParse() {
       renderParsedPreviewList();
       statusEl.innerHTML = `<span style="color: #34d399;">✓ AI đã bóc tách thành công <b>${parsedQuestions.length}</b> câu hỏi chuẩn xác!</span>`;
       document.getElementById("btn-push-github").disabled = parsedQuestions.length === 0;
+
+      // Tự động nhận diện & cập nhật Tên/Mã cuộc thi từ AI nếu đang tạo cuộc thi mới
+      const selContest = document.getElementById("sel-contest");
+      if (selContest && selContest.value === "__new__") {
+        if (json.data.contest_name) {
+          const txtName = document.getElementById("txt-contest-name");
+          if (txtName) txtName.value = json.data.contest_name;
+        }
+        if (json.data.contest_id) {
+          const txtId = document.getElementById("txt-contest-id");
+          if (txtId) txtId.value = json.data.contest_id;
+        }
+        if (json.data.contest_desc) {
+          const txtDesc = document.getElementById("txt-contest-desc");
+          if (txtDesc) txtDesc.value = json.data.contest_desc;
+        }
+      }
     } else {
       statusEl.innerHTML = `<span style="color: #f87171;">❌ Lỗi: ${json.error || "Không thể bóc tách đề thi!"}</span>`;
     }
@@ -596,7 +810,7 @@ async function handlePushGitHub() {
   }
 }
 
-// 7. Save Token
+// 7. Save & Clear Token
 async function handleSaveToken() {
   const token = document.getElementById("txt-token-input").value.trim();
   if (!token) {
@@ -604,19 +818,47 @@ async function handleSaveToken() {
     return;
   }
 
-  const res = await fetch("api.php?action=save_github_token", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token: token })
-  });
-  const json = await res.json();
+  try {
+    const res = await fetch("api.php?action=save_github_token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: token })
+    });
+    const json = await res.json();
 
-  if (json.success) {
-    alert("✓ Đã lưu GitHub Token vào phiên làm việc!");
-    document.getElementById("token-modal").classList.add("hidden");
-    checkAuth();
-  } else {
-    alert(`Lỗi: ${json.error}`);
+    if (json.success) {
+      localStorage.setItem("autothi_github_pat", token);
+      alert("✓ Đã lưu vĩnh viễn GitHub Token vào hệ thống! Từ nay mọi lần đăng nhập không cần nhập lại nữa.");
+      document.getElementById("txt-token-input").value = "";
+      document.getElementById("token-modal").classList.add("hidden");
+      await checkAuth();
+    } else {
+      alert(`Lỗi: ${json.error}`);
+    }
+  } catch (e) {
+    alert("Lỗi kết nối máy chủ khi lưu token!");
+  }
+}
+
+async function handleClearToken() {
+  if (!confirm("Bạn có chắc chắn muốn xóa GitHub Token đã lưu trên hệ thống?")) return;
+  try {
+    const res = await fetch("api.php?action=save_github_token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clear: true })
+    });
+    const json = await res.json();
+    if (json.success) {
+      localStorage.removeItem("autothi_github_pat");
+      alert("✓ Đã xóa GitHub Token khỏi hệ thống!");
+      document.getElementById("token-modal").classList.add("hidden");
+      await checkAuth();
+    } else {
+      alert("Lỗi: " + json.error);
+    }
+  } catch (e) {
+    alert("Lỗi kết nối máy chủ!");
   }
 }
 

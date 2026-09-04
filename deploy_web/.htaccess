@@ -1,0 +1,5 @@
+# Block access to hidden files and secret files
+<FilesMatch "^\.|\.secret$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

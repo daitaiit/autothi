@@ -22,10 +22,28 @@ function isAuthenticated() {
     return !empty($_SESSION['autothi_admin_logged']);
 }
 
-// Lấy GitHub Token từ config hoặc session
+// File lưu trữ GitHub Token vĩnh viễn trên server
+define('TOKEN_STORE_FILE', __DIR__ . '/.github_token.secret');
+
+// Lấy GitHub Token từ config, file bí mật, session hoặc HTTP headers
 function getEffectiveGithubToken() {
     if (!empty(GITHUB_TOKEN)) return GITHUB_TOKEN;
+    if (file_exists(TOKEN_STORE_FILE)) {
+        $saved = trim((string)@file_get_contents(TOKEN_STORE_FILE));
+        if (!empty($saved)) return $saved;
+    }
     if (!empty($_SESSION['github_token'])) return $_SESSION['github_token'];
+
+    // Lấy từ HTTP header nếu client gửi kèm
+    if (!empty($_SERVER['HTTP_X_GITHUB_TOKEN'])) {
+        $hdrToken = trim($_SERVER['HTTP_X_GITHUB_TOKEN']);
+        if (!empty($hdrToken)) {
+            $_SESSION['github_token'] = $hdrToken;
+            @file_put_contents(TOKEN_STORE_FILE, $hdrToken);
+            return $hdrToken;
+        }
+    }
+
     return null;
 }
 
@@ -35,7 +53,6 @@ $input = json_decode($rawInput, true) ?: [];
 $action = $_GET['action'] ?? $input['action'] ?? '';
 
 // -------------------------------------------------------------
-// -------------------------------------------------------------
 // 1. Xác thực & Đăng nhập
 // -------------------------------------------------------------
 if ($action === 'login') {
@@ -44,19 +61,28 @@ if ($action === 'login') {
     if ($username === ADMIN_USERNAME && $password === ADMIN_PASSWORD) {
         $_SESSION['autothi_admin_logged'] = true;
         if (!empty($input['github_token'])) {
-            $_SESSION['github_token'] = trim($input['github_token']);
+            $token = trim($input['github_token']);
+            $_SESSION['github_token'] = $token;
+            @file_put_contents(TOKEN_STORE_FILE, $token);
         }
-        jsonResponse(true, ['message' => 'Đăng nhập thành công!']);
+        $effectiveToken = getEffectiveGithubToken();
+        jsonResponse(true, [
+            'message' => 'Đăng nhập thành công!',
+            'hasGithubToken' => !empty($effectiveToken),
+            'tokenMasked' => $effectiveToken ? (substr($effectiveToken, 0, 8) . '...' . substr($effectiveToken, -4)) : ''
+        ]);
     } else {
         jsonResponse(false, null, 'Tên đăng nhập hoặc mật khẩu quản trị không chính xác!', 401);
     }
 }
 
 if ($action === 'check_auth') {
+    $token = getEffectiveGithubToken();
     jsonResponse(true, [
         'isLoggedIn' => isAuthenticated(),
         'username' => ADMIN_USERNAME,
-        'hasGithubToken' => !empty(getEffectiveGithubToken()),
+        'hasGithubToken' => !empty($token),
+        'tokenMasked' => $token ? (substr($token, 0, 8) . '...' . substr($token, -4)) : '',
         'owner' => GITHUB_OWNER,
         'repo' => GITHUB_REPO
     ]);
@@ -228,14 +254,24 @@ if (!isAuthenticated()) {
     jsonResponse(false, null, 'Vui lòng đăng nhập để tiếp tục!', 403);
 }
 
-// Lưu GitHub Token vào Session
+// Lưu / Xóa GitHub Token vĩnh viễn trên server
 if ($action === 'save_github_token') {
+    if (!empty($input['clear'])) {
+        unset($_SESSION['github_token']);
+        if (file_exists(TOKEN_STORE_FILE)) @unlink(TOKEN_STORE_FILE);
+        jsonResponse(true, ['message' => 'Đã xóa GitHub Token khỏi hệ thống!']);
+    }
+
     $token = trim($input['token'] ?? '');
     if (!$token) {
         jsonResponse(false, null, 'Token không được để trống!');
     }
     $_SESSION['github_token'] = $token;
-    jsonResponse(true, ['message' => 'Đã lưu GitHub Token vào phiên làm việc!']);
+    @file_put_contents(TOKEN_STORE_FILE, $token);
+    jsonResponse(true, [
+        'message' => 'Đã lưu vĩnh viễn GitHub Token vào hệ thống! Từ nay không cần nhập lại nữa.',
+        'tokenMasked' => substr($token, 0, 8) . '...' . substr($token, -4)
+    ]);
 }
 
 // -------------------------------------------------------------
@@ -426,16 +462,25 @@ if ($action === 'parse_questions') {
 
     $systemInstruction = <<<EOT
 Bạn là chuyên gia phân tích dữ liệu và bóc tách đề thi trắc nghiệm học thuật tại Việt Nam.
-Nhiệm vụ: Hãy đọc kỹ văn bản thô do người dùng cung cấp (có thể copy từ Word, PDF, Web đề thi), bóc tách thành danh sách các câu hỏi trắc nghiệm hoàn chỉnh và chính xác.
+Nhiệm vụ: Hãy đọc kỹ văn bản thô do người dùng cung cấp (có thể copy từ Word, PDF, Web đề thi), bóc tách thành danh sách các câu hỏi trắc nghiệm hoàn chỉnh và chính xác, đồng thời nhận diện thông tin cuộc thi (Tên cuộc thi, Mã cuộc thi slug không dấu, Mô tả).
 
 QUY TẮC BÓC TÁCH:
-1. Nhận diện từng câu hỏi: Nội dung câu hỏi đầy đủ, không cắt xén.
-2. Nhận diện các lựa chọn (A, B, C, D...): Giữ nguyên định dạng tiền tố (ví dụ "A. ...", "B. ...").
-3. Nhận diện đáp án đúng:
+1. Nhận diện Cuộc Thi:
+   - "contest_name": Tên cuộc thi đầy đủ, trang trọng (Ví dụ: "Hội nghị toàn quốc học tập, quán triệt Nghị quyết 2026" hoặc "Hội thi Tìm hiểu Tư tưởng Hồ Chí Minh 2026"). Nếu trong bài không ghi rõ, hãy đặt tên theo chủ đề chính của câu hỏi.
+   - "contest_id": Mã định danh viết thường không dấu nối bằng dấu gạch ngang (slug), có kèm năm (Ví dụ: "hoi-nghi-nghi-quyet-tw-2026" hoặc "tu-tuong-hcm-2026").
+   - "contest_desc": Mô tả ngắn gọn 1 câu về nội dung cuộc thi (Ví dụ: "Trọn bộ câu hỏi và đáp án trắc nghiệm tìm hiểu...").
+
+2. Nhận diện từng câu hỏi: Nội dung câu hỏi đầy đủ, không cắt xén.
+3. Nhận diện các lựa chọn (A, B, C, D...): Giữ nguyên định dạng tiền tố (ví dụ "A. ...", "B. ...").
+4. Nhận diện đáp án đúng:
    - Nếu trong đề có ghi sẵn đáp án (ví dụ: "Chọn đáp án C", "Đáp án: A", in đậm, có dấu *, gạch chân...), hãy lấy chính xác đáp án đó.
    - Nếu đề KHÔNG ghi đáp án, bạn hãy tự vận dụng kiến thức chuyên gia để giải và chọn đáp án chính xác nhất.
-4. Trả về định dạng JSON duy nhất dạng danh sách (Array of Objects):
+
+5. Trả về định dạng JSON duy nhất dạng đối tượng:
 {
+  "contest_name": "<Tên cuộc thi đầy đủ>",
+  "contest_id": "<slug-khong-dau-kem-nam>",
+  "contest_desc": "<Mô tả ngắn cuộc thi>",
   "total": <tổng số câu bóc tách được>,
   "questions": [
     {
@@ -502,6 +547,9 @@ EOT;
     }
 
     jsonResponse(true, [
+        'contest_name' => $parsed['contest_name'] ?? '',
+        'contest_id' => $parsed['contest_id'] ?? '',
+        'contest_desc' => $parsed['contest_desc'] ?? '',
         'total' => count($parsed['questions']),
         'questions' => $parsed['questions'],
         'modelUsed' => $model
