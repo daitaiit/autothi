@@ -342,6 +342,7 @@ QUY TRÌNH TƯ DUY (TIẾT KIỆM TOKEN & CHÍNH XÁC):
 
       const response = await fetch(url, {
         method: "POST",
+        signal: AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined,
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${key}`

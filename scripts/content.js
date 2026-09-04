@@ -991,13 +991,19 @@
       .trim();
   }
 
-  function sendToBackground(msg) {
+  function sendToBackground(msg, timeoutMs = 25000) {
     return new Promise((resolve, reject) => {
+      let timer = setTimeout(() => {
+        reject(new Error("Yêu cầu xử lý vượt quá thời gian (Timeout 25s). Đang bỏ qua để tránh treo bài làm."));
+      }, timeoutMs);
+
       try {
         if (!chrome.runtime || !chrome.runtime.sendMessage) {
+          clearTimeout(timer);
           return reject(new Error("Tiện ích vừa được Tải lại (Reload). Vui lòng bấm F5 để kết nối lại!"));
         }
         chrome.runtime.sendMessage(msg, res => {
+          clearTimeout(timer);
           if (chrome.runtime.lastError) {
             const err = chrome.runtime.lastError.message || "";
             if (err.includes("Extension context invalidated") || err.includes("context invalidated")) {
@@ -1010,6 +1016,7 @@
           }
         });
       } catch (e) {
+        clearTimeout(timer);
         reject(new Error("Tiện ích vừa được Tải lại (Reload). Vui lòng bấm F5 để kết nối lại!"));
       }
     });
