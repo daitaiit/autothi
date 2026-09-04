@@ -101,7 +101,11 @@ async function loadDefaultQuestionBank() {
       }
       if (manifest.contests && Array.isArray(manifest.contests)) {
         for (const contest of manifest.contests) {
-          await installContestPackage(contest);
+          try {
+            await installContestPackage(contest);
+          } catch (instErr) {
+            console.warn("Lỗi nạp gói đề mặc định:", contest.id, instErr);
+          }
         }
         console.log("✓ Đã nạp sẵn tất cả bộ đề thi chính thức!");
       }
@@ -162,17 +166,71 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 async function syncLatestOnlineQuestions(autoInstall = true, customUrl = null) {
   const serverUrl = customUrl || (await getSetting("serverUrl")) || DEFAULT_SERVER_URL;
+  const cdnFallbackUrl = "https://cdn.jsdelivr.net/gh/daitaiit/autothi@main/contests_manifest.json";
 
+  let manifest = null;
+  let activeUrl = serverUrl;
+
+  // 1. Tải từ máy chủ chính (GitHub Raw hoặc máy chủ tùy chọn)
   try {
-    const res = await fetch(serverUrl + (serverUrl.includes("?") ? "&" : "?") + "t=" + Date.now(), {
+    const res = await fetch(activeUrl + (activeUrl.includes("?") ? "&" : "?") + "t=" + Date.now(), {
       cache: "no-store"
     });
+    if (res.ok) {
+      manifest = await res.json();
+    }
+  } catch (netErr) {
+    console.warn("Lỗi tải từ URL chính, thử chuyển sang CDN fallback:", netErr);
+  }
 
-    if (!res.ok) {
-      throw new Error(`Máy chủ phản hồi HTTP ${res.status}: ${res.statusText}`);
+  // 2. Dự phòng CDN jsdelivr tốc độ cao nếu URL chính là GitHub Raw
+  if (!manifest && (activeUrl.includes("raw.githubusercontent.com") || !customUrl)) {
+    try {
+      const res = await fetch(cdnFallbackUrl + "?t=" + Date.now(), { cache: "no-store" });
+      if (res.ok) {
+        manifest = await res.json();
+        activeUrl = cdnFallbackUrl;
+      }
+    } catch (cdnErr) {
+      console.warn("Lỗi tải từ CDN fallback:", cdnErr);
+    }
+  }
+
+  // 3. Dự phòng nạp từ gói nội bộ tiện ích nếu không có mạng
+  if (!manifest) {
+    try {
+      const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
+      if (res.ok) {
+        manifest = await res.json();
+      }
+    } catch (localErr) {
+      console.warn("Lỗi nạp manifest local:", localErr);
+    }
+  }
+
+  if (!manifest) {
+    const st = await chrome.storage.local.get(["announcement"]);
+    return {
+      isConfigured: true,
+      serverUrl: activeUrl,
+      announcement: st.announcement || "",
+      updateCount: 0,
+      contests: []
+    };
+  }
+
+  try {
+    // CẬP NHẬT NGAY LẬP TỨC: Cuộc thi ghim, Thông báo hệ thống & Cài đặt toàn hệ thống
+    if (manifest.active_contest) {
+      await chrome.storage.local.set({ activeContest: manifest.active_contest });
+    }
+    if (manifest.announcement !== undefined) {
+      await chrome.storage.local.set({ announcement: manifest.announcement });
+    }
+    if (manifest.global_settings) {
+      await applyGlobalSettings(manifest.global_settings);
     }
 
-    const manifest = await res.json();
     const storage = await chrome.storage.local.get(["installedContests"]);
     const installed = storage.installedContests || {};
 
@@ -204,40 +262,28 @@ async function syncLatestOnlineQuestions(autoInstall = true, customUrl = null) {
       });
     }
 
-    // Cập nhật Cuộc thi ghim & Cài đặt toàn hệ thống từ Manifest
-    if (manifest.active_contest) {
-      await chrome.storage.local.set({ activeContest: manifest.active_contest });
-    }
-    if (manifest.announcement !== undefined) {
-      await chrome.storage.local.set({ announcement: manifest.announcement });
-    }
-    if (manifest.global_settings) {
-      await applyGlobalSettings(manifest.global_settings);
-    }
-
     // Sau khi tự động cập nhật xong, xóa thông báo badge
     chrome.action.setBadgeText({ text: "" });
 
     if (autoInstalledCount > 0) {
-      console.log(`🎉 AutoThi: Đã tự động cập nhật & nạp ${autoInstalledCount} bộ đề mới nhất từ máy chủ GitHub!`);
+      console.log(`🎉 AutoThi: Đã tự động cập nhật & nạp ${autoInstalledCount} bộ đề mới nhất!`);
     }
 
     return {
       isConfigured: true,
-      serverUrl,
+      serverUrl: activeUrl,
       announcement: manifest.announcement || "",
       updateCount: autoInstall ? 0 : updateCount,
       autoInstalledCount,
       contests: contestsWithStatus
     };
   } catch (err) {
-    console.warn("Lỗi kiểm tra cập nhật online (sử dụng dữ liệu offline có sẵn):", err);
-    // Fallback load local
-    await loadDefaultQuestionBank();
+    console.warn("Lỗi xử lý manifest:", err);
+    const st = await chrome.storage.local.get(["announcement"]);
     return {
       isConfigured: true,
-      serverUrl,
-      announcement: "Đang sử dụng dữ liệu ngoại tuyến có sẵn.",
+      serverUrl: activeUrl,
+      announcement: st.announcement || "",
       updateCount: 0,
       contests: []
     };
@@ -312,9 +358,6 @@ async function installContestPackage(contest) {
     questionBank: bank,
     installedContests: installed
   });
-
-  // Re-check updates to clear badge
-  checkOnlineUpdates();
 
   return count;
 }

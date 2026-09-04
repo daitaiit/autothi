@@ -43,11 +43,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function renderAnnouncement(msg) {
       if (!annBanner || !annText) return;
-      if (msg && msg.trim()) {
+      if (typeof msg === "string" && msg.trim()) {
         annText.innerText = msg.trim();
         annBanner.classList.remove("hidden");
       } else {
         annBanner.classList.add("hidden");
+        annText.innerText = "";
       }
     }
 
@@ -284,34 +285,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
 
-      // 2. Nếu không mở trang web cụ thể, ưu tiên lấy cuộc thi được ghim toàn hệ thống từ Web Admin
-      if (!targetContest) {
-        let activeC = activeContestOverride;
-        if (!activeC) {
-          try {
-            const st = await chrome.storage.local.get("activeContest");
-            activeC = st.activeContest;
-          } catch (e) {}
-        }
+      // 2. Lấy thông tin cuộc thi được ghim toàn hệ thống từ Web Admin
+      let activeC = activeContestOverride;
+      if (!activeC) {
+        try {
+          const st = await chrome.storage.local.get("activeContest");
+          activeC = st.activeContest;
+        } catch (e) {}
+      }
 
+      if (!targetContest) {
         if (activeC && activeC.name) {
-          targetContest = (installedList && installedList[activeC.id]) ? installedList[activeC.id] : {
-            id: activeC.id,
-            name: activeC.name,
-            displayDate: activeC.date || "03/09/2026",
-            updated_at: activeC.date || "03/09/2026"
+          const matched = (installedList && installedList[activeC.id]) ? { ...installedList[activeC.id] } : {};
+          targetContest = {
+            ...matched,
+            id: activeC.id || matched.id,
+            name: activeC.name, // Luôn ưu tiên tên cuộc thi được ghim từ Web Admin
+            displayDate: activeC.date || matched.displayDate || "04/09/2026", // Luôn ưu tiên ngày từ Web Admin
+            updated_at: activeC.date || matched.updated_at || "04/09/2026"
           };
         } else {
           targetContest = (installedList && (installedList["hoi_nghi_bct_03092026"] || installedList["bch_tw_khoa_xiv_2026"])) || (installedValues.length > 0 ? installedValues[0] : null);
         }
+      } else if (activeC && targetContest.id === activeC.id) {
+        if (activeC.name) targetContest.name = activeC.name;
+        if (activeC.date) targetContest.displayDate = activeC.date;
       }
 
       const lastUpdatedText = document.getElementById("last-updated-text");
       if (lastUpdatedText) {
         if (targetContest) {
-          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "03/09/2026";
+          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "04/09/2026";
         } else {
-          lastUpdatedText.innerText = "27/08/2026";
+          lastUpdatedText.innerText = (activeC && activeC.date) ? activeC.date : "04/09/2026";
         }
       }
 
@@ -320,7 +326,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           activeContestName.innerText = targetContest.name || "Đã sẵn sàng hỗ trợ làm bài";
           activeContestName.title = targetContest.name || "";
         } else {
-          activeContestName.innerText = "Đã sẵn sàng hỗ trợ làm bài";
+          activeContestName.innerText = (activeC && activeC.name) ? activeC.name : "Đã sẵn sàng hỗ trợ làm bài";
         }
       }
     }
@@ -329,8 +335,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function checkForOnlineUpdates() {
       try {
         chrome.runtime.sendMessage({ action: "CHECK_ONLINE_UPDATES" }, async response => {
-          const st = await chrome.storage.local.get(["questionBank", "installedContests", "activeContest", "settings"]);
+          const st = await chrome.storage.local.get(["questionBank", "installedContests", "activeContest", "settings", "announcement"]);
           await updateBankUI(st.questionBank, st.installedContests, st.activeContest);
+
+          // Cập nhật thông báo hệ thống (nếu có thông báo từ server hoặc từ local storage)
+          const latestAnn = (response && response.data && response.data.announcement !== undefined)
+            ? response.data.announcement
+            : (st.announcement || "");
+          renderAnnouncement(latestAnn);
 
           // Cập nhật lại các toggle nếu có cài đặt mới từ admin
           if (st.settings) {
@@ -346,13 +358,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           }
 
-          if (!response || !response.success) return;
+          if (!response || !response.success || !updateBanner) return;
           const data = response.data;
-          if (data && data.announcement !== undefined) {
-            renderAnnouncement(data.announcement);
-          }
-          if (!updateBanner) return;
-          const contests = data.contests || [];
+          const contests = (data && data.contests) || [];
 
           const needUpdate = contests.find(c => c.hasUpdate);
           if (needUpdate) {
@@ -396,7 +404,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnSyncNow) {
       btnSyncNow.addEventListener("click", () => {
-        showToast("🔄 Đang kiểm tra đề thi mới...");
+        showToast("🔄 Đang đồng bộ đề thi & thông báo...");
         checkForOnlineUpdates();
       });
     }
