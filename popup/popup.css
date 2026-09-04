@@ -191,6 +191,56 @@ body {
 .status-pill.busy .status-dot { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
 .status-pill.busy { color: #f59e0b; }
 
+/* Broadcast Announcement Banner */
+.announcement-banner {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(239, 68, 68, 0.12));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  animation: slideDown 0.3s ease;
+}
+
+.announcement-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.announcement-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.announcement-text {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fbbf24;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.announcement-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.announcement-close-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 /* Update Banner */
 .update-banner {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15));

@@ -30,11 +30,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     let pendingContest = null;
 
     // 1. Load Stored Data
-    const storage = await chrome.storage.local.get(["settings", "questionBank", "installedContests", "activeContest", "globalSettings"]);
+    const storage = await chrome.storage.local.get(["settings", "questionBank", "installedContests", "activeContest", "globalSettings", "announcement"]);
     const settings = storage.settings || {};
     const questionBank = storage.questionBank || {};
     const installed = storage.installedContests || {};
     const activeContest = storage.activeContest || null;
+
+    // Announcement Banner
+    const annBanner = document.getElementById("announcement-banner");
+    const annText = document.getElementById("announcement-text");
+    const btnCloseAnn = document.getElementById("btn-close-announcement");
+
+    function renderAnnouncement(msg) {
+      if (!annBanner || !annText) return;
+      if (msg && msg.trim()) {
+        annText.innerText = msg.trim();
+        annBanner.classList.remove("hidden");
+      } else {
+        annBanner.classList.add("hidden");
+      }
+    }
+
+    renderAnnouncement(storage.announcement);
+
+    if (btnCloseAnn) {
+      btnCloseAnn.addEventListener("click", () => {
+        if (annBanner) annBanner.classList.add("hidden");
+      });
+    }
 
     // Setup initial UI states
     currentMode = settings.mode || "auto";
@@ -323,8 +346,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           }
 
-          if (!response || !response.success || !updateBanner) return;
+          if (!response || !response.success) return;
           const data = response.data;
+          if (data && data.announcement !== undefined) {
+            renderAnnouncement(data.announcement);
+          }
+          if (!updateBanner) return;
           const contests = data.contests || [];
 
           const needUpdate = contests.find(c => c.hasUpdate);

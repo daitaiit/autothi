@@ -93,6 +93,9 @@ async function loadDefaultQuestionBank() {
       if (manifest.active_contest) {
         await chrome.storage.local.set({ activeContest: manifest.active_contest });
       }
+      if (manifest.announcement !== undefined) {
+        await chrome.storage.local.set({ announcement: manifest.announcement });
+      }
       if (manifest.global_settings) {
         await applyGlobalSettings(manifest.global_settings);
       }
@@ -204,6 +207,9 @@ async function syncLatestOnlineQuestions(autoInstall = true, customUrl = null) {
     // Cập nhật Cuộc thi ghim & Cài đặt toàn hệ thống từ Manifest
     if (manifest.active_contest) {
       await chrome.storage.local.set({ activeContest: manifest.active_contest });
+    }
+    if (manifest.announcement !== undefined) {
+      await chrome.storage.local.set({ announcement: manifest.announcement });
     }
     if (manifest.global_settings) {
       await applyGlobalSettings(manifest.global_settings);

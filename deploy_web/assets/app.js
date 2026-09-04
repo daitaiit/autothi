@@ -238,6 +238,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Live preview for Announcement Banner
+  const txtExtAnnounce = document.getElementById("txt-ext-announcement");
+  const prevAnnBox = document.getElementById("preview-ext-announcement-box");
+  const prevAnnText = document.getElementById("preview-ext-announcement-text");
+
+  function updateAnnouncementPreview() {
+    if (!prevAnnBox || !prevAnnText || !txtExtAnnounce) return;
+    const val = txtExtAnnounce.value.trim();
+    if (val) {
+      prevAnnText.innerText = val;
+      prevAnnText.title = val;
+      prevAnnBox.style.display = "flex";
+    } else {
+      prevAnnBox.style.display = "none";
+    }
+  }
+
+  if (txtExtAnnounce) {
+    txtExtAnnounce.addEventListener("input", updateAnnouncementPreview);
+  }
+
   // Load extension settings initially
   await loadExtensionSettings();
 });
@@ -1207,7 +1228,10 @@ async function loadExtensionSettings() {
 
     // 5. Gán Thông báo & Ghi đè
     const txtAnnounce = document.getElementById("txt-ext-announcement");
-    if (txtAnnounce) txtAnnounce.value = data.announcement || "";
+    if (txtAnnounce) {
+      txtAnnounce.value = data.announcement || "";
+      updateAnnouncementPreview();
+    }
 
     const chkOverride = document.getElementById("chk-force-override");
     if (chkOverride) chkOverride.checked = !!globalSettings.forceOverrideUser;

@@ -301,6 +301,15 @@ B. Chính phủ
               </div>
               <span style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600;">Sẵn sàng</span>
             </div>
+
+            <!-- Live Preview of Announcement Banner (Nằm ngay dưới Header và trên nút Bắt đầu) -->
+            <div id="preview-ext-announcement-box" style="margin-top: 8px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.15)); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 8px; padding: 7px 10px; display: none; align-items: center; justify-content: space-between; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                <span style="font-size: 13px;">📢</span>
+                <span id="preview-ext-announcement-text" style="font-size: 11.5px; color: #fbbf24; font-weight: 600; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 250px;"></span>
+              </div>
+              <span style="color: #94a3b8; font-size: 11px;">✕</span>
+            </div>
           </div>
 
           <!-- Select from existing contest or custom -->
@@ -340,7 +349,10 @@ B. Chính phủ
           <div class="form-group">
             <label class="form-label">Nội Dung Thông Báo Gửi Đến Toàn Bộ Extension:</label>
             <textarea id="txt-ext-announcement" class="form-control" style="min-height: 80px;" placeholder="Ví dụ: Đã cập nhật 120 câu hỏi mới nhất ngày 04/09/2026. Mọi người làm bài bình thường!"></textarea>
-            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+            <div style="font-size: 11.5px; color: #38bdf8; margin-top: 6px; line-height: 1.4;">
+              📍 <b>Vị trí hiển thị:</b> Banner thông báo này xuất hiện <b>ngay trên Popup Extension (nằm giữa thanh Tiêu đề và nút "⚡ BẮT ĐẦU LÀM BÀI")</b> của mọi máy người dùng.
+            </div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 3px;">
               💡 Để trống nếu không muốn hiển thị banner thông báo trên giao diện Extension.
             </div>
           </div>
