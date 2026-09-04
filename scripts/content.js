@@ -101,7 +101,32 @@
   // Initialize data
   async function init() {
     try {
-      const data = await chrome.storage.local.get(["settings", "questionBank"]);
+      let data = {};
+      const hasStorage = typeof chrome !== "undefined" && !!chrome?.storage?.local && typeof chrome.storage.local.get === "function";
+
+      if (hasStorage) {
+        try {
+          data = await chrome.storage.local.get(["settings", "questionBank"]) || {};
+        } catch (stErr) {
+          console.warn("AutoThi: Không đọc được chrome.storage.local trực tiếp:", stErr);
+        }
+      }
+
+      // Fallback: nếu storage.local chưa có, yêu cầu dữ liệu khởi tạo qua background service worker
+      if ((!data.settings || !data.questionBank) && typeof chrome !== "undefined" && chrome?.runtime?.sendMessage) {
+        try {
+          const resp = await new Promise(resolve => {
+            chrome.runtime.sendMessage({ action: "GET_INITIAL_DATA" }, res => {
+              if (chrome.runtime.lastError) resolve(null);
+              else resolve(res?.data || null);
+            });
+          });
+          if (resp) {
+            data = { ...resp, ...data };
+          }
+        } catch (msgErr) {}
+      }
+
       if (data.settings) settings = { ...settings, ...data.settings };
       if (data.questionBank && Object.keys(data.questionBank).length > 0) {
         questionBank = { ...data.questionBank };
@@ -109,24 +134,29 @@
 
       // Luôn nạp và bổ sung các đề có sẵn trong contests_manifest.json vào questionBank
       try {
-        const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
-        if (res.ok) {
-          const manifest = await res.json();
-          if (manifest.contests && Array.isArray(manifest.contests)) {
-            let hasNew = false;
-            for (const contest of manifest.contests) {
-              if (contest.questions) {
-                for (const [rawKey, qItem] of Object.entries(contest.questions)) {
-                  const normKey = normalizeText(qItem.question || rawKey);
-                  if (normKey && !questionBank[normKey]) {
-                    questionBank[normKey] = qItem;
-                    hasNew = true;
+        if (typeof chrome !== "undefined" && chrome?.runtime?.getURL) {
+          const manifestUrl = chrome.runtime.getURL("contests_manifest.json");
+          const res = await fetch(manifestUrl);
+          if (res.ok) {
+            const manifest = await res.json();
+            if (manifest.contests && Array.isArray(manifest.contests)) {
+              let hasNew = false;
+              for (const contest of manifest.contests) {
+                if (contest.questions) {
+                  for (const [rawKey, qItem] of Object.entries(contest.questions)) {
+                    const normKey = normalizeText(qItem.question || rawKey);
+                    if (normKey && !questionBank[normKey]) {
+                      questionBank[normKey] = qItem;
+                      hasNew = true;
+                    }
                   }
                 }
               }
-            }
-            if (hasNew) {
-              await chrome.storage.local.set({ questionBank });
+              if (hasNew && hasStorage) {
+                try {
+                  await chrome.storage.local.set({ questionBank });
+                } catch (e) {}
+              }
             }
           }
         }
@@ -140,44 +170,54 @@
     }
   }
 
-  // Listen for storage changes
-  chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === "local") {
-      if (changes.settings) settings = { ...settings, ...changes.settings.newValue };
-      if (changes.questionBank) questionBank = changes.questionBank.newValue || {};
-      updateDockUI();
-    }
-  });
+  // Listen for storage changes safely
+  if (typeof chrome !== "undefined" && chrome?.storage?.onChanged) {
+    try {
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === "local") {
+          if (changes.settings) settings = { ...settings, ...changes.settings.newValue };
+          if (changes.questionBank) questionBank = changes.questionBank.newValue || {};
+          updateDockUI();
+        }
+      });
+    } catch (e) {}
+  }
 
   // Listen for messages from popup
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "START_AUTO") {
-      startSolving(request.mode || settings.mode);
-      sendResponse({ status: "started" });
-    } else if (request.action === "STOP_AUTO") {
-      stopSolving();
-      sendResponse({ status: "stopped" });
-    } else if (request.action === "SOLVE_CURRENT_PAGE") {
-      solveCurrentPage();
-      sendResponse({ status: "solving" });
-    } else if (request.action === "TOGGLE_FLOATING_DOCK") {
-      let dock = document.getElementById("autothi-floating-dock");
-      if (!dock) {
-        createFloatingDock();
-        dock = document.getElementById("autothi-floating-dock");
-      }
-      if (dock) {
-        dock.classList.toggle("hidden");
-        const isVisible = !dock.classList.contains("hidden");
-        settings.showFloatingDock = isVisible;
-        chrome.storage.local.set({ settings });
-        sendResponse({ status: "toggled", isVisible: isVisible });
-      } else {
-        sendResponse({ status: "error" });
-      }
-    }
-    return true;
-  });
+  if (typeof chrome !== "undefined" && chrome?.runtime?.onMessage) {
+    try {
+      chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.action === "START_AUTO") {
+          startSolving(request.mode || settings.mode);
+          sendResponse({ status: "started" });
+        } else if (request.action === "STOP_AUTO") {
+          stopSolving();
+          sendResponse({ status: "stopped" });
+        } else if (request.action === "SOLVE_CURRENT_PAGE") {
+          solveCurrentPage();
+          sendResponse({ status: "solving" });
+        } else if (request.action === "TOGGLE_FLOATING_DOCK") {
+          let dock = document.getElementById("autothi-floating-dock");
+          if (!dock) {
+            createFloatingDock();
+            dock = document.getElementById("autothi-floating-dock");
+          }
+          if (dock) {
+            dock.classList.toggle("hidden");
+            const isVisible = !dock.classList.contains("hidden");
+            settings.showFloatingDock = isVisible;
+            if (typeof chrome !== "undefined" && chrome?.storage?.local?.set) {
+              chrome.storage.local.set({ settings }).catch(() => {});
+            }
+            sendResponse({ status: "toggled", isVisible: isVisible });
+          } else {
+            sendResponse({ status: "error" });
+          }
+        }
+        return true;
+      });
+    } catch (e) {}
+  }
 
   // -------------------------------------------------------------
   // DOM Scanning & Question Extraction

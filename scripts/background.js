@@ -138,6 +138,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
+  if (request.action === "GET_INITIAL_DATA") {
+    chrome.storage.local.get(["settings", "questionBank", "activeContest"])
+      .then(data => sendResponse({ success: true, data }))
+      .catch(error => sendResponse({ success: false, error: error.message }));
+    return true;
+  }
+
   if (request.action === "INSTALL_CONTEST_PACKAGE") {
     installContestPackage(request.contest)
       .then(count => sendResponse({ success: true, count }))
