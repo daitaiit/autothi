@@ -164,31 +164,53 @@ function slugifyVietnamese(text) {
   return str;
 }
 
-// Helper: Tự động trích xuất Tên, Mã ID và Mô tả từ đoạn văn bản thô
+// Helper: Tự động trích xuất Tên, Mã ID và Mô tả từ đoạn văn bản thô (kể cả văn bản bắt đầu bằng câu hỏi)
 function extractContestMetaFromRawText(text) {
   if (!text) return null;
-  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  if (lines.length === 0) return null;
-
-  // Lấy các dòng tiêu đề trước khi xuất hiện câu hỏi trắc nghiệm đầu tiên
-  let headerLines = [];
-  for (let line of lines.slice(0, 10)) {
-    if (/^(câu\s*\d+|bài\s*\d+|\d+[\.\:\)\/])/i.test(line)) {
-      break;
-    }
-    headerLines.push(line);
-  }
+  const clean = text.trim();
+  if (!clean) return null;
 
   let title = "";
-  if (headerLines.length > 0) {
-    let foundLine = headerLines.find(l => /(cuộc\s*thi|hội\s*thi|đề\s*thi|tìm\s*hiểu|nghị\s*quyết|bộ\s*câu\s*hỏi|kiểm\s*tra|ôn\s*tập|hội\s*nghị)/i.test(l));
-    title = foundLine || headerLines[0];
+
+  // 1. Quét tìm dòng tiêu đề ở 10 dòng đầu tiên
+  const lines = clean.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  for (let l of lines.slice(0, 10)) {
+    if (/(cuộc\s*thi|hội\s*thi|đề\s*thi|tìm\s*hiểu|hội\s*nghị|bộ\s*câu\s*hỏi|kiểm\s*tra|ôn\s*tập)/i.test(l)) {
+      title = l;
+      break;
+    }
   }
 
-  if (!title) return null;
+  // 2. Nếu không có dòng tiêu đề ở đầu, quét toàn văn bản để tìm Văn kiện, Nghị quyết, Chỉ thị, Quyết định, Luật
+  if (!title) {
+    const docMatch = clean.match(/(Nghị\s*quyết|Chỉ\s*thị|Quyết\s*định|Luật|Thông\s*tư)\s*(số\s*[\w\-\/]+|[A-Za-z0-9\-\/]+)/i);
+    if (docMatch) {
+      const yearMatch = clean.match(/(202[4-9]|203[0-9])/);
+      const yr = yearMatch ? yearMatch[0] : new Date().getFullYear();
+      title = `Tìm hiểu ${docMatch[0].trim()} (${yr})`;
+    }
+  }
+
+  // 3. Nếu vẫn chưa có, quét các chủ đề nổi bật
+  if (!title) {
+    if (/hồ\s*chí\s*minh/i.test(clean)) title = `Tìm hiểu Tư tưởng Hồ Chí Minh ${new Date().getFullYear()}`;
+    else if (/chuyển\s*đổi\s*số/i.test(clean)) title = `Tìm hiểu Chuyển đổi số Quốc gia ${new Date().getFullYear()}`;
+    else if (/an\s*toàn\s*giao\s*thông/i.test(clean)) title = `Tìm hiểu An toàn Giao thông ${new Date().getFullYear()}`;
+    else if (/pháp\s*luật/i.test(clean)) title = `Tìm hiểu Pháp luật ${new Date().getFullYear()}`;
+    else {
+      // Lấy từ câu hỏi đầu tiên
+      const firstQMatch = clean.match(/(?:câu\s*\d+[\.\:\)]*\s*)([^\?\n\r]+)/i);
+      if (firstQMatch && firstQMatch[1]) {
+        let qShort = firstQMatch[1].trim().slice(0, 45);
+        title = `Cuộc thi - ${qShort}`;
+      } else {
+        title = `Cuộc thi Trắc nghiệm ${new Date().getFullYear()}`;
+      }
+    }
+  }
 
   title = title.replace(/^(đề\s*thi|tên\s*cuộc\s*thi|chủ\s*đề|nội\s*dung|bộ\s*câu\s*hỏi\s*về)[\s\:\-]+/i, "").trim();
-  if (title.length > 120) title = title.substring(0, 120).trim();
+  if (title.length > 100) title = title.substring(0, 100).trim();
 
   let slug = slugifyVietnamese(title);
   if (!slug) slug = "cuoc-thi-" + new Date().getFullYear();
@@ -410,17 +432,6 @@ async function runApiHealthCheck() {
     summaryEl.innerText = "Lỗi kết nối";
   } finally {
     if (retestBtn) retestBtn.disabled = false;
-  }
-}
-
-function updateTokenStatus(hasToken) {
-  const tag = document.getElementById("token-status-tag");
-  if (hasToken) {
-    tag.innerHTML = "🟢 GitHub: Đã kết nối";
-    tag.style.color = "#34d399";
-  } else {
-    tag.innerHTML = "🟠 GitHub: Chưa nhập Token";
-    tag.style.color = "#f59e0b";
   }
 }
 
@@ -659,26 +670,36 @@ async function handleParse() {
 
     if (json.success && json.data.questions) {
       parsedQuestions = json.data.questions;
+
+      // 1. Tự động nhận diện & điền Tên/Mã cuộc thi từ AI hoặc văn bản thô TRƯỚC TIÊN
+      const selContest = document.getElementById("sel-contest");
+      if (selContest && selContest.value === "__new__") {
+        let cName = json.data.contest_name;
+        let cId = json.data.contest_id;
+        let cDesc = json.data.contest_desc;
+
+        if (!cName || !cName.trim()) {
+          const autoMeta = extractContestMetaFromRawText(rawText);
+          if (autoMeta) {
+            cName = autoMeta.name;
+            cId = autoMeta.id;
+            cDesc = autoMeta.desc;
+          }
+        }
+
+        const txtName = document.getElementById("txt-contest-name");
+        const txtId = document.getElementById("txt-contest-id");
+        const txtDesc = document.getElementById("txt-contest-desc");
+
+        if (txtName && cName) txtName.value = cName;
+        if (txtId) txtId.value = cId || (cName ? slugifyVietnamese(cName) : "");
+        if (txtDesc && cDesc) txtDesc.value = cDesc;
+      }
+
+      // 2. Render danh sách câu hỏi xem trước (kèm phát hiện trùng lặp với GitHub)
       renderParsedPreviewList();
       statusEl.innerHTML = `<span style="color: #34d399;">✓ AI đã bóc tách thành công <b>${parsedQuestions.length}</b> câu hỏi chuẩn xác!</span>`;
       document.getElementById("btn-push-github").disabled = parsedQuestions.length === 0;
-
-      // Tự động nhận diện & cập nhật Tên/Mã cuộc thi từ AI nếu đang tạo cuộc thi mới
-      const selContest = document.getElementById("sel-contest");
-      if (selContest && selContest.value === "__new__") {
-        if (json.data.contest_name) {
-          const txtName = document.getElementById("txt-contest-name");
-          if (txtName) txtName.value = json.data.contest_name;
-        }
-        if (json.data.contest_id) {
-          const txtId = document.getElementById("txt-contest-id");
-          if (txtId) txtId.value = json.data.contest_id;
-        }
-        if (json.data.contest_desc) {
-          const txtDesc = document.getElementById("txt-contest-desc");
-          if (txtDesc) txtDesc.value = json.data.contest_desc;
-        }
-      }
     } else {
       statusEl.innerHTML = `<span style="color: #f87171;">❌ Lỗi: ${json.error || "Không thể bóc tách đề thi!"}</span>`;
     }
@@ -689,7 +710,7 @@ async function handleParse() {
   }
 }
 
-// 5. Render Parsed Preview List (Có phát hiện trùng lặp trực quan)
+// 5. Render Parsed Preview List (Phát hiện trùng lặp trên GitHub)
 function renderParsedPreviewList() {
   const container = document.getElementById("questions-list");
   const countEl = document.getElementById("parsed-count");
@@ -706,34 +727,45 @@ function renderParsedPreviewList() {
     return;
   }
 
-  // Lấy danh sách câu hỏi hiện có của cuộc thi đang chọn để kiểm tra trùng
-  const selContestVal = document.getElementById("sel-contest")?.value;
-  const currentContest = availableContests.find(c => c.id === selContestVal);
-  const existingQuestions = currentContest?.questions || [];
-
+  // Chuẩn hóa chuỗi so khớp: loại bỏ toàn bộ dấu câu, dấu cách thừa
   const norm = str => (str || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
-  const existingMap = new Set(existingQuestions.map(q => norm(q.question)));
+
+  // Lấy toàn bộ câu hỏi đã có trên GitHub để kiểm tra trùng
+  const allGithubMap = new Map(); // normalized_question -> { contestName, contestId, correctAnswer }
+  availableContests.forEach(c => {
+    const qList = c.questions_normalized || c.questions || [];
+    if (Array.isArray(qList)) {
+      qList.forEach(q => {
+        const k = norm(q.question);
+        if (k && !allGithubMap.has(k)) {
+          allGithubMap.set(k, {
+            contestName: c.name,
+            contestId: c.id,
+            correctAnswer: q.correctAnswer || q.answer || ""
+          });
+        }
+      });
+    }
+  });
 
   let newCount = 0;
   let dupCount = 0;
-
-  // Kiểm tra trùng lặp nội bộ ngay trong mảng parsedQuestions
   const seenInBatch = new Set();
 
   let html = "";
   parsedQuestions.forEach((q, idx) => {
     const qKey = norm(q.question);
-    const isAlreadyOnGithub = existingMap.has(qKey);
+    const existingMatch = allGithubMap.get(qKey);
     const isDuplicateInBatch = seenInBatch.has(qKey);
     seenInBatch.add(qKey);
 
     let badgeHtml = "";
-    if (isAlreadyOnGithub) {
+    if (existingMatch) {
       dupCount++;
-      badgeHtml = `<span class="badge-tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); font-size: 11px; padding: 2px 7px;">🔄 Đã có trên GitHub (Sẽ cập nhật đáp án)</span>`;
+      badgeHtml = `<span class="badge-tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); font-size: 11px; padding: 2px 7px;">🔄 Đã có trên GitHub (${escapeHtml(existingMatch.contestName)})</span>`;
     } else if (isDuplicateInBatch) {
       dupCount++;
-      badgeHtml = `<span class="badge-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3); font-size: 11px; padding: 2px 7px;">⚠️ Trùng lặp trong đoạn văn bản</span>`;
+      badgeHtml = `<span class="badge-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3); font-size: 11px; padding: 2px 7px;">⚠️ Trùng lặp trong đề vừa dán</span>`;
     } else {
       newCount++;
       badgeHtml = `<span class="badge-tag" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3); font-size: 11px; padding: 2px 7px;">✨ Câu mới</span>`;
@@ -770,7 +802,7 @@ function renderParsedPreviewList() {
     `;
   });
 
-  countEl.innerHTML = `<b>${parsedQuestions.length}</b> câu (${newCount} mới, ${dupCount} trùng/cập nhật)`;
+  countEl.innerHTML = `<b>${parsedQuestions.length}</b> câu (${newCount} mới, ${dupCount} trùng)`;
   container.innerHTML = html;
 }
 
