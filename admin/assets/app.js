@@ -3,12 +3,13 @@
 
 let parsedQuestions = [];
 let availableContests = [];
+let allGithubContestsData = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Check auth
   await checkAuth();
 
-  // Load contests list
+  // Load contests list & live bank from GitHub
   await loadContests();
 
   // Bind Events
@@ -17,6 +18,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("btn-parse").addEventListener("click", handleParse);
   document.getElementById("btn-push-github").addEventListener("click", handlePushGitHub);
   document.getElementById("btn-save-token").addEventListener("click", handleSaveToken);
+  document.getElementById("btn-refresh-bank").addEventListener("click", loadContests);
+
   document.getElementById("btn-open-token-modal").addEventListener("click", () => {
     document.getElementById("token-modal").classList.remove("hidden");
   });
@@ -24,7 +27,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("token-modal").classList.add("hidden");
   });
 
-  // Select contest handler
+  // Tab switching
+  const tabBtns = document.querySelectorAll(".tab-btn");
+  tabBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabBtns.forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+
+      btn.classList.add("active");
+      const targetId = btn.getAttribute("data-tab");
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) {
+        targetPane.classList.add("active");
+      }
+    });
+  });
+
+  // Search & Filter live bank
+  const txtBankSearch = document.getElementById("txt-bank-search");
+  const selBankFilterContest = document.getElementById("sel-bank-filter-contest");
+  if (txtBankSearch) txtBankSearch.addEventListener("input", renderGitHubBank);
+  if (selBankFilterContest) selBankFilterContest.addEventListener("change", renderGitHubBank);
+
+  // Select contest handler in upload tab
   const selContest = document.getElementById("sel-contest");
   selContest.addEventListener("change", () => {
     const val = selContest.value;
@@ -102,35 +127,218 @@ function updateTokenStatus(hasToken) {
   }
 }
 
-// 2. Load contests
+// 2. Load contests & live bank from GitHub
 async function loadContests() {
   try {
+    const btnRef = document.getElementById("btn-refresh-bank");
+    if (btnRef) btnRef.innerText = "⏳ Đang tải...";
+
     const res = await fetch("api.php?action=get_contests");
     const json = await res.json();
     if (json.success) {
       availableContests = json.data.contests || [];
+      allGithubContestsData = availableContests;
+
+      // Update upload selector
       const sel = document.getElementById("sel-contest");
       sel.innerHTML = '<option value="__new__">+ Tạo cuộc thi mới...</option>';
       
+      const filterSel = document.getElementById("sel-bank-filter-contest");
+      filterSel.innerHTML = '<option value="ALL">Tất cả các cuộc thi</option>';
+
       availableContests.forEach(c => {
-        const count = c.questions ? c.questions.length : (c.question_count || 0);
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.innerText = `${c.name} (${count} câu)`;
-        sel.appendChild(opt);
+        const count = c.question_count || 0;
+        
+        const opt1 = document.createElement("option");
+        opt1.value = c.id;
+        opt1.innerText = `${c.name} (${count} câu)`;
+        sel.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = c.id;
+        opt2.innerText = `${c.name} (${count} câu)`;
+        filterSel.appendChild(opt2);
       });
 
       if (availableContests.length > 0) {
         sel.value = availableContests[0].id;
         sel.dispatchEvent(new Event("change"));
       }
+
+      // Update stats banner
+      document.getElementById("stat-contests-count").innerText = `${availableContests.length} cuộc thi`;
+      document.getElementById("stat-questions-count").innerText = `${json.data.total_questions_all || 0} câu`;
+      document.getElementById("stat-last-sync").innerText = json.data.updated_at || "Vừa xong";
+      document.getElementById("badge-bank-total").innerText = `${json.data.total_questions_all || 0}`;
+
+      // Render live GitHub bank list
+      renderGitHubBank();
     }
   } catch (e) {
     console.warn("Không tải được danh sách cuộc thi:", e);
+  } finally {
+    const btnRef = document.getElementById("btn-refresh-bank");
+    if (btnRef) btnRef.innerText = "🔄 Tải Lại Từ GitHub";
   }
 }
 
-// 3. AI Parse Questions
+// 3. Render GitHub Bank Questions Categorized by Contest
+function renderGitHubBank() {
+  const container = document.getElementById("github-contests-container");
+  if (!container) return;
+
+  const searchQuery = (document.getElementById("txt-bank-search")?.value || "").toLowerCase().trim();
+  const selectedContestId = document.getElementById("sel-bank-filter-contest")?.value || "ALL";
+
+  let filteredContests = allGithubContestsData;
+  if (selectedContestId !== "ALL") {
+    filteredContests = filteredContests.filter(c => c.id === selectedContestId);
+  }
+
+  if (filteredContests.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>Không tìm thấy cuộc thi nào phù hợp.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let totalQuestionsMatched = 0;
+  let html = "";
+
+  filteredContests.forEach(contest => {
+    let questions = contest.questions_normalized || [];
+    
+    // Filter by search query
+    if (searchQuery) {
+      questions = questions.filter(q => {
+        const qText = (q.question || "").toLowerCase();
+        const ansText = (q.correctAnswer || "").toLowerCase();
+        const optsText = (q.options || []).join(" ").toLowerCase();
+        return qText.includes(searchQuery) || ansText.includes(searchQuery) || optsText.includes(searchQuery);
+      });
+    }
+
+    if (searchQuery && questions.length === 0) {
+      return; // Skip contest if no matching questions
+    }
+
+    totalQuestionsMatched += questions.length;
+
+    let questionsCardsHtml = "";
+    questions.forEach((q, qIdx) => {
+      let optsHtml = "";
+      (q.options || []).forEach(opt => {
+        const isCorrect = isMatchingAnswer(opt, q.correctAnswer);
+        optsHtml += `
+          <div class="preview-option-item ${isCorrect ? 'correct' : ''}">
+            ${isCorrect ? '✓ ' : ''}${escapeHtml(opt)}
+          </div>
+        `;
+      });
+
+      questionsCardsHtml += `
+        <div class="question-card" style="background: rgba(11, 19, 41, 0.65);">
+          <div class="question-header">
+            <span class="question-num" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">Câu ${qIdx + 1}</span>
+            <div class="question-text">${escapeHtml(q.question)}</div>
+            <button class="btn-icon" style="color: #f87171;" onclick="deleteQuestionFromGithub('${contest.id}', '${escapeAttr(q.question)}')" title="Xóa câu này khỏi GitHub">
+              🗑️ Xóa
+            </button>
+          </div>
+          <div class="preview-options">
+            ${optsHtml}
+          </div>
+          <div style="font-size: 12.5px; color: #34d399; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span>🎯 Đáp án chuẩn đã lưu:</span>
+            <span>${escapeHtml(q.correctAnswer || 'Chưa rõ')}</span>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+      <div class="contest-block">
+        <div class="contest-header" onclick="toggleContestBody('${contest.id}')">
+          <div class="contest-title-wrap">
+            <span style="font-size: 20px;">🏆</span>
+            <span class="contest-name">${escapeHtml(contest.name)}</span>
+            <span class="contest-id-tag">ID: ${escapeHtml(contest.id)}</span>
+            ${contest.domain_match ? `<span class="badge-tag" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">🌐 ${escapeHtml(contest.domain_match)}</span>` : ''}
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="badge-tag" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+              ${questions.length} câu hỏi
+            </span>
+            <span id="arrow-${contest.id}" style="color: #94a3b8; font-size: 14px;">▼</span>
+          </div>
+        </div>
+
+        <div class="contest-body" id="body-${contest.id}">
+          <div style="font-size: 13px; color: #94a3b8; margin-bottom: 6px;">
+            ${escapeHtml(contest.description || 'Chưa có mô tả chi tiết.')}
+          </div>
+          ${questionsCardsHtml || '<div style="color: #94a3b8; font-size: 13px;">Chưa có câu hỏi nào trong cuộc thi này.</div>'}
+        </div>
+      </div>
+    `;
+  });
+
+  if (totalQuestionsMatched === 0 && searchQuery) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <p>Không tìm thấy câu hỏi nào chứa từ khóa: "<b>${escapeHtml(searchQuery)}</b>"</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = html;
+}
+
+function toggleContestBody(contestId) {
+  const body = document.getElementById("body-" + contestId);
+  const arrow = document.getElementById("arrow-" + contestId);
+  if (body) {
+    const isHidden = body.style.display === "none";
+    body.style.display = isHidden ? "flex" : "none";
+    if (arrow) arrow.innerText = isHidden ? "▼" : "▶";
+  }
+}
+
+async function deleteQuestionFromGithub(contestId, questionText) {
+  if (!confirm(`Bạn có chắc muốn XÓA câu hỏi này vĩnh viễn khỏi GitHub?\n\nCâu hỏi: "${questionText.slice(0, 70)}..."\n\nToàn bộ Extension trên mọi máy sẽ không còn nhận câu này nữa.`)) {
+    return;
+  }
+
+  try {
+    const res = await fetch("api.php?action=delete_github_question", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contest_id: contestId,
+        question: questionText
+      })
+    });
+    const json = await res.json();
+    if (json.success) {
+      alert("✓ " + json.data.message);
+      await loadContests();
+    } else {
+      if (json.error && json.error.includes("Chưa có GitHub Token")) {
+        document.getElementById("token-modal").classList.remove("hidden");
+      }
+      alert("❌ Lỗi: " + json.error);
+    }
+  } catch (e) {
+    alert("❌ Lỗi mạng: " + e.message);
+  }
+}
+
+// 4. AI Parse Questions
 async function handleParse() {
   const rawText = document.getElementById("txt-raw-input").value.trim();
   const model = document.getElementById("sel-ai-model").value;
@@ -154,7 +362,7 @@ async function handleParse() {
 
     if (json.success && json.data.questions) {
       parsedQuestions = json.data.questions;
-      renderQuestionsList();
+      renderParsedPreviewList();
       statusEl.innerHTML = `<span style="color: #34d399;">✓ AI đã bóc tách thành công <b>${parsedQuestions.length}</b> câu hỏi chuẩn xác!</span>`;
       document.getElementById("btn-push-github").disabled = parsedQuestions.length === 0;
     } else {
@@ -167,8 +375,8 @@ async function handleParse() {
   }
 }
 
-// 4. Render Questions List
-function renderQuestionsList() {
+// 5. Render Parsed Preview List
+function renderParsedPreviewList() {
   const container = document.getElementById("questions-list");
   const countEl = document.getElementById("parsed-count");
   countEl.innerText = `${parsedQuestions.length} câu`;
@@ -178,7 +386,7 @@ function renderQuestionsList() {
       <div class="empty-state">
         <div class="empty-icon">📝</div>
         <p>Chưa có câu hỏi nào được nạp.</p>
-        <p style="font-size: 12px; margin-top: 4px;">Dán đề thi vào ô bên trái và bấm "Phân tích bằng AI" để bắt đầu.</p>
+        <p style="font-size: 12px; margin-top: 4px;">Dán đề thi vào ô bên trái và bấm "Bắt Đầu Phân Tích Bằng AI" để bắt đầu.</p>
       </div>
     `;
     return;
@@ -200,7 +408,7 @@ function renderQuestionsList() {
           <span class="question-num">Câu ${idx + 1}</span>
           <div class="question-text">${escapeHtml(q.question)}</div>
           <div class="card-actions">
-            <button class="btn-icon" onclick="deleteQuestion(${idx})" title="Xóa câu này">🗑️</button>
+            <button class="btn-icon" onclick="deleteParsedQuestion(${idx})" title="Xóa câu này">🗑️</button>
           </div>
         </div>
         <div class="preview-options">
@@ -223,15 +431,15 @@ function isMatchingAnswer(optionText, correctAnswer) {
   return o === c || c.includes(o) || o.includes(c);
 }
 
-function deleteQuestion(index) {
+function deleteParsedQuestion(index) {
   if (confirm(`Bạn có chắc muốn xóa Câu ${index + 1}?`)) {
     parsedQuestions.splice(index, 1);
-    renderQuestionsList();
+    renderParsedPreviewList();
     document.getElementById("btn-push-github").disabled = parsedQuestions.length === 0;
   }
 }
 
-// 5. Push to GitHub
+// 6. Push to GitHub
 async function handlePushGitHub() {
   if (parsedQuestions.length === 0) {
     alert("Không có câu hỏi nào để đẩy lên!");
@@ -272,6 +480,8 @@ async function handlePushGitHub() {
       alert(`🎉 THÀNH CÔNG!\n\n${json.data.message}\nTổng số câu trong cuộc thi: ${json.data.totalInContest}\n\nToàn bộ máy cài Extension sẽ nhận được đề mới!`);
       // Reload contests
       await loadContests();
+      // Switch to Bank Tab
+      document.getElementById("nav-tab-bank").click();
     } else {
       if (json.error && json.error.includes("Chưa có GitHub Token")) {
         document.getElementById("token-modal").classList.remove("hidden");
@@ -286,7 +496,7 @@ async function handlePushGitHub() {
   }
 }
 
-// 6. Save Token
+// 7. Save Token
 async function handleSaveToken() {
   const token = document.getElementById("txt-token-input").value.trim();
   if (!token) {
@@ -318,4 +528,11 @@ function escapeHtml(text) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function escapeAttr(text) {
+  if (!text) return "";
+  return text
+    .replace(/'/g, "\\'")
+    .replace(/"/g, "&quot;");
 }

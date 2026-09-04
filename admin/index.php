@@ -17,8 +17,19 @@ require_once __DIR__ . '/config.php';
       <div class="brand-icon">⚡</div>
       <div>
         <div class="brand-name">AutoThi Admin</div>
-        <div style="font-size: 11px; color: #94a3b8;">Hệ thống nạp đề tự động bằng AI • autothi.tafinex.com</div>
+        <div style="font-size: 11px; color: #94a3b8;">Quản lý & Nạp đề thi AI • autothi.tafinex.com</div>
       </div>
+    </div>
+
+    <!-- Main Tabs Switcher -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="tab-upload" id="nav-tab-upload">
+        📥 Nạp Đề Mới (AI)
+      </button>
+      <button class="tab-btn" data-tab="tab-github-bank" id="nav-tab-bank">
+        📚 Ngân Hàng Đề Trên GitHub
+        <span id="badge-bank-total" class="pill-mini">0</span>
+      </button>
     </div>
 
     <div class="nav-actions">
@@ -32,21 +43,23 @@ require_once __DIR__ . '/config.php';
     </div>
   </header>
 
-  <!-- Main Content Grid -->
-  <main class="main-content">
+  <!-- ============================================================= -->
+  <!-- TAB 1: NẠP & BÓC TÁCH ĐỀ MỚI BẰNG AI                         -->
+  <!-- ============================================================= -->
+  <main class="main-content tab-pane active" id="tab-upload">
     
     <!-- Left Column: Input & AI Extraction -->
     <section class="card">
       <div class="card-header">
-        <h2 class="card-title">📥 1. Nạp Đề Thi Bằng AI</h2>
+        <h2 class="card-title">📥 1. Dán Văn Bản & Gọi AI Bóc Tách</h2>
         <span class="badge-tag" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3);">
           ShopAIKey AI
         </span>
       </div>
 
-      <!-- Cuộc thi -->
+      <!-- Cuộc thi đích -->
       <div class="form-group">
-        <label class="form-label">Chọn Cuộc Thi Đích Đến:</label>
+        <label class="form-label">Chọn Cuộc Thi Đích Đến (Hoặc tạo mới):</label>
         <select id="sel-contest" class="form-control">
           <option value="__new__">+ Tạo cuộc thi mới...</option>
         </select>
@@ -55,12 +68,12 @@ require_once __DIR__ . '/config.php';
       <!-- Thông tin cuộc thi nếu tạo mới -->
       <div id="new-contest-fields">
         <div class="form-group">
-          <label class="form-label">Mã Cuộc Thi (ID không dấu, vd: an-toan-giao-thong-2026):</label>
+          <label class="form-label">Mã Cuộc Thi (ID không dấu, vd: tu-tuong-hcm-2026):</label>
           <input type="text" id="txt-contest-id" class="form-control" placeholder="ma-cuoc-thi-2026">
         </div>
         <div class="form-group">
           <label class="form-label">Tên Cuộc Thi Hiển Thị:</label>
-          <input type="text" id="txt-contest-name" class="form-control" placeholder="Hội thi Tìm hiểu An toàn Giao thông 2026">
+          <input type="text" id="txt-contest-name" class="form-control" placeholder="Hội thi Tìm hiểu Tư tưởng Hồ Chí Minh 2026">
         </div>
         <div class="form-group">
           <label class="form-label">Mô Tả Cuộc Thi (Không bắt buộc):</label>
@@ -70,17 +83,17 @@ require_once __DIR__ . '/config.php';
 
       <!-- Mô hình AI -->
       <div class="form-group">
-        <label class="form-label">Mô Hình AI Xử Lý Bóc Tách:</label>
+        <label class="form-label">Mô Hình AI Bóc Tách:</label>
         <select id="sel-ai-model" class="form-control">
-          <option value="gpt-4o-mini" selected>gpt-4o-mini (Siêu nhanh & Tiết kiệm token tối đa)</option>
-          <option value="deepseek-v3">deepseek-v3 (Giá rẻ, tư duy phản biện cao)</option>
-          <option value="gpt-4o">gpt-4o (Độ chính xác cao nhất)</option>
+          <option value="gpt-4o-mini" selected>gpt-4o-mini (⚡ Siêu nhanh & Tiết kiệm token tối đa)</option>
+          <option value="deepseek-v3">deepseek-v3 (🧠 Giá rẻ, tư duy phản biện cao)</option>
+          <option value="gpt-4o">gpt-4o (👑 Độ chính xác cao nhất)</option>
         </select>
       </div>
 
       <!-- Dán văn bản thô -->
       <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
-        <label class="form-label">Dán Văn Bản Đề Thi Thô (Hỗ trợ dán hàng chục / hàng trăm câu):</label>
+        <label class="form-label">Dán Văn Bản Đề Thi Thô (Copy từ Word, PDF, Web đề thi):</label>
         <textarea id="txt-raw-input" class="form-control" style="flex: 1; min-height: 220px;" placeholder="Ví dụ: Dán nguyên văn đoạn câu hỏi từ Word, PDF, Web:
 
 Câu 1: Ngày Chuyển đổi số quốc gia của Việt Nam là ngày nào?
@@ -93,7 +106,7 @@ D. Ngày 30/04
 Câu 2: Cơ quan quyền lực nhà nước cao nhất là gì?
 A. Quốc hội
 B. Chính phủ
-... (Dù có đáp án hay chưa có đáp án, AI sẽ tự động phân tích và giải chuẩn xác)"></textarea>
+... (Dù có đáp án hay chưa có đáp án, AI sẽ tự động phân tích và bóc tách chuẩn xác)"></textarea>
       </div>
 
       <div id="parse-status" style="margin-bottom: 12px; font-size: 13px;"></div>
@@ -106,7 +119,7 @@ B. Chính phủ
     <!-- Right Column: Live Preview & Push to GitHub -->
     <section class="card">
       <div class="card-header">
-        <h2 class="card-title">📋 2. Xem Trước Câu Hỏi & Đáp Án</h2>
+        <h2 class="card-title">📋 2. Xem Trước Câu Hỏi & Đáp Án Chuẩn</h2>
         <span id="parsed-count" class="badge-tag">0 câu</span>
       </div>
 
@@ -123,10 +136,70 @@ B. Chính phủ
           🚀 Đẩy Lên GitHub (Commit to contests_manifest.json)
         </button>
         <p style="font-size: 11.5px; color: #94a3b8; text-align: center; margin-top: 8px;">
-          Sau khi đẩy lên GitHub, toàn bộ người dùng cài Extension AutoThi AI sẽ tự động đồng bộ đề mới trong vài phút!
+          Sau khi đẩy lên GitHub, toàn bộ người dùng cài Extension AutoThi AI sẽ tự động đồng bộ đề mới!
         </p>
       </div>
     </section>
+
+  </main>
+
+  <!-- ============================================================= -->
+  <!-- TAB 2: NGÂN HÀNG ĐỀ HIỆN TẠI TRÊN GITHUB (LIVE DATABASE)      -->
+  <!-- ============================================================= -->
+  <main class="main-content-single tab-pane" id="tab-github-bank">
+    
+    <!-- Stats Banner -->
+    <div class="stats-banner">
+      <div class="stat-item">
+        <div class="stat-icon">🏆</div>
+        <div>
+          <div class="stat-label">Tổng số cuộc thi</div>
+          <div class="stat-val" id="stat-contests-count">0</div>
+        </div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-icon">📝</div>
+        <div>
+          <div class="stat-label">Tổng số câu hỏi trên GitHub</div>
+          <div class="stat-val" id="stat-questions-count" style="color: #34d399;">0</div>
+        </div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-icon">🕒</div>
+        <div>
+          <div class="stat-label">Đồng bộ gần nhất</div>
+          <div class="stat-val" id="stat-last-sync" style="font-size: 15px; font-weight: 600; color: #94a3b8;">Đang tải...</div>
+        </div>
+      </div>
+
+      <div style="margin-left: auto;">
+        <button id="btn-refresh-bank" class="btn btn-primary" style="padding: 9px 16px;">
+          🔄 Tải Lại Từ GitHub
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="bank-filters">
+      <div style="flex: 1; position: relative;">
+        <input type="text" id="txt-bank-search" class="form-control" placeholder="🔍 Tìm kiếm câu hỏi hoặc nội dung đáp án...">
+      </div>
+      <div style="width: 320px;">
+        <select id="sel-bank-filter-contest" class="form-control">
+          <option value="ALL">Tất cả các cuộc thi</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- GitHub Contests & Questions Display -->
+    <div id="github-contests-container" class="github-contests-list">
+      <div class="empty-state">
+        <div class="empty-icon">⏳</div>
+        <p>Đang tải dữ liệu từ GitHub repository daitaiit/autothi...</p>
+      </div>
+    </div>
 
   </main>
 

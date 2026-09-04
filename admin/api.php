@@ -81,7 +81,7 @@ if ($action === 'save_github_token') {
 }
 
 // -------------------------------------------------------------
-// 2. Lấy Danh Sách Cuộc Thi Hiện Có Từ GitHub
+// 2. Lấy Danh Sách Cuộc Thi & Câu Hỏi Trực Quan Từ GitHub
 // -------------------------------------------------------------
 if ($action === 'get_contests') {
     $url = 'https://raw.githubusercontent.com/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/' . GITHUB_BRANCH . '/' . GITHUB_FILE_PATH . '?t=' . time();
@@ -96,10 +96,39 @@ if ($action === 'get_contests') {
     if ($json) {
         $manifest = json_decode($json, true);
         if ($manifest && isset($manifest['contests'])) {
+            $formattedContests = [];
+            $totalQuestionsAll = 0;
+
+            foreach ($manifest['contests'] as $c) {
+                $qList = [];
+                if (!empty($c['questions'])) {
+                    if (is_array($c['questions'])) {
+                        $isAssoc = array_keys($c['questions']) !== range(0, count($c['questions']) - 1);
+                        if ($isAssoc) {
+                            foreach ($c['questions'] as $k => $qItem) {
+                                $qList[] = [
+                                    'question' => $qItem['question'] ?? $k,
+                                    'correctAnswer' => $qItem['correctAnswer'] ?? $qItem['answer'] ?? '',
+                                    'options' => $qItem['options'] ?? []
+                                ];
+                            }
+                        } else {
+                            $qList = $c['questions'];
+                        }
+                    }
+                }
+                $c['questions_normalized'] = $qList;
+                $c['question_count'] = count($qList);
+                $totalQuestionsAll += count($qList);
+                $formattedContests[] = $c;
+            }
+
             jsonResponse(true, [
-                'contests' => $manifest['contests'],
-                'manifest_version' => $manifest['manifest_version'] ?? '1.0',
-                'updated_at' => $manifest['updated_at'] ?? ''
+                'contests' => $formattedContests,
+                'total_questions_all' => $totalQuestionsAll,
+                'manifest_version' => $manifest['version'] ?? $manifest['manifest_version'] ?? '1.0',
+                'updated_at' => $manifest['updated_at'] ?? date('Y-m-d H:i:s'),
+                'announcement' => $manifest['announcement'] ?? ''
             ]);
         }
     }
@@ -107,9 +136,123 @@ if ($action === 'get_contests') {
     // Fallback nếu không gọi được raw
     jsonResponse(true, [
         'contests' => [],
+        'total_questions_all' => 0,
         'manifest_version' => '1.0',
         'updated_at' => date('Y-m-d')
     ]);
+}
+
+// -------------------------------------------------------------
+// Xóa Câu Hỏi Trực Tiếp Khỏi GitHub
+// -------------------------------------------------------------
+if ($action === 'delete_github_question') {
+    $token = getEffectiveGithubToken();
+    if (empty($token)) {
+        jsonResponse(false, null, 'Chưa có GitHub Token để thực hiện thao tác xóa!', 400);
+    }
+
+    $contestId = trim($input['contest_id'] ?? '');
+    $qText = trim($input['question'] ?? '');
+
+    if (empty($contestId) || empty($qText)) {
+        jsonResponse(false, null, 'Thiếu thông tin cuộc thi hoặc câu hỏi cần xóa!');
+    }
+
+    $apiUrl = 'https://api.github.com/repos/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/contents/' . GITHUB_FILE_PATH . '?ref=' . GITHUB_BRANCH;
+    
+    $ch = curl_init($apiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'User-Agent: AutoThi-Admin',
+            'Authorization: Bearer ' . $token,
+            'Accept: application/vnd.github.v3+json'
+        ],
+        CURLOPT_TIMEOUT => 20
+    ]);
+    $res = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode !== 200) {
+        jsonResponse(false, null, "Không thể đọc file từ GitHub (Mã HTTP $httpCode)", 500);
+    }
+
+    $fileData = json_decode($res, true);
+    $sha = $fileData['sha'] ?? '';
+    $manifest = json_decode(base64_decode($fileData['content'] ?? ''), true);
+
+    function normStr($t) {
+        return preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower(trim($t), 'UTF-8'));
+    }
+    $targetNorm = normStr($qText);
+    $deleted = false;
+
+    if (isset($manifest['contests'])) {
+        foreach ($manifest['contests'] as &$c) {
+            if ($c['id'] === $contestId) {
+                if (isset($c['questions']) && is_array($c['questions'])) {
+                    $isAssoc = array_keys($c['questions']) !== range(0, count($c['questions']) - 1);
+                    if ($isAssoc) {
+                        foreach ($c['questions'] as $k => $v) {
+                            if (normStr($k) === $targetNorm || normStr($v['question'] ?? '') === $targetNorm) {
+                                unset($c['questions'][$k]);
+                                $deleted = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        foreach ($c['questions'] as $idx => $item) {
+                            if (normStr($item['question'] ?? '') === $targetNorm) {
+                                array_splice($c['questions'], $idx, 1);
+                                $deleted = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                $c['total_questions'] = count($c['questions']);
+                $c['question_count'] = count($c['questions']);
+                break;
+            }
+        }
+    }
+
+    if (!$deleted) {
+        jsonResponse(false, null, 'Không tìm thấy câu hỏi này trong cuộc thi để xóa!');
+    }
+
+    $manifest['updated_at'] = date('Y-m-d H:i:s');
+    $updatedJsonStr = json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    $commitPayload = [
+        'message' => "AutoThi Admin: Xoa 1 cau hoi khoi " . $contestId . " [" . date('d/m/Y H:i') . "]",
+        'content' => base64_encode($updatedJsonStr),
+        'sha' => $sha,
+        'branch' => GITHUB_BRANCH
+    ];
+
+    $ch = curl_init($apiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => 'PUT',
+        CURLOPT_HTTPHEADER => [
+            'User-Agent: AutoThi-Admin',
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/json',
+            'Accept: application/vnd.github.v3+json'
+        ],
+        CURLOPT_POSTFIELDS => json_encode($commitPayload),
+        CURLOPT_TIMEOUT => 30
+    ]);
+    $putRes = curl_exec($ch);
+    $putHttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($putHttpCode === 200 || $putHttpCode === 201) {
+        jsonResponse(true, ['message' => 'Đã xóa câu hỏi khỏi GitHub thành công!']);
+    } else {
+        jsonResponse(false, null, 'Lỗi commit lên GitHub khi xóa!', 500);
+    }
 }
 
 // -------------------------------------------------------------
