@@ -786,7 +786,8 @@
         if (response && response.success && response.data) {
           chosenIndex = response.data.best_index;
           source = "AI chọn";
-          log(`🤖 AI chọn: "${response.data.answer_text?.slice(0, 30)}..."`, "success");
+          const reasonHint = response.data.reason ? ` (${response.data.reason.slice(0, 45)}...)` : "";
+          log(`🧠 AI tư duy chọn: "${response.data.answer_text?.slice(0, 30)}..."${reasonHint}`, "success");
         } else {
           log(`❌ Lỗi AI: ${response ? response.error : "Không có phản hồi"}`, "error");
         }

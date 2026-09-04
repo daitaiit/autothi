@@ -23,8 +23,8 @@ Trợ lý mở rộng (Chrome Extension Manifest V3) tự động phân tích c�
 Extension đã được cấu hình sẵn API Key chất lượng cao từ [ShopAIKey](https://shopaikey.com):
 `sk-4OmuvVaeLHVgJozU3EjsteCapGXuwZu5rUBUkRcVrjXeLHXd`
 
-- Sử dụng mô hình `gpt-4o-mini` tốc độ siêu nhanh và chính xác vượt trội để giải văn bản trắc nghiệm.
-- Hỗ trợ fallback tự động sang các model dự phòng: `gpt-4o`, `qwen-flash`, `grok-3-mini`.
+- Tích hợp mô hình `gpt-4o` cùng kiến trúc **Tư duy phản biện (Chain-of-Thought)**: phân tích ngữ cảnh, đối chiếu dữ liệu lịch sử/khoa học/pháp luật và loại trừ các bẫy đảo ngược trước khi kết luận đáp án.
+- Hỗ trợ fallback tự động sang các siêu mô hình dự phòng: `deepseek-v3`, `qwen3.7-max`, `gpt-4o-mini`.
 
 ---
 

@@ -2,7 +2,7 @@
 
 const DEFAULT_API_KEY = "sk-4OmuvVaeLHVgJozU3EjsteCapGXuwZu5rUBUkRcVrjXeLHXd";
 const DEFAULT_API_URL = "https://api.shopaikey.com/v1/chat/completions";
-const DEFAULT_MODEL = "gpt-4o-mini";
+const DEFAULT_MODEL = "gpt-4o";
 const DEFAULT_SERVER_URL = "https://raw.githubusercontent.com/daitaiit/autothi/main/contests_manifest.json";
 
 const DEFAULT_SETTINGS = {
@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     if (!updated.apiKey || updated.apiKey.startsWith("AIzaSy")) {
       updated.apiKey = DEFAULT_API_KEY;
     }
-    if (!updated.model || updated.model.includes("gemini") || updated.model.includes("1.5") || updated.model.includes("2.0")) {
+    if (!updated.model || updated.model.includes("gemini") || updated.model.includes("1.5") || updated.model.includes("2.0") || updated.model === "gpt-4o-mini") {
       updated.model = DEFAULT_MODEL;
     }
     await chrome.storage.local.set({ settings: updated });
@@ -59,7 +59,7 @@ chrome.runtime.onStartup.addListener(async () => {
       data.settings.apiKey = DEFAULT_API_KEY;
       changed = true;
     }
-    if (!data.settings.model || data.settings.model.includes("gemini") || data.settings.model.includes("1.5") || data.settings.model.includes("2.0")) {
+    if (!data.settings.model || data.settings.model.includes("gemini") || data.settings.model.includes("1.5") || data.settings.model.includes("2.0") || data.settings.model === "gpt-4o-mini") {
       data.settings.model = DEFAULT_MODEL;
       changed = true;
     }
@@ -293,7 +293,7 @@ async function installContestPackage(contest) {
 async function handleSolveQuestion({ questionText, options, apiKey, model }) {
   const key = apiKey || (await getSetting("apiKey")) || DEFAULT_API_KEY;
   let targetModel = model || (await getSetting("model")) || DEFAULT_MODEL;
-  if (!targetModel || targetModel.includes("gemini")) {
+  if (!targetModel || targetModel.includes("gemini") || targetModel === "gpt-4o-mini") {
     targetModel = DEFAULT_MODEL;
   }
 
@@ -301,16 +301,29 @@ async function handleSolveQuestion({ questionText, options, apiKey, model }) {
     .map((opt, idx) => `[${idx}] ${opt.text}`)
     .join("\n");
 
-  const systemInstruction = `Bạn là một trợ lý AI chuyên gia xuất sắc trong việc giải đề thi trắc nghiệm học tập, pháp luật, lịch sử, chính trị, chuyển đổi số, tin học và kiến thức chung tại Việt Nam.
-Nhiệm vụ: Hãy đọc kỹ câu hỏi và các lựa chọn dưới đây, sau đó tìm ra đáp án CHÍNH XÁC NHẤT.
+  const systemInstruction = `Bạn là một chuyên gia tư duy phản biện và giải đề thi trắc nghiệm học thuật, kỹ thuật, lịch sử, chính trị, pháp luật, triết học và kiến thức chung đỉnh cao tại Việt Nam.
+Nhiệm vụ của bạn: Giải quyết câu hỏi trắc nghiệm một cách chính xác tuyệt đối 100%.
 
-QUY TẮC BẮT BUỘC:
-1. Bạn phải chọn 1 đáp án đúng nhất trong danh sách các lựa chọn được cung cấp.
-2. Trả về kết quả dưới định dạng JSON duy nhất (không kèm chữ thừa):
-{"best_index": <số nguyên từ 0 đến ${options.length - 1}>, "answer_text": "<nội dung đáp án đã chọn>", "confidence": 0.95, "reason": "<giải thích ngắn gọn 1 câu>"}`;
+QUY TRÌNH TƯ DUY PHẢN BIỆN (CHAIN-OF-THOUGHT BẮT BUỘC):
+1. Phân tích ngữ cảnh và yêu cầu cốt lõi của câu hỏi:
+   - Xác định chính xác sự kiện lịch sử, nhân vật, mốc thời gian, công thức, định lý, quy định pháp luật (Hiến pháp, Luật hiện hành) hoặc đặc tính công nghệ.
+   - Nhận diện và cẩn trọng với các bẫy ngữ nghĩa: đảo ngược thứ tự chuyển đổi (ví dụ: "chuyển từ A sang B" khác hoàn toàn với "chuyển từ B sang A"), từ phủ định ("KHÔNG", "NGOẠI TRỪ"), hoặc các mốc ngưỡng số liệu tiệm cận.
+2. Phân tích phản biện từng phương án ([0], [1], [2], [3]...):
+   - So sánh kỹ lưỡng các phương án gần giống nhau.
+   - Phân tích rõ ràng tại sao từng phương án sai hoặc đúng dựa trên căn cứ khoa học/lịch sử thực tế để loại trừ phương án gây nhiễu.
+3. Chốt phương án chính xác nhất.
+
+BẮT BUỘC TRẢ VỀ ĐỊNH DẠNG JSON DUY NHẤT (phải xuất thinking_process trước để kích hoạt tư duy rồi mới kết luận best_index):
+{
+  "thinking_process": "<phân tích tư duy logic chi tiết từng bước, phản biện và loại trừ các phương án gây nhiễu>",
+  "best_index": <số nguyên index của phương án đúng nhất từ 0 đến ${options.length - 1}>,
+  "answer_text": "<nội dung phương án đã chọn>",
+  "confidence": 0.99,
+  "reason": "<kết luận ngắn gọn súc tích lý do chọn>"
+}`;
 
   const prompt = `Câu hỏi:\n${questionText}\n\nCác lựa chọn:\n${optionsFormatted}`;
-  const modelsToTry = [targetModel, "gpt-4o-mini", "gpt-4o", "qwen-flash", "grok-3-mini"];
+  const modelsToTry = [targetModel, "gpt-4o", "deepseek-v3", "qwen3.7-max", "gpt-4o-mini"];
   const uniqueModels = [...new Set(modelsToTry)];
 
   let lastError = null;
@@ -318,15 +331,19 @@ QUY TẮC BẮT BUỘC:
   for (const mod of uniqueModels) {
     try {
       const url = DEFAULT_API_URL;
+      const isReasoningOnly = mod.includes("r1") || mod.includes("o1") || mod.includes("o3");
       const payload = {
         model: mod,
         messages: [
           { role: "system", content: systemInstruction },
           { role: "user", content: prompt }
-        ],
-        temperature: 0.1,
-        response_format: { type: "json_object" }
+        ]
       };
+
+      if (!isReasoningOnly) {
+        payload.temperature = 0.1;
+        payload.response_format = { type: "json_object" };
+      }
 
       const response = await fetch(url, {
         method: "POST",
@@ -346,7 +363,11 @@ QUY TẮC BẮT BUỘC:
       const rawText = data.choices?.[0]?.message?.content;
       if (!rawText) throw new Error("Không nhận được phản hồi từ AI");
 
-      const cleanJson = rawText.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
+      let cleanJson = rawText.trim();
+      const jsonMatch = cleanJson.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        cleanJson = jsonMatch[0];
+      }
       const parsed = JSON.parse(cleanJson);
 
       if (typeof parsed.best_index !== "number" || parsed.best_index < 0 || parsed.best_index >= options.length) {
@@ -360,8 +381,9 @@ QUY TẮC BẮT BUỘC:
       return {
         best_index: parsed.best_index,
         answer_text: options[parsed.best_index]?.text || parsed.answer_text,
-        confidence: parsed.confidence || 0.95,
-        reason: parsed.reason || "Giải bằng ShopAIKey AI",
+        confidence: parsed.confidence || 0.99,
+        reason: parsed.reason || parsed.thinking_process?.slice(0, 100) || "Giải bằng ShopAIKey AI",
+        thinking: parsed.thinking_process || "",
         modelUsed: mod
       };
     } catch (err) {
