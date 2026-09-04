@@ -1,14 +1,14 @@
 {
     "version": "2.5.0",
-    "updated_at": "2026-09-04 04:06:44",
+    "updated_at": "2026-09-04 04:07:09",
     "author": "Tafinex",
     "announcement": "Alo test",
     "active_contest": {
-        "id": "hoi_nghi_bct_03092026",
-        "name": "Hội nghị toàn quốc học tập, quán triệt Nghị quyết, Chỉ thị của Bộ Chính trị (03\/9\/2026)",
+        "id": "test-123",
+        "name": "Test 123",
         "date": "03\/09\/2026",
         "pinned": true,
-        "updated_at": "2026-09-04 04:06:44"
+        "updated_at": "2026-09-04 04:07:09"
     },
     "global_settings": {
         "autoNext": true,
@@ -21,8 +21,8 @@
         "solveSpeed": "normal",
         "delayPerQuestion": 2200,
         "forceOverrideUser": false,
-        "version": 3,
-        "updated_at": "2026-09-04 04:06:44"
+        "version": 4,
+        "updated_at": "2026-09-04 04:07:09"
     },
     "contests": [
         {
