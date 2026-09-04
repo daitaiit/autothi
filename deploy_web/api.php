@@ -685,6 +685,18 @@ if ($action === 'push_to_github') {
     $manifest['updated_at'] = date('Y-m-d H:i:s');
     $manifest['announcement'] = 'Đã cập nhật thêm ' . $addedCount . ' câu hỏi mới cho cuộc thi: ' . $contestName;
 
+    // Nếu người dùng chọn ghim làm cuộc thi hoạt động mới nhất của extension
+    $pinAsActive = !empty($input['pin_as_active']);
+    if ($pinAsActive) {
+        $manifest['active_contest'] = [
+            'id' => $contestId,
+            'name' => $contestName,
+            'date' => date('d/m/Y'),
+            'pinned' => true,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
     // B4: Gọi GitHub API commit & push
     $updatedJsonStr = json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     $commitPayload = [
@@ -715,12 +727,201 @@ if ($action === 'push_to_github') {
     if ($putHttpCode === 200 || $putHttpCode === 201) {
         $commitUrl = $putData['commit']['html_url'] ?? '';
         $msg = "🎉 Đã đồng bộ thành công lên GitHub!\n• Thêm mới: {$addedCount} câu\n• Cập nhật đáp án: {$updatedCount} câu\n• Tổng số câu hiện tại trong cuộc thi: " . count($existingQuestions) . " câu.";
+        if ($pinAsActive) {
+            $msg .= "\n• 📌 Đã ghim thành công làm Cuộc thi hoạt động chính thức trên toàn hệ thống Extension!";
+        }
         jsonResponse(true, [
             'addedCount' => $addedCount,
             'updatedCount' => $updatedCount,
             'totalInContest' => count($existingQuestions),
             'commitUrl' => $commitUrl,
             'message' => $msg
+        ]);
+    } else {
+        $errMsg = $putData['message'] ?? "Lỗi Commit GitHub (Mã HTTP $putHttpCode)";
+        jsonResponse(false, null, $errMsg, 500);
+    }
+}
+
+// -------------------------------------------------------------
+// 5. Lấy Cấu Hình Đồng Bộ Extension (Global Settings & Active Contest)
+// -------------------------------------------------------------
+if ($action === 'get_extension_settings') {
+    $url = 'https://raw.githubusercontent.com/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/' . GITHUB_BRANCH . '/' . GITHUB_FILE_PATH . '?t=' . time();
+    $ctx = stream_context_create([
+        'http' => [
+            'timeout' => 10,
+            'header' => "User-Agent: AutoThi-Admin\r\n"
+        ]
+    ]);
+    $json = @file_get_contents($url, false, $ctx);
+    $manifest = $json ? json_decode($json, true) : null;
+
+    $contestsList = [];
+    if ($manifest && !empty($manifest['contests'])) {
+        foreach ($manifest['contests'] as $c) {
+            $qCount = isset($c['questions']) && is_array($c['questions']) ? count($c['questions']) : ($c['question_count'] ?? 0);
+            $contestsList[] = [
+                'id' => $c['id'],
+                'name' => $c['name'],
+                'question_count' => $qCount,
+                'last_updated' => $c['last_updated'] ?? ($c['updated_at'] ?? '')
+            ];
+        }
+    }
+
+    $defaultGlobalSettings = [
+        'autoNext' => true,
+        'autoSubmit' => true,
+        'autoPredict' => true,
+        'predictType' => 'range',
+        'predictMin' => 1500,
+        'predictMax' => 3500,
+        'predictFixed' => 2500,
+        'solveSpeed' => 'normal',
+        'delayPerQuestion' => 2200,
+        'forceOverrideUser' => false,
+        'version' => 1,
+        'updated_at' => date('Y-m-d H:i:s')
+    ];
+
+    $defaultActiveContest = [
+        'id' => 'hoi_nghi_bct_03092026',
+        'name' => 'Hội nghị toàn quốc học tập, quán triệt Nghị quyết',
+        'date' => date('d/m/Y'),
+        'pinned' => true,
+        'updated_at' => date('Y-m-d H:i:s')
+    ];
+
+    jsonResponse(true, [
+        'active_contest' => $manifest['active_contest'] ?? $defaultActiveContest,
+        'global_settings' => array_merge($defaultGlobalSettings, $manifest['global_settings'] ?? []),
+        'announcement' => $manifest['announcement'] ?? '',
+        'manifest_updated_at' => $manifest['updated_at'] ?? date('Y-m-d H:i:s'),
+        'contests_list' => $contestsList
+    ]);
+}
+
+// -------------------------------------------------------------
+// 6. Lưu & Đồng Bộ Cấu Hình Extension Lên Toàn Hệ Thống (GitHub)
+// -------------------------------------------------------------
+if ($action === 'save_extension_settings') {
+    if (!isAuthenticated()) {
+        jsonResponse(false, null, 'Bạn chưa đăng nhập quản trị viên!', 401);
+    }
+
+    $token = getEffectiveGithubToken();
+    if (empty($token)) {
+        jsonResponse(false, null, 'Chưa có GitHub Token để đồng bộ cấu hình lên máy chủ!', 400);
+    }
+
+    $apiUrl = 'https://api.github.com/repos/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/contents/' . GITHUB_FILE_PATH . '?ref=' . GITHUB_BRANCH;
+    
+    // Đọc manifest hiện tại từ GitHub
+    $ch = curl_init($apiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'User-Agent: AutoThi-Admin',
+            'Authorization: Bearer ' . $token,
+            'Accept: application/vnd.github.v3+json'
+        ],
+        CURLOPT_TIMEOUT => 20
+    ]);
+    $res = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode !== 200) {
+        jsonResponse(false, null, "Không thể đọc manifest từ GitHub (Mã HTTP $httpCode)", 500);
+    }
+
+    $fileData = json_decode($res, true);
+    $sha = $fileData['sha'] ?? '';
+    $manifest = json_decode(base64_decode($fileData['content'] ?? ''), true) ?: [
+        'manifest_version' => '1.0',
+        'contests' => []
+    ];
+
+    // Cập nhật Cuộc thi mới nhất / Ghim hiển thị trên Header Extension
+    $activeContestInput = $input['active_contest'] ?? [];
+    if (!empty($activeContestInput['name'])) {
+        $contestName = trim($activeContestInput['name']);
+        $contestId = trim($activeContestInput['id'] ?? '');
+        if (empty($contestId)) {
+            $contestId = preg_replace('/[^a-z0-9_-]/', '-', strtolower($contestName));
+            $contestId = trim(preg_replace('/-+/', '-', $contestId), '-');
+        }
+        $manifest['active_contest'] = [
+            'id' => $contestId,
+            'name' => $contestName,
+            'date' => !empty($activeContestInput['date']) ? trim($activeContestInput['date']) : date('d/m/Y'),
+            'pinned' => true,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    // Cập nhật Cài đặt mặc định áp dụng toàn hệ thống (Global Settings)
+    $settingsInput = $input['global_settings'] ?? [];
+    $currentSettings = $manifest['global_settings'] ?? [];
+    $nextVersion = ((int)($currentSettings['version'] ?? 0)) + 1;
+
+    $manifest['global_settings'] = [
+        'autoNext' => isset($settingsInput['autoNext']) ? (bool)$settingsInput['autoNext'] : true,
+        'autoSubmit' => isset($settingsInput['autoSubmit']) ? (bool)$settingsInput['autoSubmit'] : true,
+        'autoPredict' => isset($settingsInput['autoPredict']) ? (bool)$settingsInput['autoPredict'] : true,
+        'predictType' => in_array($settingsInput['predictType'] ?? '', ['range', 'fixed']) ? $settingsInput['predictType'] : 'range',
+        'predictMin' => (int)($settingsInput['predictMin'] ?? 1500),
+        'predictMax' => (int)($settingsInput['predictMax'] ?? 3500),
+        'predictFixed' => (int)($settingsInput['predictFixed'] ?? 2500),
+        'solveSpeed' => in_array($settingsInput['solveSpeed'] ?? '', ['fast', 'normal', 'safe']) ? $settingsInput['solveSpeed'] : 'normal',
+        'delayPerQuestion' => (int)($settingsInput['delayPerQuestion'] ?? 2200),
+        'forceOverrideUser' => isset($settingsInput['forceOverrideUser']) ? (bool)$settingsInput['forceOverrideUser'] : false,
+        'version' => $nextVersion,
+        'updated_at' => date('Y-m-d H:i:s')
+    ];
+
+    if (isset($input['announcement'])) {
+        $manifest['announcement'] = trim($input['announcement']);
+    }
+
+    $manifest['updated_at'] = date('Y-m-d H:i:s');
+
+    // Commit & Push lên GitHub
+    $updatedJsonStr = json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    $commitPayload = [
+        'message' => "AutoThi Admin: Cap nhat Cau hinh & Cuoc thi ghim Extension v{$nextVersion} [" . date('d/m/Y H:i') . "]",
+        'content' => base64_encode($updatedJsonStr),
+        'sha' => $sha,
+        'branch' => GITHUB_BRANCH
+    ];
+
+    $ch = curl_init($apiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => 'PUT',
+        CURLOPT_HTTPHEADER => [
+            'User-Agent: AutoThi-Admin',
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/json',
+            'Accept: application/vnd.github.v3+json'
+        ],
+        CURLOPT_POSTFIELDS => json_encode($commitPayload),
+        CURLOPT_TIMEOUT => 30
+    ]);
+    $putRes = curl_exec($ch);
+    $putHttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    $putData = json_decode($putRes, true);
+    if ($putHttpCode === 200 || $putHttpCode === 201) {
+        $commitUrl = $putData['commit']['html_url'] ?? '';
+        jsonResponse(true, [
+            'version' => $nextVersion,
+            'active_contest' => $manifest['active_contest'],
+            'global_settings' => $manifest['global_settings'],
+            'commitUrl' => $commitUrl,
+            'message' => "🚀 Đã lưu & đồng bộ thành công cấu hình Extension lên toàn hệ thống (Phiên bản cấu hình #{$nextVersion})!"
         ]);
     } else {
         $errMsg = $putData['message'] ?? "Lỗi Commit GitHub (Mã HTTP $putHttpCode)";

@@ -30,10 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     let pendingContest = null;
 
     // 1. Load Stored Data
-    const storage = await chrome.storage.local.get(["settings", "questionBank", "installedContests"]);
+    const storage = await chrome.storage.local.get(["settings", "questionBank", "installedContests", "activeContest", "globalSettings"]);
     const settings = storage.settings || {};
     const questionBank = storage.questionBank || {};
     const installed = storage.installedContests || {};
+    const activeContest = storage.activeContest || null;
 
     // Setup initial UI states
     currentMode = settings.mode || "auto";
@@ -42,7 +43,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (chkAutoNext) chkAutoNext.checked = settings.autoNext !== false;
     if (chkAutoSubmit) chkAutoSubmit.checked = settings.autoSubmit !== false;
     if (chkAutoPredict) chkAutoPredict.checked = settings.autoPredict !== false;
-    if (txtPredictNumber) txtPredictNumber.value = settings.predictNumber || "";
+    if (txtPredictNumber) {
+      if (settings.predictType === "fixed" && settings.predictFixed) {
+        txtPredictNumber.value = settings.predictNumber || settings.predictFixed.toString();
+        txtPredictNumber.placeholder = settings.predictFixed.toString();
+      } else {
+        txtPredictNumber.value = settings.predictNumber || "";
+        txtPredictNumber.placeholder = `Random ${settings.predictMin || 1500}-${settings.predictMax || 3500}`;
+      }
+    }
 
     currentDelay = settings.minDelay || 2200;
     setSpeedUI(currentDelay);
@@ -51,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       btnToggleDock.classList.toggle("active", !!settings.showFloatingDock);
     }
 
-    updateBankUI(questionBank, installed);
+    updateBankUI(questionBank, installed, activeContest);
 
     // 2. Mode Selection (Tự động vs Gợi ý)
     if (modeAuto) {
@@ -219,7 +228,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 6. Bank UI (Tự động nhận diện cuộc thi theo Tab web đang mở hoặc đề mới nhất)
-    async function updateBankUI(bank, installedList) {
+    async function updateBankUI(bank, installedList, activeContestOverride = null) {
       if (footerBankCount) {
         const count = Object.keys(bank || {}).length;
         footerBankCount.innerText = `${count} câu hỏi`;
@@ -252,9 +261,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
 
-      // 2. Nếu không mở trang web cụ thể, ưu tiên lấy cuộc thi mới nhất
+      // 2. Nếu không mở trang web cụ thể, ưu tiên lấy cuộc thi được ghim toàn hệ thống từ Web Admin
       if (!targetContest) {
-        targetContest = installedList["hoi_nghi_bct_03092026"] || installedList["bch_tw_khoa_xiv_2026"] || (installedValues.length > 0 ? installedValues[0] : null);
+        let activeC = activeContestOverride;
+        if (!activeC) {
+          try {
+            const st = await chrome.storage.local.get("activeContest");
+            activeC = st.activeContest;
+          } catch (e) {}
+        }
+
+        if (activeC && activeC.name) {
+          targetContest = (installedList && installedList[activeC.id]) ? installedList[activeC.id] : {
+            id: activeC.id,
+            name: activeC.name,
+            displayDate: activeC.date || "03/09/2026",
+            updated_at: activeC.date || "03/09/2026"
+          };
+        } else {
+          targetContest = (installedList && (installedList["hoi_nghi_bct_03092026"] || installedList["bch_tw_khoa_xiv_2026"])) || (installedValues.length > 0 ? installedValues[0] : null);
+        }
       }
 
       const lastUpdatedText = document.getElementById("last-updated-text");
@@ -280,8 +306,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function checkForOnlineUpdates() {
       try {
         chrome.runtime.sendMessage({ action: "CHECK_ONLINE_UPDATES" }, async response => {
-          const st = await chrome.storage.local.get(["questionBank", "installedContests"]);
-          await updateBankUI(st.questionBank, st.installedContests);
+          const st = await chrome.storage.local.get(["questionBank", "installedContests", "activeContest", "settings"]);
+          await updateBankUI(st.questionBank, st.installedContests, st.activeContest);
+
+          // Cập nhật lại các toggle nếu có cài đặt mới từ admin
+          if (st.settings) {
+            if (chkAutoNext && st.settings.autoNext !== undefined) chkAutoNext.checked = st.settings.autoNext;
+            if (chkAutoSubmit && st.settings.autoSubmit !== undefined) chkAutoSubmit.checked = st.settings.autoSubmit;
+            if (chkAutoPredict && st.settings.autoPredict !== undefined) chkAutoPredict.checked = st.settings.autoPredict;
+            if (txtPredictNumber) {
+              if (st.settings.predictType === "fixed" && st.settings.predictFixed) {
+                txtPredictNumber.placeholder = st.settings.predictFixed.toString();
+              } else {
+                txtPredictNumber.placeholder = `Random ${st.settings.predictMin || 1500}-${st.settings.predictMax || 3500}`;
+              }
+            }
+          }
 
           if (!response || !response.success || !updateBanner) return;
           const data = response.data;

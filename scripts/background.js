@@ -12,14 +12,20 @@ const DEFAULT_SETTINGS = {
   autoNext: true,
   autoSubmit: true,
   autoPredict: true,
+  predictType: "range", // 'range' | 'fixed'
+  predictMin: 1500,
+  predictMax: 3500,
+  predictFixed: 2500,
   predictNumber: "",
+  solveSpeed: "normal",
   minDelay: 1500,
   maxDelay: 3000,
   autoLearn: true,
   enabled: true,
   showFloatingDock: false,
   serverUrl: DEFAULT_SERVER_URL,
-  autoCheckUpdate: true
+  autoCheckUpdate: true,
+  globalSettingsVersion: 0
 };
 
 // Initialize settings on install
@@ -84,6 +90,12 @@ async function loadDefaultQuestionBank() {
     const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
     if (res.ok) {
       const manifest = await res.json();
+      if (manifest.active_contest) {
+        await chrome.storage.local.set({ activeContest: manifest.active_contest });
+      }
+      if (manifest.global_settings) {
+        await applyGlobalSettings(manifest.global_settings);
+      }
       if (manifest.contests && Array.isArray(manifest.contests)) {
         for (const contest of manifest.contests) {
           await installContestPackage(contest);
@@ -180,6 +192,14 @@ async function syncLatestOnlineQuestions(autoInstall = true, customUrl = null) {
         installedVersion: contest.version,
         isInstalled: true
       });
+    }
+
+    // Cập nhật Cuộc thi ghim & Cài đặt toàn hệ thống từ Manifest
+    if (manifest.active_contest) {
+      await chrome.storage.local.set({ activeContest: manifest.active_contest });
+    }
+    if (manifest.global_settings) {
+      await applyGlobalSettings(manifest.global_settings);
     }
 
     // Sau khi tự động cập nhật xong, xóa thông báo badge
@@ -457,3 +477,34 @@ function normalizeText(text) {
     .replace(/\s+/g, " ")
     .trim();
 }
+
+async function applyGlobalSettings(gs) {
+  if (!gs || typeof gs !== "object") return;
+  try {
+    const data = await chrome.storage.local.get("settings");
+    const current = data.settings || DEFAULT_SETTINGS;
+    const isNewer = (gs.version || 0) > (current.globalSettingsVersion || 0);
+    const force = gs.forceOverrideUser || isNewer;
+
+    const merged = {
+      ...current,
+      autoNext: force ? gs.autoNext : (current.autoNext !== undefined ? current.autoNext : gs.autoNext),
+      autoSubmit: force ? gs.autoSubmit : (current.autoSubmit !== undefined ? current.autoSubmit : gs.autoSubmit),
+      autoPredict: force ? gs.autoPredict : (current.autoPredict !== undefined ? current.autoPredict : gs.autoPredict),
+      predictType: force ? (gs.predictType || "range") : (current.predictType || gs.predictType || "range"),
+      predictMin: gs.predictMin !== undefined ? gs.predictMin : (current.predictMin ?? 1500),
+      predictMax: gs.predictMax !== undefined ? gs.predictMax : (current.predictMax ?? 3500),
+      predictFixed: gs.predictFixed !== undefined ? gs.predictFixed : (current.predictFixed ?? 2500),
+      predictNumber: (gs.predictType === "fixed" && gs.predictFixed) ? gs.predictFixed.toString() : (current.predictNumber || ""),
+      solveSpeed: gs.solveSpeed || current.solveSpeed || "normal",
+      minDelay: gs.delayPerQuestion ? Math.max(500, Math.round(gs.delayPerQuestion * 0.8)) : (current.minDelay || 1500),
+      maxDelay: gs.delayPerQuestion ? Math.max(1000, Math.round(gs.delayPerQuestion * 1.2)) : (current.maxDelay || 3000),
+      globalSettingsVersion: gs.version || current.globalSettingsVersion || 0
+    };
+
+    await chrome.storage.local.set({ settings: merged, globalSettings: gs });
+  } catch (e) {
+    console.warn("Lỗi applyGlobalSettings:", e);
+  }
+}
+

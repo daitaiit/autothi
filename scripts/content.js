@@ -525,17 +525,29 @@
 
     if (predictInput) {
       smoothScrollTo(predictInput, "center");
-      let val = settings.predictNumber ? settings.predictNumber.trim() : "";
-      if (!val) {
-        // Generate a realistic random prediction number (e.g. 1250 - 3800)
-        val = Math.floor(Math.random() * (3800 - 1250 + 1) + 1250).toString();
+      let val = "";
+
+      if (settings.predictType === "fixed" && settings.predictFixed) {
+        val = settings.predictFixed.toString();
+      } else if (settings.predictType === "range") {
+        const min = parseInt(settings.predictMin, 10) || 1500;
+        const max = parseInt(settings.predictMax, 10) || 3500;
+        const lo = Math.min(min, max);
+        const hi = Math.max(min, max);
+        val = Math.floor(Math.random() * (hi - lo + 1) + lo).toString();
+      } else if (settings.predictNumber && settings.predictNumber.trim()) {
+        val = settings.predictNumber.trim();
+      } else {
+        const min = parseInt(settings.predictMin, 10) || 1500;
+        const max = parseInt(settings.predictMax, 10) || 3500;
+        val = Math.floor(Math.random() * (max - min + 1) + min).toString();
       }
 
       predictInput.value = val;
       predictInput.dispatchEvent(new Event("input", { bubbles: true }));
       predictInput.dispatchEvent(new Event("change", { bubbles: true }));
       predictInput.classList.add("autothi-highlight-correct");
-      log(`✓ Tự động điền số dự đoán: ${val}`, "success");
+      log(`✓ Tự động điền số dự đoán (${settings.predictType === 'fixed' ? 'cố định' : 'ngẫu nhiên'}): ${val}`, "success");
       return true;
     }
     return false;

@@ -3,6 +3,28 @@
     "updated_at": "2026-09-04 03:40:44",
     "author": "Tafinex",
     "announcement": "Đã cập nhật thêm 10 câu hỏi mới cho cuộc thi: Hội nghị toàn quốc học tập, quán triệt Nghị quyết, Chỉ thị của Bộ Chính trị (03\/9\/2026)",
+    "active_contest": {
+        "id": "hoi_nghi_bct_03092026",
+        "name": "Hội nghị toàn quốc học tập, quán triệt Nghị quyết, Chỉ thị của Bộ Chính trị (03/9/2026)",
+        "date": "03/09/2026",
+        "display_date": "03/09/2026",
+        "pinned": true,
+        "updated_at": "2026-09-04 10:55:00"
+    },
+    "global_settings": {
+        "autoNext": true,
+        "autoSubmit": true,
+        "autoPredict": true,
+        "predictType": "range",
+        "predictMin": 1500,
+        "predictMax": 3500,
+        "predictFixed": 2500,
+        "solveSpeed": "normal",
+        "delayPerQuestion": 2200,
+        "forceOverrideUser": false,
+        "version": 1,
+        "updated_at": "2026-09-04 10:55:00"
+    },
     "contests": [
         {
             "id": "hoi_nghi_bct_03092026",

@@ -141,10 +141,105 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (found) {
         document.getElementById("txt-contest-id").value = found.id;
         document.getElementById("txt-contest-name").value = found.name;
-        document.getElementById("txt-contest-desc").value = found.description || "";
       }
     }
   });
+
+  // Extension Settings tab events
+  const btnReloadExt = document.getElementById("btn-reload-ext-settings");
+  const btnSaveExtTop = document.getElementById("btn-save-ext-settings");
+  const btnSaveExtBottom = document.getElementById("btn-save-ext-settings-bottom");
+  if (btnReloadExt) btnReloadExt.addEventListener("click", loadExtensionSettings);
+  if (btnSaveExtTop) btnSaveExtTop.addEventListener("click", handleSaveExtensionSettings);
+  if (btnSaveExtBottom) btnSaveExtBottom.addEventListener("click", handleSaveExtensionSettings);
+
+  // Speed selection in extension settings
+  const speedOptBtns = document.querySelectorAll(".btn-speed-opt");
+  speedOptBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      speedOptBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const speed = btn.getAttribute("data-speed");
+      const delay = btn.getAttribute("data-delay");
+      const speedInput = document.getElementById("val-global-speed");
+      const delayInput = document.getElementById("val-global-delay");
+      if (speedInput) speedInput.value = speed;
+      if (delayInput) delayInput.value = delay;
+    });
+  });
+
+  // Predict type radio switcher (range vs fixed)
+  const radPredictRange = document.getElementById("rad-predict-range");
+  const radPredictFixed = document.getElementById("rad-predict-fixed");
+  const boxPredictRange = document.getElementById("box-predict-range");
+  const boxPredictFixed = document.getElementById("box-predict-fixed");
+  function updatePredictTypeUI() {
+    if (radPredictFixed && radPredictFixed.checked) {
+      if (boxPredictRange) boxPredictRange.style.display = "none";
+      if (boxPredictFixed) boxPredictFixed.style.display = "block";
+    } else {
+      if (boxPredictRange) boxPredictRange.style.display = "flex";
+      if (boxPredictFixed) boxPredictFixed.style.display = "none";
+    }
+  }
+  if (radPredictRange) radPredictRange.addEventListener("change", updatePredictTypeUI);
+  if (radPredictFixed) radPredictFixed.addEventListener("change", updatePredictTypeUI);
+
+  // Live preview & preset handler for active contest
+  const selExtPreset = document.getElementById("sel-ext-active-preset");
+  const txtExtActiveName = document.getElementById("txt-ext-active-name");
+  const txtExtActiveId = document.getElementById("txt-ext-active-id");
+  const txtExtActiveDate = document.getElementById("txt-ext-active-date");
+  const prevExtName = document.getElementById("preview-ext-contest-name");
+  const prevExtDate = document.getElementById("preview-ext-contest-date");
+
+  function updateActiveContestPreview() {
+    if (prevExtName && txtExtActiveName) {
+      prevExtName.innerText = txtExtActiveName.value.trim() || "Chưa đặt tên cuộc thi";
+      prevExtName.title = txtExtActiveName.value.trim() || "";
+    }
+    if (prevExtDate && txtExtActiveDate) {
+      prevExtDate.innerText = txtExtActiveDate.value.trim() || "03/09/2026";
+    }
+  }
+
+  if (txtExtActiveName) txtExtActiveName.addEventListener("input", () => {
+    if (txtExtActiveId && !txtExtActiveId.dataset.manual) {
+      txtExtActiveId.value = slugifyVietnamese(txtExtActiveName.value);
+    }
+    updateActiveContestPreview();
+  });
+  if (txtExtActiveDate) txtExtActiveDate.addEventListener("input", updateActiveContestPreview);
+  if (txtExtActiveId) txtExtActiveId.addEventListener("input", () => {
+    txtExtActiveId.dataset.manual = "true";
+  });
+
+  if (selExtPreset) {
+    selExtPreset.addEventListener("change", () => {
+      const selectedId = selExtPreset.value;
+      if (!selectedId) return;
+      const found = availableContests.find(c => c.id === selectedId);
+      if (found) {
+        if (txtExtActiveName) txtExtActiveName.value = found.name;
+        if (txtExtActiveId) {
+          txtExtActiveId.value = found.id;
+          txtExtActiveId.dataset.manual = "true";
+        }
+        if (txtExtActiveDate && found.last_updated) {
+          const parts = found.last_updated.split("-");
+          if (parts.length === 3) {
+            txtExtActiveDate.value = `${parts[2]}/${parts[1]}/${parts[0]}`;
+          } else {
+            txtExtActiveDate.value = found.last_updated;
+          }
+        }
+        updateActiveContestPreview();
+      }
+    });
+  }
+
+  // Load extension settings initially
+  await loadExtensionSettings();
 });
 
 // Helper: Chuyển tiếng Việt có dấu thành slug không dấu
@@ -478,6 +573,20 @@ async function loadContests() {
       document.getElementById("stat-questions-count").innerText = `${json.data.total_questions_all || 0} câu`;
       document.getElementById("stat-last-sync").innerText = json.data.updated_at || "Vừa xong";
       document.getElementById("badge-bank-total").innerText = `${json.data.total_questions_all || 0}`;
+
+      // Update Extension Settings Preset Dropdown
+      const selExtPreset = document.getElementById("sel-ext-active-preset");
+      if (selExtPreset) {
+        const curVal = selExtPreset.value;
+        selExtPreset.innerHTML = '<option value="">-- Chọn cuộc thi từ ngân hàng đề --</option>';
+        availableContests.forEach(c => {
+          const opt = document.createElement("option");
+          opt.value = c.id;
+          opt.innerText = `${c.name} (${c.question_count || 0} câu)`;
+          if (c.id === curVal) opt.selected = true;
+          selExtPreset.appendChild(opt);
+        });
+      }
 
       // Render live GitHub bank list
       renderGitHubBank();
@@ -897,6 +1006,8 @@ async function handlePushGitHub() {
   btn.innerText = "⏳ Đang commit lên GitHub...";
 
   try {
+    const pinAsActive = document.getElementById("chk-pin-active-contest")?.checked ?? true;
+
     const res = await fetch("api.php?action=push_to_github", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -904,15 +1015,17 @@ async function handlePushGitHub() {
         contest_id: contestId,
         contest_name: contestName,
         contest_desc: contestDesc,
-        questions: parsedQuestions
+        questions: parsedQuestions,
+        pin_as_active: pinAsActive
       })
     });
     const json = await res.json();
 
     if (json.success) {
       alert(`🎉 THÀNH CÔNG!\n\n${json.data.message}\nTổng số câu trong cuộc thi: ${json.data.totalInContest}\n\nToàn bộ máy cài Extension sẽ nhận được đề mới!`);
-      // Reload contests
+      // Reload contests & extension settings
       await loadContests();
+      await loadExtensionSettings();
       // Switch to Bank Tab
       document.getElementById("nav-tab-bank").click();
     } else {
@@ -997,3 +1110,202 @@ function escapeAttr(text) {
     .replace(/'/g, "\\'")
     .replace(/"/g, "&quot;");
 }
+
+// -------------------------------------------------------------
+// 8. Quản Lý Cài Đặt Tập Trung Toàn Bộ Extension (Global Hub)
+// -------------------------------------------------------------
+async function loadExtensionSettings() {
+  try {
+    const res = await fetch("api.php?action=get_extension_settings");
+    const json = await res.json();
+    if (!json.success || !json.data) return;
+
+    const data = json.data;
+    const activeContest = data.active_contest || {};
+    const globalSettings = data.global_settings || {};
+
+    // 1. Gán thông tin cuộc thi ghim Header
+    const txtName = document.getElementById("txt-ext-active-name");
+    const txtId = document.getElementById("txt-ext-active-id");
+    const txtDate = document.getElementById("txt-ext-active-date");
+    const prevName = document.getElementById("preview-ext-contest-name");
+    const prevDate = document.getElementById("preview-ext-contest-date");
+
+    if (txtName) txtName.value = activeContest.name || "";
+    if (txtId) txtId.value = activeContest.id || "";
+    if (txtDate) txtDate.value = activeContest.date || (new Date().toLocaleDateString('vi-VN'));
+
+    if (prevName) {
+      prevName.innerText = activeContest.name || "Chưa đặt tên";
+      prevName.title = activeContest.name || "";
+    }
+    if (prevDate) {
+      prevDate.innerText = activeContest.date || (new Date().toLocaleDateString('vi-VN'));
+    }
+
+    // Populate preset dropdown
+    const selPreset = document.getElementById("sel-ext-active-preset");
+    if (selPreset && data.contests_list) {
+      selPreset.innerHTML = '<option value="">-- Chọn cuộc thi từ ngân hàng đề --</option>';
+      data.contests_list.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.innerText = `${c.name} (${c.question_count || 0} câu)`;
+        if (c.id === activeContest.id) opt.selected = true;
+        selPreset.appendChild(opt);
+      });
+    }
+
+    // 2. Gán các Toggle mặc định
+    const chkAutoNext = document.getElementById("chk-global-auto-next");
+    const chkAutoSubmit = document.getElementById("chk-global-auto-submit");
+    const chkAutoPredict = document.getElementById("chk-global-auto-predict");
+    if (chkAutoNext) chkAutoNext.checked = globalSettings.autoNext !== false;
+    if (chkAutoSubmit) chkAutoSubmit.checked = globalSettings.autoSubmit !== false;
+    if (chkAutoPredict) chkAutoPredict.checked = globalSettings.autoPredict !== false;
+
+    // 3. Gán Số Người Dự Đoán (Range / Fixed)
+    const radRange = document.getElementById("rad-predict-range");
+    const radFixed = document.getElementById("rad-predict-fixed");
+    const numMin = document.getElementById("num-predict-min");
+    const numMax = document.getElementById("num-predict-max");
+    const numFixed = document.getElementById("num-predict-fixed");
+
+    if (globalSettings.predictType === "fixed") {
+      if (radFixed) radFixed.checked = true;
+    } else {
+      if (radRange) radRange.checked = true;
+    }
+    if (numMin) numMin.value = globalSettings.predictMin ?? 1500;
+    if (numMax) numMax.value = globalSettings.predictMax ?? 3500;
+    if (numFixed) numFixed.value = globalSettings.predictFixed ?? 2500;
+
+    const boxRange = document.getElementById("box-predict-range");
+    const boxFixed = document.getElementById("box-predict-fixed");
+    if (boxRange && boxFixed) {
+      if (globalSettings.predictType === "fixed") {
+        boxRange.style.display = "none";
+        boxFixed.style.display = "block";
+      } else {
+        boxRange.style.display = "flex";
+        boxFixed.style.display = "none";
+      }
+    }
+
+    // 4. Gán Tốc độ & Độ trễ
+    const speed = globalSettings.solveSpeed || "normal";
+    const delay = globalSettings.delayPerQuestion || 2200;
+    const speedInput = document.getElementById("val-global-speed");
+    const delayInput = document.getElementById("val-global-delay");
+    if (speedInput) speedInput.value = speed;
+    if (delayInput) delayInput.value = delay;
+
+    document.querySelectorAll(".btn-speed-opt").forEach(btn => {
+      const bSpeed = btn.getAttribute("data-speed");
+      btn.classList.toggle("active", bSpeed === speed);
+    });
+
+    // 5. Gán Thông báo & Ghi đè
+    const txtAnnounce = document.getElementById("txt-ext-announcement");
+    if (txtAnnounce) txtAnnounce.value = data.announcement || "";
+
+    const chkOverride = document.getElementById("chk-force-override");
+    if (chkOverride) chkOverride.checked = !!globalSettings.forceOverrideUser;
+
+  } catch (e) {
+    console.warn("Lỗi tải cài đặt Extension:", e);
+  }
+}
+
+async function handleSaveExtensionSettings() {
+  const btnTop = document.getElementById("btn-save-ext-settings");
+  const btnBottom = document.getElementById("btn-save-ext-settings-bottom");
+  const alertBox = document.getElementById("ext-settings-alert");
+
+  const name = document.getElementById("txt-ext-active-name")?.value.trim();
+  const id = document.getElementById("txt-ext-active-id")?.value.trim();
+  const date = document.getElementById("txt-ext-active-date")?.value.trim();
+
+  if (!name) {
+    alert("Vui lòng nhập Tên cuộc thi mới nhất hiển thị trên Header Extension!");
+    document.getElementById("txt-ext-active-name")?.focus();
+    return;
+  }
+
+  const isFixed = document.getElementById("rad-predict-fixed")?.checked;
+  const predictMin = parseInt(document.getElementById("num-predict-min")?.value, 10) || 1500;
+  const predictMax = parseInt(document.getElementById("num-predict-max")?.value, 10) || 3500;
+  const predictFixed = parseInt(document.getElementById("num-predict-fixed")?.value, 10) || 2500;
+
+  if (predictMin > predictMax) {
+    alert("Số dự đoán ngẫu nhiên Từ (Min) không được lớn hơn Đến (Max)!");
+    return;
+  }
+
+  const payload = {
+    active_contest: {
+      id: id || slugifyVietnamese(name),
+      name: name,
+      date: date || (new Date().toLocaleDateString('vi-VN'))
+    },
+    global_settings: {
+      autoNext: document.getElementById("chk-global-auto-next")?.checked ?? true,
+      autoSubmit: document.getElementById("chk-global-auto-submit")?.checked ?? true,
+      autoPredict: document.getElementById("chk-global-auto-predict")?.checked ?? true,
+      predictType: isFixed ? "fixed" : "range",
+      predictMin: predictMin,
+      predictMax: predictMax,
+      predictFixed: predictFixed,
+      solveSpeed: document.getElementById("val-global-speed")?.value || "normal",
+      delayPerQuestion: parseInt(document.getElementById("val-global-delay")?.value, 10) || 2200,
+      forceOverrideUser: document.getElementById("chk-force-override")?.checked ?? false
+    },
+    announcement: document.getElementById("txt-ext-announcement")?.value.trim() || ""
+  };
+
+  const oldTopText = btnTop ? btnTop.innerText : "";
+  const oldBottomText = btnBottom ? btnBottom.innerText : "";
+  if (btnTop) { btnTop.disabled = true; btnTop.innerText = "⏳ Đang lưu & đồng bộ..."; }
+  if (btnBottom) { btnBottom.disabled = true; btnBottom.innerText = "⏳ Đang lưu & đồng bộ..."; }
+
+  try {
+    const res = await fetch("api.php?action=save_extension_settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+
+    if (json.success) {
+      if (alertBox) {
+        alertBox.style.display = "block";
+        alertBox.innerHTML = `
+          <div class="alert-box success" style="margin: 0; padding: 14px 16px;">
+            <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: #34d399;">${escapeHtml(json.data.message)}</div>
+            <div style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+              • Cuộc thi ghim: <b style="color: #60a5fa;">${escapeHtml(json.data.active_contest.name)}</b> (Ngày: ${escapeHtml(json.data.active_contest.date)})<br>
+              • Trạng thái mặc định: Tự làm &amp; chuyển câu: <b>${payload.global_settings.autoNext ? 'BẬT' : 'TẮT'}</b> | Tự nộp: <b>${payload.global_settings.autoSubmit ? 'BẬT' : 'TẮT'}</b> | Điền dự đoán: <b>${payload.global_settings.autoPredict ? 'BẬT' : 'TẮT'} (${payload.global_settings.predictType === 'range' ? `Random ${payload.global_settings.predictMin} - ${payload.global_settings.predictMax}` : `Cố định ${payload.global_settings.predictFixed}`})</b><br>
+              • Toàn bộ Extension người dùng sẽ nhận ngay cấu hình này khi mở popup hoặc qua tự động đồng bộ ngầm định kỳ.
+            </div>
+            ${json.data.commitUrl ? `<div style="margin-top: 8px;"><a href="${escapeHtml(json.data.commitUrl)}" target="_blank" style="color: #60a5fa; text-decoration: underline; font-size: 11.5px;">🔗 Xem Commit trên GitHub</a></div>` : ''}
+          </div>
+        `;
+        alertBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        alert(json.data.message);
+      }
+      await loadExtensionSettings();
+    } else {
+      if (json.error && json.error.includes("Chưa có GitHub Token")) {
+        document.getElementById("token-modal").classList.remove("hidden");
+      }
+      alert(`❌ Lỗi đồng bộ: ${json.error}`);
+    }
+  } catch (e) {
+    alert(`❌ Lỗi mạng: ${e.message}`);
+  } finally {
+    if (btnTop) { btnTop.disabled = false; btnTop.innerText = oldTopText; }
+    if (btnBottom) { btnBottom.disabled = false; btnBottom.innerText = oldBottomText; }
+  }
+}
+

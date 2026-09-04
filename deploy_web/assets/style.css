@@ -710,5 +710,89 @@ textarea.form-control {
   .contest-name {
     font-size: 14.5px;
   }
+
+  #tab-extension-settings > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================================ */
+/* Extension Settings Toggles & Controls UI                     */
+/* ============================================================ */
+.switch-ui {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch-ui input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-ui {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #334155;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider-ui:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 2px;
+  background-color: #ffffff;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.switch-ui input:checked + .slider-ui {
+  background-color: #2563eb;
+  border-color: #3b82f6;
+}
+
+.switch-ui input:checked + .slider-ui:before {
+  transform: translateX(20px);
+  background-color: #ffffff;
+}
+
+.btn-speed-opt {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border);
+  color: #cbd5e1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.btn-speed-opt:hover {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #ffffff;
+}
+
+.btn-speed-opt.active {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: #3b82f6;
+  color: #60a5fa;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
 }
 

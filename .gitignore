@@ -2,3 +2,5 @@
 Thumbs.db
 node_modules/
 *.log
+scratch/
+.github_token.secret
