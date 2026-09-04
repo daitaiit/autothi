@@ -485,6 +485,15 @@
       <button class="btn btn-next" type="button" onclick="alert('Đang hiển thị toàn bộ câu hỏi trên trang này!')">Tiếp theo</button>
       <button class="btn btn-submit" type="button" id="btn-submit-exam">Nộp bài thi</button>
     </div>
+
+    <!-- Bảng Điểm Kết Quả Hiển Thị Ngay Sau Khi Nộp Bài -->
+    <div id="quiz-result-card" style="display: none; background: rgba(16, 185, 129, 0.12); border: 2px solid #10b981; border-radius: 12px; padding: 24px; margin-top: 25px; text-align: center;">
+      <div style="font-size: 36px;">🎉</div>
+      <h2 style="font-size: 20px; color: #34d399; margin: 6px 0 2px;">KẾT QUẢ BÀI THI</h2>
+      <div id="inpage-score-text" style="font-size: 42px; font-weight: 800; color: #10b981;">0/8 (0%)</div>
+      <p id="inpage-score-comment" style="font-size: 13.5px; color: #94a3b8; margin-top: 4px;">Kết quả giải đề tự động bằng ShopAIKey</p>
+      <div id="inpage-score-breakdown" style="text-align: left; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 16px; margin-top: 15px; font-size: 14px; line-height: 1.6;"></div>
+    </div>
   </div>
 
   <!-- Modal Chấm Điểm Sau Khi Nộp -->
@@ -526,10 +535,10 @@
 
         if (isRight) {
           score++;
-          detailHtml += `<div style="color: #34d399; margin-bottom: 4px;">✓ Câu ${i}: Đúng (${correct.ans})</div>`;
+          detailHtml += `<div style="color: #34d399; margin-bottom: 4px;">✓ <b>Câu ${i}: Đúng!</b> (${correct.ans}. ${correct.text})</div>`;
         } else {
           const userAns = selected ? selected.value : "Chưa chọn";
-          detailHtml += `<div style="color: #f87171; margin-bottom: 4px;">✗ Câu ${i}: Chọn ${userAns} (Đáp án đúng: ${correct.ans})</div>`;
+          detailHtml += `<div style="color: #f87171; margin-bottom: 4px;">✗ <b>Câu ${i}: Chọn ${userAns}</b> (Đáp án đúng: ${correct.ans}. ${correct.text})</div>`;
         }
       }
 
@@ -543,6 +552,13 @@
 
       document.getElementById("score-details").innerHTML = detailHtml;
       document.getElementById("result-modal").classList.add("active");
+
+      // In-page display
+      document.getElementById("inpage-score-text").innerText = `${score}/${total} (${percent}%)`;
+      document.getElementById("inpage-score-breakdown").innerHTML = detailHtml;
+      const inpageCard = document.getElementById("quiz-result-card");
+      inpageCard.style.display = "block";
+      inpageCard.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   </script>
 </body>

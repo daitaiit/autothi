@@ -533,6 +533,13 @@
         triggerClick(confirmBtn);
       }
       log("🎉 ĐÃ NỘP BÀI THÀNH CÔNG!", "success");
+
+      // Tự động lăn chuột đến bảng điểm hiển thị ngay sau khi nộp bài
+      await sleep(500);
+      const scoreEl = document.querySelector('#quiz-result-card, #result-modal, .result-card, .result-box, .result-overlay, .score, [class*="score"], [class*="ket-qua"], [id*="ket-qua"], [id*="score"]');
+      if (scoreEl) {
+        smoothScrollTo(scoreEl, "center");
+      }
     }
   }
 

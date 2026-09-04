@@ -9,7 +9,8 @@
     body { background: #f1f5f9; color: #1e293b; padding: 30px 20px; }
     .container { max-width: 760px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
     h1 { color: #1e3a8a; font-size: 22px; margin-bottom: 8px; text-align: center; }
-    p.subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 25px; }
+    p.subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 20px; }
+    
     .question-item { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
     .question-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 12px; }
     .options-list { display: flex; flex-direction: column; gap: 8px; }
@@ -20,12 +21,41 @@
     .btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; }
     .btn-next { background: #2563eb; color: #fff; }
     .btn-submit { background: #16a34a; color: #fff; }
+
+    /* Result Score Card */
+    .result-box {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 2px solid #86efac;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 25px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(22, 163, 74, 0.15);
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-breakdown {
+      text-align: left;
+      background: #ffffff;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 15px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>CUỘC THI TÌM HIỂU CHUYỂN ĐỔI SỐ VÀ CÔNG NGHỆ 2026</h1>
     <p class="subtitle">Trang mẫu thử nghiệm tính năng tự động làm bài của AutoThi AI</p>
+    
     <div style="text-align: center; margin-bottom: 20px;">
       <a href="test_hard_quiz.html" style="display: inline-block; padding: 6px 14px; background: #fee2e2; color: #b91c1c; border-radius: 999px; font-weight: 600; font-size: 13px; text-decoration: none; border: 1px solid #fca5a5;">
         🔥 Thử sức với Bộ Đề Độ Khó Cao (Test khả năng tự suy luận của AI) &rarr;
@@ -110,9 +140,69 @@
     </div>
 
     <div class="actions">
-      <button class="btn btn-next" type="button">Tiếp theo</button>
-      <button class="btn btn-submit" type="button" onclick="alert('🎉 Nộp bài thành công!')">Nộp bài</button>
+      <button class="btn btn-next" type="button" onclick="alert('Đang hiển thị toàn bộ câu hỏi trên trang này!')">Tiếp theo</button>
+      <button class="btn btn-submit" type="button" id="btn-submit" onclick="submitExam()">Nộp bài</button>
+    </div>
+
+    <!-- Bảng Điểm Kết Quả Hiển Thị Ngay Sau Khi Nộp Bài -->
+    <div id="quiz-result-card" class="result-box" style="display: none;">
+      <div style="font-size: 36px;">🎉</div>
+      <h2 style="font-size: 20px; color: #15803d; margin: 6px 0 2px;">KẾT QUẢ BÀI THI</h2>
+      <div id="score-text" style="font-size: 38px; font-weight: 800; color: #16a34a;">3/3 (100%)</div>
+      <p id="score-comment" style="font-size: 13.5px; color: #475569; margin-top: 4px;">Xuất sắc! AI đã trả lời chính xác tất cả các câu hỏi.</p>
+      <div id="score-breakdown" class="result-breakdown"></div>
     </div>
   </div>
+
+  <script>
+    const correctAnswers = {
+      q1: { ans: "A", text: "Ngày 10 tháng 10" },
+      q2: { ans: "A", text: "Chính phủ số, Kinh tế số và Xã hội số" },
+      q3: { ans: "B", text: "VNeID" }
+    };
+
+    function submitExam() {
+      let score = 0;
+      const total = 3;
+      let html = "";
+
+      for (let i = 1; i <= total; i++) {
+        const key = "q" + i;
+        const selected = document.querySelector(`input[name="${key}"]:checked`);
+        const item = correctAnswers[key];
+        const isRight = selected && selected.value === item.ans;
+
+        if (isRight) {
+          score++;
+          html += `<div style="color: #16a34a; margin-bottom: 6px;">✓ <b>Câu ${i}: Đúng!</b> (Đáp án ${item.ans}. ${item.text})</div>`;
+        } else {
+          const userVal = selected ? selected.value : "Chưa chọn";
+          html += `<div style="color: #dc2626; margin-bottom: 6px;">✗ <b>Câu ${i}: Chọn ${userVal}</b> (Đáp án đúng: ${item.ans}. ${item.text})</div>`;
+        }
+      }
+
+      const percent = Math.round((score / total) * 100);
+      document.getElementById("score-text").innerText = `${score}/${total} (${percent} Điểm)`;
+      
+      const commentEl = document.getElementById("score-comment");
+      if (score === total) {
+        commentEl.innerText = "Tuyệt đối! Tất cả câu hỏi đều trả lời chính xác 100%.";
+        commentEl.style.color = "#15803d";
+      } else {
+        commentEl.innerText = `Hoàn thành bài thi đạt ${percent}%.`;
+        commentEl.style.color = "#475569";
+      }
+
+      const predictVal = document.querySelector('input[name="du_doan_so_nguoi"]')?.value || "Chưa điền";
+      html += `<hr style="margin: 10px 0; border: none; border-top: 1px dashed #cbd5e1;">`;
+      html += `<div>🎯 Số người dự đoán đã điền: <b style="color: #2563eb;">${predictVal}</b></div>`;
+
+      document.getElementById("score-breakdown").innerHTML = html;
+      
+      const resultCard = document.getElementById("quiz-result-card");
+      resultCard.style.display = "block";
+      resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  </script>
 </body>
 </html>
