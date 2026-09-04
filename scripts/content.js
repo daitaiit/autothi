@@ -442,8 +442,18 @@
     }
 
     // Auto next question / submit if enabled
+    const submitBtn = findSubmitButton();
     const nextBtn = findNextButton();
-    if (settings.autoNext && isRunning && nextBtn) {
+
+    // Nếu đã có nút nộp bài hiển thị và không còn nút tiếp theo hợp lệ, ưu tiên nộp bài ngay
+    if (settings.autoSubmit && submitBtn && isVisible(submitBtn) && (!nextBtn || !isVisible(nextBtn) || nextBtn.disabled || nextBtn.classList.contains("disabled"))) {
+      log("🎉 Đã giải xong các câu hỏi, tiến hành nộp bài...", "success");
+      await trySubmitExam();
+      stopSolving();
+      return;
+    }
+
+    if (settings.autoNext && isRunning && nextBtn && isVisible(nextBtn) && !nextBtn.disabled && !nextBtn.classList.contains("disabled")) {
       smoothScrollTo(nextBtn, "center");
       log("➡️ Đang chuyển sang câu tiếp theo...", "info");
       const delay = getRandomDelay(1000, 2000);
@@ -454,7 +464,7 @@
         }, 1500);
       }, delay);
     } else {
-      log("🎉 Đã tới câu cuối cùng!", "success");
+      log("🎉 Đã hoàn thành câu cuối cùng!", "success");
       if (settings.autoSubmit) {
         await trySubmitExam();
       }
@@ -915,6 +925,7 @@
     const nextTexts = ["tiếp theo", "tiếp tục", "câu tiếp", "câu sau", "next", "kế tiếp", "tiếp", "trang sau"];
     
     return buttons.find(b => {
+      if (b.disabled || b.classList.contains("disabled") || b.getAttribute("aria-disabled") === "true") return false;
       const text = (b.innerText || b.value || "").toLowerCase().trim();
       return nextTexts.some(nt => text === nt || text.includes(nt)) && isVisible(b);
     });
