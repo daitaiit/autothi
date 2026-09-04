@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Elements
     const btnStart = document.getElementById("btn-start");
     const btnStop = document.getElementById("btn-stop");
-    const btnSolvePage = document.getElementById("btn-solve-page");
-    const btnToggleDock = document.getElementById("btn-toggle-dock");
     const modeAuto = document.getElementById("mode-auto");
     const modeHighlight = document.getElementById("mode-highlight");
     const chkAutoNext = document.getElementById("chk-auto-next");
@@ -139,26 +137,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         sendActionToActiveTab("STOP_AUTO");
         setRunningState(false);
         showToast("⏹ Đã dừng lại!");
-      });
-    }
-
-    if (btnSolvePage) {
-      btnSolvePage.addEventListener("click", async () => {
-        await saveSettings();
-        const success = await sendActionToActiveTab("SOLVE_CURRENT_PAGE");
-        if (success) {
-          setRunningState(true);
-          showToast("🔍 Đang giải tất cả câu hỏi trên trang này...");
-        }
-      });
-    }
-
-    if (btnToggleDock) {
-      btnToggleDock.addEventListener("click", async () => {
-        const success = await sendActionToActiveTab("TOGGLE_FLOATING_DOCK");
-        if (success) {
-          showToast("📌 Đã bật/ẩn thanh điều khiển nổi trên màn hình trang web!");
-        }
       });
     }
 

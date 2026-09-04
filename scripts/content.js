@@ -875,13 +875,12 @@
             <span>Trạng thái:</span>
             <span class="badge" id="autothi-status-text">Sẵn sàng</span>
           </div>
-          <div class="autothi-dock-buttons">
-            <button class="autothi-btn autothi-btn-primary" id="autothi-start-btn">⚡ Tự động làm</button>
-            <button class="autothi-btn autothi-btn-secondary" id="autothi-highlight-btn">🎯 Chỉ gợi ý</button>
+          <div class="autothi-dock-buttons" style="margin-bottom: 8px;">
+            <button class="autothi-btn autothi-btn-primary" id="autothi-start-btn" style="grid-column: span 2; padding: 10px; font-size: 13px; font-weight: 700;">⚡ Tự động làm</button>
           </div>
-          <div class="autothi-dock-buttons" style="margin-bottom: 6px;">
-            <button class="autothi-btn autothi-btn-secondary" id="autothi-scan-btn" style="grid-column: span 1;">🔍 Giải trang này</button>
-            <button class="autothi-btn autothi-btn-danger" id="autothi-stop-btn" style="grid-column: span 1;">⏹ Dừng</button>
+          <div class="autothi-dock-buttons" style="margin-bottom: 8px;">
+            <button class="autothi-btn autothi-btn-secondary" id="autothi-highlight-btn">🎯 Chỉ gợi ý</button>
+            <button class="autothi-btn autothi-btn-danger" id="autothi-stop-btn">⏹ Dừng</button>
           </div>
           <div class="autothi-log-box" id="autothi-logs">
             <div class="autothi-log-item info">Hệ thống AutoThi AI đã sẵn sàng.</div>
@@ -895,7 +894,6 @@
     // Event listeners
     document.getElementById("autothi-start-btn").addEventListener("click", () => startSolving("auto"));
     document.getElementById("autothi-highlight-btn").addEventListener("click", () => startSolving("highlight"));
-    document.getElementById("autothi-scan-btn").addEventListener("click", solveCurrentPage);
     document.getElementById("autothi-stop-btn").addEventListener("click", stopSolving);
     document.getElementById("autothi-btn-toggle").addEventListener("click", toggleDock);
     document.getElementById("autothi-btn-close").addEventListener("click", hideDock);
