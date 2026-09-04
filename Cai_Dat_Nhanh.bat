@@ -4,7 +4,7 @@ title Hướng dẫn cài đặt AutoThi AI - Tafinex
 color 0B
 
 echo ================================================================
-echo    CHƯƠNG TRÌNH HỖ TRỢ CÀI ĐẶT AUTOTHI AI - ĐẠI TÀI
+echo    CHƯƠNG TRÌNH HỖ TRỢ CÀI ĐẶT AUTOTHI AI - TAFINEX
 echo ================================================================
 echo.
 echo  Đang mở trang quản lý tiện ích trên trình duyệt của bạn...

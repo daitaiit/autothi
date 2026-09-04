@@ -134,7 +134,7 @@ new_contest = {
     "version": 1,
     "total_questions": len(raw_data),
     "updated_at": "03/09/2026",
-    "description": "Trọn bộ 10 câu hỏi & đáp án chuẩn (1B – 2C – 3B – 4B – 5D – 6D – 7A – 8B – 9C – 10A) do Đại Tài cập nhật.",
+    "description": "Trọn bộ 10 câu hỏi & đáp án chuẩn (1B – 2C – 3B – 4B – 5D – 6D – 7A – 8B – 9C – 10A) do Tafinex cập nhật.",
     "questions": questions_map
 }
 

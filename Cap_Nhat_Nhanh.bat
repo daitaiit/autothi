@@ -4,7 +4,7 @@ title Cập Nhật AutoThi AI Lên Bản Mới Nhất - Tafinex
 color 0A
 
 echo ================================================================
-echo    CHƯƠNG TRÌNH TỰ ĐỘNG CẬP NHẬT AUTOTHI AI - ĐẠI TÀI
+echo    CHƯƠNG TRÌNH TỰ ĐỘNG CẬP NHẬT AUTOTHI AI - TAFINEX
 echo ================================================================
 echo.
 echo  Đang tải phiên bản mã nguồn mới nhất từ GitHub...

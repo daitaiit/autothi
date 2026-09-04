@@ -8,8 +8,8 @@ base_dir = r"d:\Tool\AutoThi"
 popup_html_path = os.path.join(base_dir, "popup", "popup.html")
 with open(popup_html_path, "r", encoding="utf-8") as f:
     content = f.read()
-content = content.replace("Phát triển bởi <b style=\"color: #38bdf8;\">DataIT</b>", "Phát triển bởi <b style=\"color: #38bdf8;\">Tafinex</b>")
-content = content.replace("DataIT", "Tafinex")
+content = content.replace("Phát triển bởi <b style=\"color: #38bdf8;\">Tafinex</b>", "Phát triển bởi <b style=\"color: #38bdf8;\">Tafinex</b>")
+content = content.replace("Tafinex", "Tafinex")
 with open(popup_html_path, "w", encoding="utf-8") as f:
     f.write(content)
 print("Updated popup.html")
@@ -32,7 +32,7 @@ for mf_rel in ["contests_manifest.json", os.path.join("server_data_sample", "con
     data["author"] = "Tafinex"
     for c in data.get("contests", []):
         if "description" in c:
-            c["description"] = c["description"].replace("Đại Tài", "Tafinex").replace("DataIT", "Tafinex")
+            c["description"] = c["description"].replace("Tafinex", "Tafinex").replace("Tafinex", "Tafinex")
     with open(mf_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     print(f"Updated {mf_rel}")
@@ -41,7 +41,7 @@ for mf_rel in ["contests_manifest.json", os.path.join("server_data_sample", "con
 bat1 = os.path.join(base_dir, "Cai_Dat_Nhanh.bat")
 with open(bat1, "r", encoding="utf-8") as f:
     b1_content = f.read()
-b1_content = b1_content.replace("Đại Tài", "Tafinex").replace("DataIT", "Tafinex")
+b1_content = b1_content.replace("Tafinex", "Tafinex").replace("Tafinex", "Tafinex")
 with open(bat1, "w", encoding="utf-8") as f:
     f.write(b1_content)
 print("Updated Cai_Dat_Nhanh.bat")
@@ -50,7 +50,7 @@ print("Updated Cai_Dat_Nhanh.bat")
 bat2 = os.path.join(base_dir, "Cap_Nhat_Nhanh.bat")
 with open(bat2, "r", encoding="utf-8") as f:
     b2_content = f.read()
-b2_content = b2_content.replace("Đại Tài", "Tafinex").replace("DataIT", "Tafinex")
+b2_content = b2_content.replace("Tafinex", "Tafinex").replace("Tafinex", "Tafinex")
 with open(bat2, "w", encoding="utf-8") as f:
     f.write(b2_content)
 print("Updated Cap_Nhat_Nhanh.bat")
@@ -59,7 +59,7 @@ print("Updated Cap_Nhat_Nhanh.bat")
 guide_md = os.path.join(base_dir, "HUONG_DAN_SU_DUNG.md")
 with open(guide_md, "r", encoding="utf-8") as f:
     guide_content = f.read()
-guide_content = guide_content.replace("Đại Tài", "Tafinex").replace("DataIT", "Tafinex")
+guide_content = guide_content.replace("Tafinex", "Tafinex").replace("Tafinex", "Tafinex")
 with open(guide_md, "w", encoding="utf-8") as f:
     f.write(guide_content)
 print("Updated HUONG_DAN_SU_DUNG.md")
