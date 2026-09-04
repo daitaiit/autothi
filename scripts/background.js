@@ -53,6 +53,12 @@ chrome.runtime.onInstalled.addListener(async () => {
     chrome.alarms.create("AUTO_SYNC_ALARM", { periodInMinutes: 15 });
   } catch (e) {}
 
+  // Làm sạch thông báo kỹ thuật cũ nếu có
+  const annData = await chrome.storage.local.get("announcement");
+  if (annData.announcement && (annData.announcement.includes("ngoại tuyến") || annData.announcement.includes("offline"))) {
+    await chrome.storage.local.set({ announcement: "" });
+  }
+
   console.log("AutoThi AI Extension đã sẵn sàng!");
 });
 

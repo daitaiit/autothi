@@ -43,12 +43,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function renderAnnouncement(msg) {
       if (!annBanner || !annText) return;
-      if (typeof msg === "string" && msg.trim()) {
+      // Chỉ hiển thị thông báo phát thanh thực tế do Quản trị viên nhập từ Web Admin
+      if (typeof msg === "string" && msg.trim() && !msg.toLowerCase().includes("ngoại tuyến") && !msg.toLowerCase().includes("offline")) {
         annText.innerText = msg.trim();
         annBanner.classList.remove("hidden");
       } else {
         annBanner.classList.add("hidden");
         annText.innerText = "";
+        // Nếu bộ nhớ trình duyệt còn vướng thông báo kỹ thuật cũ, tự động dọn sạch
+        if (typeof msg === "string" && (msg.toLowerCase().includes("ngoại tuyến") || msg.toLowerCase().includes("offline"))) {
+          chrome.storage.local.set({ announcement: "" });
+        }
       }
     }
 
