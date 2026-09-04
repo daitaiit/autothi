@@ -1,0 +1,20 @@
+Cai_Dat_Nhanh.bat:3: title Hướng dẫn cài đặt AutoThi AI - Đại Tài
+Cai_Dat_Nhanh.bat:7: echo    CHƯƠNG TRÌNH HỖ TRỢ CÀI ĐẶT AUTOTHI AI - ĐẠI TÀI
+Cap_Nhat_Nhanh.bat:3: title Cập Nhật AutoThi AI Lên Bản Mới Nhất - Đại Tài
+Cap_Nhat_Nhanh.bat:7: echo    CHƯƠNG TRÌNH TỰ ĐỘNG CẬP NHẬT AUTOTHI AI - ĐẠI TÀI
+Cap_Nhat_Nhanh.bat:13: set "ZIP_URL=https://raw.githubusercontent.com/daitaiit/autothi/main/AutoThi-Extension.zip"
+contests_manifest.json:4: "author": "DataIT",
+contests_manifest.json:16: "description": "Trọn bộ 10 câu hỏi & đáp án chuẩn (1B – 2C – 3B – 4B – 5D – 6D – 7A – 8B – 9C – 10A) do Đại Tài cập nhật.",
+contests_manifest.json:129: "description": "Trọn bộ 5 câu hỏi & đáp án chuẩn (1A – 2B – 3A – 4C – 5B) do Đại Tài cập nhật.",
+contests_manifest.json:191: "description": "Trọn bộ 20 câu hỏi & đáp án chuẩn (1A–2C–3D–4C–5A–6C–7C–8A–9C–10A–11B–12D–13A–14B–15C–16A–17D–18D–19C–20A) do Đại Tài cập nhật.",
+HUONG_DAN_SU_DUNG.md:2: **Tác giả:** Đại Tài | **Repository:** [github.com/daitaiit/autothi](https://github.com/daitaiit/autothi)
+manifest.json:5: "author": "DataIT",
+manifest.json:6: "homepage_url": "https://github.com/daitaiit/autothi",
+manifest.json:7: "description": "Tự động phân tích, giải đề và chọn đáp án trắc nghiệm chính xác bằng AI & Ngân hàng đề thông minh. Phát triển bởi DataIT.",
+popup\popup.html:141: Phát triển bởi <b style="color: #38bdf8;">DataIT</b>
+scratch\add_new_contest.py:137: "description": "Trọn bộ 10 câu hỏi & đáp án chuẩn (1B – 2C – 3B – 4B – 5D – 6D – 7A – 8B – 9C – 10A) do Đại Tài cập nhật.",
+scripts\background.js:4: const DEFAULT_SERVER_URL = "https://raw.githubusercontent.com/daitaiit/autothi/main/contests_manifest.json";
+server_data_sample\contests_manifest.json:4: "author": "DataIT",
+server_data_sample\contests_manifest.json:16: "description": "Trọn bộ 10 câu hỏi & đáp án chuẩn (1B – 2C – 3B – 4B – 5D – 6D – 7A – 8B – 9C – 10A) do Đại Tài cập nhật.",
+server_data_sample\contests_manifest.json:129: "description": "Trọn bộ 5 câu hỏi & đáp án chuẩn (1A – 2B – 3A – 4C – 5B) do Đại Tài cập nhật.",
+server_data_sample\contests_manifest.json:191: "description": "Trọn bộ 20 câu hỏi & đáp án chuẩn (1A–2C–3D–4C–5A–6C–7C–8A–9C–10A–11B–12D–13A–14B–15C–16A–17D–18D–19C–20A) do Đại Tài cập nhật.",

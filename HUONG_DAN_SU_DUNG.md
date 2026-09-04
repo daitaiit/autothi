@@ -1,5 +1,5 @@
 # 🚀 HƯỚNG DẪN CÀI ĐẶT & SỬ DỤNG EXTENSION AUTOTHI AI
-**Tác giả:** Đại Tài | **Repository:** [github.com/daitaiit/autothi](https://github.com/daitaiit/autothi)
+**Tác giả:** Tafinex | **Repository:** [github.com/daitaiit/autothi](https://github.com/daitaiit/autothi)
 
 Trợ lý mở rộng (Chrome Extension Manifest V3) tự động phân tích câu hỏi, giải đề trắc nghiệm bằng **Gemini AI** và **Ngân hàng đề thông minh**.
 

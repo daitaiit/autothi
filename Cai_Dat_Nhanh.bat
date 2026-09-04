@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Hướng dẫn cài đặt AutoThi AI - Đại Tài
+title Hướng dẫn cài đặt AutoThi AI - Tafinex
 color 0B
 
 echo ================================================================

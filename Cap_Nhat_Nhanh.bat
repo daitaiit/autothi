@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Cập Nhật AutoThi AI Lên Bản Mới Nhất - Đại Tài
+title Cập Nhật AutoThi AI Lên Bản Mới Nhất - Tafinex
 color 0A
 
 echo ================================================================
