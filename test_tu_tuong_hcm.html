@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đề Thi Thử Nghiệm: Tư Tưởng Hồ Chí Minh - AutoThi AI</title>
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #f59e0b;
+      --bg: #0b1120;
+      --card-bg: #1e293b;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 30px 16px; min-height: 100vh; }
+    
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 35px 30px;
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .header-box {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .badge-tag {
+      display: inline-block;
+      padding: 5px 14px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(245, 158, 11, 0.25));
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fde68a;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    h1 {
+      color: #ffffff;
+      font-size: 25px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .notice-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(16, 185, 129, 0.08));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      font-size: 13.5px;
+      color: #bfdbfe;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .question-item {
+      margin-bottom: 24px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .question-item:hover {
+      border-color: rgba(59, 130, 246, 0.35);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .question-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 14px;
+      line-height: 1.55;
+    }
+
+    .quote-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-left: 3px solid #f59e0b;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-style: italic;
+      color: #cbd5e1;
+      font-size: 14px;
+      border-radius: 0 8px 8px 0;
+      line-height: 1.5;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .answer-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    .answer-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .answer-item input[type="radio"] {
+      cursor: pointer;
+      width: 17px;
+      height: 17px;
+      accent-color: #3b82f6;
+    }
+
+    .answer-toggle-btn {
+      margin-top: 12px;
+      background: none;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .answer-toggle-btn:hover {
+      color: #f8fafc;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .answer-preview {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    .prediction-box {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+
+    .prediction-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      margin-top: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .prediction-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn {
+      padding: 13px 26px;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 14.5px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-next {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+    }
+    .btn-next:hover { background: rgba(255, 255, 255, 0.18); color: #fff; }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Score Result Modal */
+    .result-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .result-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .result-card {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 32px 28px;
+      max-width: 520px;
+      width: 92%;
+      max-height: 90vh;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .result-overlay.active .result-card {
+      transform: scale(1);
+    }
+
+    .result-score {
+      font-size: 52px;
+      font-weight: 800;
+      color: #10b981;
+      margin: 12px 0 4px;
+    }
+
+    .result-badge {
+      font-size: 13.5px;
+      color: #94a3b8;
+      margin-bottom: 18px;
+    }
+
+    .result-details {
+      text-align: left;
+      background: rgba(15, 23, 42, 0.75);
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .btn-close-result {
+      flex: 1;
+      padding: 12px;
+      background: #3b82f6;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-box">
+      <span class="badge-tag">🇻🇳 Đề Thi Khảo Sát Năng Lực Tư Duy & Kiến Thức Lịch Sử</span>
+      <h1>BỘ ĐỀ ĐÁNH GIÁ: TƯ TƯỞNG HỒ CHÍ MINH</h1>
+      <p class="subtitle">
+        Bộ đề gồm <b>10 câu hỏi chuyên sâu</b> về các tác phẩm, mốc lịch sử và luận điểm của Chủ tịch Hồ Chí Minh.<br>
+        AutoThi AI sẽ phân tích và vận dụng khả năng tư duy phản biện (Chain-of-Thought) để tìm ra đáp án đúng.
+      </p>
+    </div>
+
+    <div class="notice-card">
+      <span style="font-size: 20px;">⚡</span>
+      <span>Hãy mở Extension <b>AutoThi AI</b> và bấm <b>"BẮT ĐẦU LÀM BÀI"</b> để xem AI tư duy từng bước và chọn đáp án chính xác!</span>
+    </div>
+
+    <!-- Câu 1 -->
+    <div class="question-item" data-question="1" data-correct="C">
+      <div class="question-title">Câu 1: Tác phẩm "Đạo đức cách mạng" của Hồ Chí Minh được in lần đầu trên tạp chí nào?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q1" value="A">
+          <span>A. Tạp chí Xây dựng Đảng</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="B">
+          <span>B. Tạp chí Quân đội nhân dân</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="C">
+          <span>C. Tạp chí Học tập</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="D">
+          <span>D. Tạp chí Những vấn đề hòa bình và chủ nghĩa xã hội</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(1)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-1">✓ Đáp án chuẩn: C. Tạp chí Học tập (tháng 12/1958)</div>
+    </div>
+
+    <!-- Câu 2 -->
+    <div class="question-item" data-question="2" data-correct="A">
+      <div class="question-title">Câu 2: Ai là tác giả của những câu thơ sau:</div>
+      <div class="quote-box">
+        “Luận cương đến với Bác Hồ. Và Người đã khóc<br>
+        Lệ Bác Hồ rơi trên chữ Lenin.<br>
+        Bốn bức tường im nghe Bác lật từng trang sách gấp<br>
+        Tưởng bên ngoài, đất nước đợi mong tin.<br>
+        Bác reo lên một mình như nói cùng dân tộc:<br>
+        'Cơm áo là đây! Hạnh phúc đây rồi!'<br>
+        Hình của Đảng lồng trong hình của Nước.<br>
+        Phút khóc đầu tiên là phút Bác Hồ cười”
+      </div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q2" value="A">
+          <span>A. Chế Lan Viên</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="B">
+          <span>B. Sóng Hồng</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="C">
+          <span>C. Huy Cận</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="D">
+          <span>D. Tố Hữu</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(2)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-2">✓ Đáp án chuẩn: A. Chế Lan Viên (Bài thơ "Người đi tìm hình của Nước")</div>
+    </div>
+
+    <!-- Câu 3 -->
+    <div class="question-item" data-question="3" data-correct="C">
+      <div class="question-title">Câu 3: Trong nhà nước dân chủ của Hồ Chí Minh, nhân dân thực thi quyền dân chủ của mình qua mấy hình thức?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q3" value="A">
+          <span>A. 3 hình thức</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="B">
+          <span>B. 4 hình thức</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="C">
+          <span>C. 2 hình thức</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="D">
+          <span>D. 1 hình thức</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(3)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-3">✓ Đáp án chuẩn: C. 2 hình thức (Dân chủ trực tiếp và Dân chủ gián tiếp/đại diện)</div>
+    </div>
+
+    <!-- Câu 4 -->
+    <div class="question-item" data-question="4" data-correct="C">
+      <div class="question-title">Câu 4: Theo Hồ Chí Minh, trong xây dựng Đảng “mục đích phê bình cốt để ___________, giúp nhau cùng tiến bộ”</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q4" value="A">
+          <span>A. sửa chữa sai lầm</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q4" value="B">
+          <span>B. giúp nhau sửa chữa</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q4" value="C">
+          <span>C. sửa chữa khuyết điểm</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q4" value="D">
+          <span>D. giúp nhau sửa sai</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(4)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-4">✓ Đáp án chuẩn: C. sửa chữa khuyết điểm</div>
+    </div>
+
+    <!-- Câu 5 -->
+    <div class="question-item" data-question="5" data-correct="C">
+      <div class="question-title">Câu 5: Hồ Chí Minh đưa ra khái niệm văn hóa vào khoảng thời gian nào?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q5" value="A">
+          <span>A. 09/1942</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q5" value="B">
+          <span>B. 08/1942</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q5" value="C">
+          <span>C. 08/1943</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q5" value="D">
+          <span>D. 09/1943</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(5)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-5">✓ Đáp án chuẩn: C. 08/1943 (ở phần cuối tập Nhật ký trong tù)</div>
+    </div>
+
+    <!-- Câu 6 -->
+    <div class="question-item" data-question="6" data-correct="A">
+      <div class="question-title">Câu 6: Ai là người đã gợi ý cho Nguyễn Tất Thành về phương hướng tìm đường cứu nước qua câu nói: “Muốn đánh Pháp phải hiểu Pháp, muốn hiểu Pháp, phải học tiếng Pháp”?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q6" value="A">
+          <span>A. Nguyễn Quý Song</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q6" value="B">
+          <span>B. Hoàng Thông</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q6" value="C">
+          <span>C. Nguyễn Sinh Sắc</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q6" value="D">
+          <span>D. Vương Thúc Quý</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(6)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-6">✓ Đáp án chuẩn: A. Nguyễn Quý Song</div>
+    </div>
+
+    <!-- Câu 7 -->
+    <div class="question-item" data-question="7" data-correct="D">
+      <div class="question-title">Câu 7: Kể từ khi thành lập đến nay, Mặt trận dân tộc thống nhất có bao nhiêu tên gọi?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q7" value="A">
+          <span>A. 5 tên gọi</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q7" value="B">
+          <span>B. 7 tên gọi</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q7" value="C">
+          <span>C. 4 tên gọi</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q7" value="D">
+          <span>D. 6 tên gọi</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(7)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-7">✓ Đáp án chuẩn: D. 6 tên gọi</div>
+    </div>
+
+    <!-- Câu 8 -->
+    <div class="question-item" data-question="8" data-correct="C">
+      <div class="question-title">Câu 8: Hồ Chí Minh sống và làm việc tại Anh trong khoảng thời gian nào?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q8" value="A">
+          <span>A. 1912 – 1913</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q8" value="B">
+          <span>B. 1912 - 1917</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q8" value="C">
+          <span>C. 1913 – 1917</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q8" value="D">
+          <span>D. 1913 – 1914</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(8)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-8">✓ Đáp án chuẩn: C. 1913 – 1917</div>
+    </div>
+
+    <!-- Câu 9 -->
+    <div class="question-item" data-question="9" data-correct="D">
+      <div class="question-title">Câu 9: Tư tưởng Hồ Chí Minh về vấn đề dân tộc có mấy nội dung?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q9" value="A">
+          <span>A. 3 nội dung</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q9" value="B">
+          <span>B. 5 nội dung</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q9" value="C">
+          <span>C. 2 nội dung</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q9" value="D">
+          <span>D. 4 nội dung</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(9)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-9">✓ Đáp án chuẩn: D. 4 nội dung</div>
+    </div>
+
+    <!-- Câu 10 -->
+    <div class="question-item" data-question="10" data-correct="A">
+      <div class="question-title">Câu 10: Theo Hồ Chí Minh: “Văn hóa phải ________ cho quốc dân đi”.</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q10" value="A">
+          <span>A. soi đường</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q10" value="B">
+          <span>B. đi trước</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q10" value="C">
+          <span>C. dẫn đường</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q10" value="D">
+          <span>D. mở đường</span>
+        </label>
+      </div>
+      <button class="answer-toggle-btn" type="button" onclick="toggleAnswer(10)">👁️ Hiển thị đáp án</button>
+      <div class="answer-preview" id="ans-preview-10">✓ Đáp án chuẩn: A. soi đường</div>
+    </div>
+
+    <!-- Câu hỏi phụ: Dự đoán -->
+    <div class="prediction-box question-item">
+      <div class="question-title" style="color: #60a5fa;">Câu hỏi phụ: Dự đoán số lượng người sẽ trả lời chính xác tất cả các câu hỏi trên?</div>
+      <div>
+        <input type="number" name="du_doan_so_nguoi" class="prediction-input" placeholder="Nhập số người dự đoán...">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-submit" type="button" id="btn-submit-exam" onclick="submitHcmExam()">Nộp bài thi</button>
+    </div>
+
+    <!-- Bảng Điểm Kết Quả Hiển Thị Ngay Sau Khi Nộp Bài -->
+    <div id="quiz-result-card" style="display: none; background: rgba(16, 185, 129, 0.12); border: 2px solid #10b981; border-radius: 14px; padding: 24px; margin-top: 25px; text-align: center;">
+      <div style="font-size: 38px;">🎉</div>
+      <h2 style="font-size: 21px; color: #34d399; margin: 6px 0 2px;">KẾT QUẢ BÀI THI TƯ TƯỞNG HỒ CHÍ MINH</h2>
+      <div id="inpage-score-text" style="font-size: 44px; font-weight: 800; color: #10b981;">0/10 (0%)</div>
+      <p id="inpage-score-comment" style="font-size: 13.5px; color: #94a3b8; margin-top: 4px;">Kết quả giải đề tự động bằng AutoThi AI</p>
+      <div id="inpage-score-breakdown" style="text-align: left; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 16px; margin-top: 16px; font-size: 14px; line-height: 1.6;"></div>
+      <div style="margin-top: 20px;">
+        <button class="btn btn-next" type="button" onclick="resetHcmExam()">🔄 Làm lại bài thi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Chấm Điểm Sau Khi Nộp -->
+  <div class="result-overlay" id="result-modal">
+    <div class="result-card">
+      <div style="font-size: 42px;">🏆</div>
+      <div class="result-score" id="score-display">0/10</div>
+      <div class="result-badge" id="score-percentage">Độ chính xác AI: 0%</div>
+      <div class="result-details" id="score-details">
+        Đang phân tích kết quả...
+      </div>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn-close-result" type="button" onclick="document.getElementById('result-modal').classList.remove('active')">Đóng & Xem lại bài</button>
+        <button class="btn-close-result" type="button" onclick="resetHcmExam()" style="background: #10b981;">Làm lại bài thi</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const correctAnswers = {
+      q1: { ans: "C", text: "Tạp chí Học tập" },
+      q2: { ans: "A", text: "Chế Lan Viên" },
+      q3: { ans: "C", text: "2 hình thức" },
+      q4: { ans: "C", text: "sửa chữa khuyết điểm" },
+      q5: { ans: "C", text: "08/1943" },
+      q6: { ans: "A", text: "Nguyễn Quý Song" },
+      q7: { ans: "D", text: "6 tên gọi" },
+      q8: { ans: "C", text: "1913 – 1917" },
+      q9: { ans: "D", text: "4 nội dung" },
+      q10: { ans: "A", text: "soi đường" }
+    };
+
+    function toggleAnswer(qNum) {
+      const el = document.getElementById("ans-preview-" + qNum);
+      if (el) {
+        el.style.display = el.style.display === "block" ? "none" : "block";
+      }
+    }
+
+    function submitHcmExam() {
+      let score = 0;
+      let total = 10;
+      let detailHtml = "";
+
+      for (let i = 1; i <= total; i++) {
+        const qKey = "q" + i;
+        const selected = document.querySelector(`input[name="${qKey}"]:checked`);
+        const correct = correctAnswers[qKey];
+        const isRight = selected && selected.value === correct.ans;
+
+        if (isRight) {
+          score++;
+          detailHtml += `<div style="color: #34d399; margin-bottom: 5px;">✓ <b>Câu ${i}: Đúng!</b> (${correct.ans}. ${correct.text})</div>`;
+        } else {
+          const userAns = selected ? selected.value : "Chưa chọn";
+          detailHtml += `<div style="color: #f87171; margin-bottom: 5px;">✗ <b>Câu ${i}: Chọn ${userAns}</b> (Đáp án đúng: ${correct.ans}. ${correct.text})</div>`;
+        }
+      }
+
+      const percent = Math.round((score / total) * 100);
+      document.getElementById("score-display").innerText = `${score}/${total}`;
+      document.getElementById("score-percentage").innerText = `Độ chính xác AI: ${percent}%`;
+      
+      const predictVal = document.querySelector('input[name="du_doan_so_nguoi"]')?.value || "Chưa điền";
+      detailHtml += `<hr style="margin: 12px 0; border: none; border-top: 1px solid rgba(255,255,255,0.12);">`;
+      detailHtml += `<div>🎯 Số người dự đoán đã điền: <b>${predictVal}</b></div>`;
+
+      document.getElementById("score-details").innerHTML = detailHtml;
+      document.getElementById("result-modal").classList.add("active");
+
+      // In-page display
+      document.getElementById("inpage-score-text").innerText = `${score}/${total} (${percent}%)`;
+      document.getElementById("inpage-score-breakdown").innerHTML = detailHtml;
+      const inpageCard = document.getElementById("quiz-result-card");
+      inpageCard.style.display = "block";
+    }
+
+    function resetHcmExam() {
+      document.getElementById("result-modal").classList.remove("active");
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      const predictInp = document.querySelector('input[name="du_doan_so_nguoi"]');
+      if (predictInp) predictInp.value = "";
+      const resultCard = document.getElementById("quiz-result-card");
+      if (resultCard) resultCard.style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("btn-submit-exam").addEventListener("click", submitHcmExam);
+  </script>
+</body>
+</html>
