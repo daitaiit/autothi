@@ -387,9 +387,11 @@
       return;
     }
 
-    log(`🔍 Tìm thấy ${questions.length} câu hỏi. Đang xử lý...`, "info");
+    log(`🔍 Tìm thấy ${questions.length} câu hỏi. Đang tự động giải từng câu...`, "info");
     for (const q of questions) {
       await solveSingleQuestion(q, settings.mode);
+      const delay = getRandomDelay(settings.minDelay || 1200, settings.maxDelay || 2500);
+      await sleep(delay);
     }
   }
 
@@ -434,6 +436,7 @@
     // Auto next question / submit if enabled
     const nextBtn = findNextButton();
     if (settings.autoNext && isRunning && nextBtn) {
+      smoothScrollTo(nextBtn, "center");
       log("➡️ Đang chuyển sang câu tiếp theo...", "info");
       const delay = getRandomDelay(1000, 2000);
       currentSolveTimeout = setTimeout(() => {
@@ -488,6 +491,7 @@
     }
 
     if (predictInput) {
+      smoothScrollTo(predictInput, "center");
       let val = settings.predictNumber ? settings.predictNumber.trim() : "";
       if (!val) {
         // Generate a realistic random prediction number (e.g. 1250 - 3800)
@@ -507,6 +511,7 @@
   async function trySubmitExam() {
     const submitBtn = findSubmitButton();
     if (submitBtn) {
+      smoothScrollTo(submitBtn, "center");
       log("📝 Tự động nộp bài trong giây lát...", "info");
       await sleep(1500);
       triggerClick(submitBtn);
@@ -515,6 +520,7 @@
       await sleep(800);
       const confirmBtn = findModalConfirmButton();
       if (confirmBtn) {
+        smoothScrollTo(confirmBtn, "center");
         log("✓ Tự động bấm xác nhận nộp bài!", "success");
         triggerClick(confirmBtn);
       }
@@ -541,8 +547,56 @@
     });
   }
 
+  // -------------------------------------------------------------
+  // Tự động lăn chuột mượt mà (Auto Smooth Scrolling)
+  // -------------------------------------------------------------
+  function smoothScrollTo(element, blockPos = "center") {
+    if (!element) return;
+    try {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: blockPos,
+        inline: "nearest"
+      });
+
+      // Cơ chế bảo đảm tính toán tọa độ cửa sổ để cuộn ngay cả khi trang có fixed header
+      setTimeout(() => {
+        try {
+          const rect = element.getBoundingClientRect();
+          const targetOffset = blockPos === "center"
+            ? (window.innerHeight / 2 - rect.height / 2)
+            : 100;
+          
+          if (rect.top < 80 || rect.bottom > window.innerHeight - 40) {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            const finalY = scrollTop + rect.top - targetOffset;
+            window.scrollTo({
+              top: Math.max(0, finalY),
+              behavior: "smooth"
+            });
+          }
+        } catch (subErr) {}
+      }, 50);
+    } catch (e) {
+      try {
+        element.scrollIntoView(true);
+      } catch (err) {}
+    }
+  }
+
   async function solveSingleQuestion(qData, mode) {
+    // 🎯 Tự động lăn chuột mượt mà đến vị trí câu hỏi đang làm
+    const scrollTarget = qData.container || qData.options[0]?.element;
+    if (scrollTarget) {
+      smoothScrollTo(scrollTarget, "center");
+      document.querySelectorAll(".autothi-active-question").forEach(el => el.classList.remove("autothi-active-question"));
+      if (qData.container && qData.container.classList) {
+        qData.container.classList.add("autothi-active-question");
+      }
+    }
+
     log(`Đang giải: "${qData.questionText.slice(0, 45)}..."`, "info");
+    await sleep(350);
 
     let chosenIndex = -1;
     let source = "AI chọn";
@@ -707,8 +761,8 @@
       existingBadge.innerText = "✓ AI chọn";
     }
 
-    // Scroll into view smoothly
-    targetElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    // Tự động lăn chuột mượt mà đến đúng phương án được chọn
+    smoothScrollTo(targetElement, "center");
 
     // Click if auto mode
     if (mode === "auto") {
