@@ -117,6 +117,23 @@ B. Chính phủ
       <button id="btn-parse" class="btn btn-primary btn-block">
         🤖 Bắt Đầu Phân Tích Bằng AI
       </button>
+
+      <!-- Thanh tiến trình Loading khi AI đang phân tích -->
+      <div id="ai-loading-container" style="display: none; margin-top: 14px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span id="ai-loading-status" style="color: #60a5fa; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+            <span class="spinner-ring"></span>
+            <span id="ai-loading-status-text">Đang kết nối AI...</span>
+          </span>
+          <span id="ai-loading-percent" style="color: #34d399; font-weight: 800; font-size: 13px;">15%</span>
+        </div>
+        <div class="progress-track">
+          <div id="ai-loading-bar" class="progress-bar-fill" style="width: 15%;"></div>
+        </div>
+        <div id="ai-loading-tip" style="font-size: 11.5px; color: #94a3b8; margin-top: 8px; text-align: center; line-height: 1.4;">
+          💡 AI đang đọc hiểu văn bản, trích xuất câu hỏi, đối chiếu đáp án và chuẩn hóa tiêu đề cuộc thi...
+        </div>
+      </div>
     </section>
 
     <!-- Right Column: Live Preview & Push to GitHub -->

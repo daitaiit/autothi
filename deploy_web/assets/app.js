@@ -651,14 +651,45 @@ async function handleParse() {
   const rawText = document.getElementById("txt-raw-input").value.trim();
   const model = document.getElementById("sel-ai-model").value;
   const statusEl = document.getElementById("parse-status");
+  const loadingBox = document.getElementById("ai-loading-container");
+  const bar = document.getElementById("ai-loading-bar");
+  const percentEl = document.getElementById("ai-loading-percent");
+  const statusText = document.getElementById("ai-loading-status-text");
+  const parseBtn = document.getElementById("btn-parse");
 
   if (!rawText) {
     alert("Vui lòng dán văn bản câu hỏi vào ô!");
     return;
   }
 
-  statusEl.innerHTML = `<span style="color: #60a5fa;">⏳ Đang gọi AI (${model}) phân tích và bóc tách đề thi... Vui lòng đợi vài giây...</span>`;
-  document.getElementById("btn-parse").disabled = true;
+  // Khởi động giao diện thanh loading tiến trình
+  if (loadingBox) loadingBox.style.display = "block";
+  if (bar) {
+    bar.style.width = "15%";
+    bar.style.background = "linear-gradient(90deg, #3b82f6, #06b6d4, #10b981)";
+  }
+  if (percentEl) percentEl.innerText = "15%";
+  if (statusText) statusText.innerText = `Đang kết nối mô hình AI (${model})...`;
+  if (statusEl) statusEl.innerHTML = "";
+  parseBtn.disabled = true;
+  parseBtn.innerHTML = `⏳ Đang Phân Tích Bằng AI...`;
+
+  // Chạy hoạt ảnh tăng phần trăm mượt mà
+  let currentPct = 15;
+  const progressTimer = setInterval(() => {
+    if (currentPct < 45) {
+      currentPct += 6;
+      if (statusText) statusText.innerText = "🧠 AI đang đọc hiểu & bóc tách từng câu hỏi...";
+    } else if (currentPct < 78) {
+      currentPct += 4;
+      if (statusText) statusText.innerText = "🔍 Đang nhận diện tiêu đề, mã cuộc thi và đáp án chuẩn...";
+    } else if (currentPct < 93) {
+      currentPct += 1;
+      if (statusText) statusText.innerText = "⚙️ Đang hoàn tất chuẩn hóa danh sách câu hỏi...";
+    }
+    if (bar) bar.style.width = `${currentPct}%`;
+    if (percentEl) percentEl.innerText = `${currentPct}%`;
+  }, 380);
 
   try {
     const res = await fetch("api.php?action=parse_questions", {
@@ -667,8 +698,13 @@ async function handleParse() {
       body: JSON.stringify({ text: rawText, model: model })
     });
     const json = await res.json();
+    clearInterval(progressTimer);
 
     if (json.success && json.data.questions) {
+      if (bar) bar.style.width = "100%";
+      if (percentEl) percentEl.innerText = "100%";
+      if (statusText) statusText.innerText = "✓ Hoàn tất bóc tách đề thi!";
+
       parsedQuestions = json.data.questions;
 
       // 1. Tự động nhận diện & điền Tên/Mã cuộc thi từ AI hoặc văn bản thô TRƯỚC TIÊN
@@ -700,13 +736,28 @@ async function handleParse() {
       renderParsedPreviewList();
       statusEl.innerHTML = `<span style="color: #34d399;">✓ AI đã bóc tách thành công <b>${parsedQuestions.length}</b> câu hỏi chuẩn xác!</span>`;
       document.getElementById("btn-push-github").disabled = parsedQuestions.length === 0;
+
+      // Ẩn thanh loading sau 800ms
+      setTimeout(() => {
+        if (loadingBox) loadingBox.style.display = "none";
+      }, 800);
     } else {
+      if (bar) bar.style.background = "#ef4444";
       statusEl.innerHTML = `<span style="color: #f87171;">❌ Lỗi: ${json.error || "Không thể bóc tách đề thi!"}</span>`;
+      setTimeout(() => {
+        if (loadingBox) loadingBox.style.display = "none";
+      }, 2500);
     }
   } catch (e) {
+    clearInterval(progressTimer);
+    if (bar) bar.style.background = "#ef4444";
     statusEl.innerHTML = `<span style="color: #f87171;">❌ Lỗi kết nối mạng: ${e.message}</span>`;
+    setTimeout(() => {
+      if (loadingBox) loadingBox.style.display = "none";
+    }, 2500);
   } finally {
-    document.getElementById("btn-parse").disabled = false;
+    parseBtn.disabled = false;
+    parseBtn.innerHTML = `🤖 Bắt Đầu Phân Tích Bằng AI`;
   }
 }
 
