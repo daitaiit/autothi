@@ -381,18 +381,26 @@
   }
 
   async function solveCurrentPage() {
+    isRunning = true;
+    updateDockUI();
     const questions = findQuestionsOnPage();
     if (questions.length === 0) {
       log("⚠️ Không tìm thấy câu hỏi nào trên trang.", "warn");
+      isRunning = false;
+      updateDockUI();
       return;
     }
 
     log(`🔍 Tìm thấy ${questions.length} câu hỏi. Đang tự động giải từng câu...`, "info");
     for (const q of questions) {
+      if (!isRunning) return;
       await solveSingleQuestion(q, settings.mode);
       const delay = getRandomDelay(settings.minDelay || 1200, settings.maxDelay || 2500);
       await sleep(delay);
     }
+    isRunning = false;
+    updateDockUI();
+    log("🎉 Đã giải xong toàn bộ câu hỏi trên trang!", "success");
   }
 
   async function processNextStep(mode) {
