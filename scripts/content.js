@@ -620,7 +620,7 @@
       }
     }
 
-    // 2. Nếu ngân hàng chưa có, gọi Gemini AI
+    // 2. Nếu ngân hàng chưa có, gọi ShopAIKey AI
     if (chosenIndex === -1) {
       try {
         const response = await sendToBackground({

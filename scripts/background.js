@@ -1,11 +1,13 @@
 // AutoThi AI - Service Worker (Background Script)
 
-const DEFAULT_API_KEY = "AIzaSyBsWhAEb7UaJcjGYiVZ0obLJPj3olo77Cw";
+const DEFAULT_API_KEY = "sk-4OmuvVaeLHVgJozU3EjsteCapGXuwZu5rUBUkRcVrjXeLHXd";
+const DEFAULT_API_URL = "https://api.shopaikey.com/v1/chat/completions";
+const DEFAULT_MODEL = "gpt-4o-mini";
 const DEFAULT_SERVER_URL = "https://raw.githubusercontent.com/daitaiit/autothi/main/contests_manifest.json";
 
 const DEFAULT_SETTINGS = {
   apiKey: DEFAULT_API_KEY,
-  model: "gemini-3.7-flash",
+  model: DEFAULT_MODEL,
   mode: "auto", // 'auto' | 'highlight'
   autoNext: true,
   autoSubmit: true,
@@ -27,9 +29,11 @@ chrome.runtime.onInstalled.addListener(async () => {
     await chrome.storage.local.set({ settings: DEFAULT_SETTINGS });
   } else {
     const updated = { ...DEFAULT_SETTINGS, ...data.settings };
-    if (!updated.apiKey) updated.apiKey = DEFAULT_API_KEY;
-    if (!updated.model || updated.model.includes("1.5") || updated.model.includes("2.0")) {
-      updated.model = "gemini-3.7-flash";
+    if (!updated.apiKey || updated.apiKey.startsWith("AIzaSy")) {
+      updated.apiKey = DEFAULT_API_KEY;
+    }
+    if (!updated.model || updated.model.includes("gemini") || updated.model.includes("1.5") || updated.model.includes("2.0")) {
+      updated.model = DEFAULT_MODEL;
     }
     await chrome.storage.local.set({ settings: updated });
   }
@@ -49,9 +53,19 @@ chrome.runtime.onInstalled.addListener(async () => {
 // Periodic background check & startup sync
 chrome.runtime.onStartup.addListener(async () => {
   const data = await chrome.storage.local.get("settings");
-  if (data.settings && (data.settings.model?.includes("1.5") || data.settings.model?.includes("2.0"))) {
-    data.settings.model = "gemini-3.7-flash";
-    await chrome.storage.local.set({ settings: data.settings });
+  if (data.settings) {
+    let changed = false;
+    if (data.settings.apiKey && data.settings.apiKey.startsWith("AIzaSy")) {
+      data.settings.apiKey = DEFAULT_API_KEY;
+      changed = true;
+    }
+    if (!data.settings.model || data.settings.model.includes("gemini") || data.settings.model.includes("1.5") || data.settings.model.includes("2.0")) {
+      data.settings.model = DEFAULT_MODEL;
+      changed = true;
+    }
+    if (changed) {
+      await chrome.storage.local.set({ settings: data.settings });
+    }
   }
   syncLatestOnlineQuestions(true);
 });
@@ -273,57 +287,53 @@ async function installContestPackage(contest) {
 }
 
 // -------------------------------------------------------------
-// Gemini AI Solver
+// ShopAIKey AI Solver (OpenAI-Compatible Standard)
 // -------------------------------------------------------------
 
 async function handleSolveQuestion({ questionText, options, apiKey, model }) {
   const key = apiKey || (await getSetting("apiKey")) || DEFAULT_API_KEY;
-  let targetModel = model || (await getSetting("model")) || "gemini-3.7-flash";
-  if (!targetModel || targetModel.includes("1.5") || targetModel.includes("2.0")) {
-    targetModel = "gemini-3.7-flash";
+  let targetModel = model || (await getSetting("model")) || DEFAULT_MODEL;
+  if (!targetModel || targetModel.includes("gemini")) {
+    targetModel = DEFAULT_MODEL;
   }
 
   const optionsFormatted = options
     .map((opt, idx) => `[${idx}] ${opt.text}`)
     .join("\n");
 
-  const systemInstruction = `Bạn là một trợ lý AI thông minh xuất sắc trong việc giải đề thi trắc nghiệm học tập, pháp luật, lịch sử, chuyển đổi số, tin học và kiến thức chung tại Việt Nam.
+  const systemInstruction = `Bạn là một trợ lý AI chuyên gia xuất sắc trong việc giải đề thi trắc nghiệm học tập, pháp luật, lịch sử, chính trị, chuyển đổi số, tin học và kiến thức chung tại Việt Nam.
 Nhiệm vụ: Hãy đọc kỹ câu hỏi và các lựa chọn dưới đây, sau đó tìm ra đáp án CHÍNH XÁC NHẤT.
 
 QUY TẮC BẮT BUỘC:
 1. Bạn phải chọn 1 đáp án đúng nhất trong danh sách các lựa chọn được cung cấp.
-2. Trả về kết quả dưới định dạng JSON duy nhất:
-{"best_index": <số nguyên từ 0 đến ${options.length - 1}>, "answer_text": "<nội dung đáp án đã chọn>", "confidence": <từ 0.0 đến 1.0>, "reason": "<giải thích ngắn gọn 1 câu>"}`;
+2. Trả về kết quả dưới định dạng JSON duy nhất (không kèm chữ thừa):
+{"best_index": <số nguyên từ 0 đến ${options.length - 1}>, "answer_text": "<nội dung đáp án đã chọn>", "confidence": 0.95, "reason": "<giải thích ngắn gọn 1 câu>"}`;
 
   const prompt = `Câu hỏi:\n${questionText}\n\nCác lựa chọn:\n${optionsFormatted}`;
-  const modelsToTry = [targetModel, "gemini-3.7-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-flash-lite-latest"];
+  const modelsToTry = [targetModel, "gpt-4o-mini", "gpt-4o", "qwen-flash", "grok-3-mini"];
   const uniqueModels = [...new Set(modelsToTry)];
 
   let lastError = null;
 
   for (const mod of uniqueModels) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${mod}:generateContent?key=${key}`;
-      
+      const url = DEFAULT_API_URL;
       const payload = {
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: `${systemInstruction}\n\n${prompt}` }]
-          }
+        model: mod,
+        messages: [
+          { role: "system", content: systemInstruction },
+          { role: "user", content: prompt }
         ],
-        generationConfig: {
-          temperature: 0.1,
-          topK: 1,
-          topP: 0.8,
-          maxOutputTokens: 500,
-          responseMimeType: "application/json"
-        }
+        temperature: 0.1,
+        response_format: { type: "json_object" }
       };
 
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${key}`
+        },
         body: JSON.stringify(payload)
       });
 
@@ -333,7 +343,7 @@ QUY TẮC BẮT BUỘC:
       }
 
       const data = await response.json();
-      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const rawText = data.choices?.[0]?.message?.content;
       if (!rawText) throw new Error("Không nhận được phản hồi từ AI");
 
       const cleanJson = rawText.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
@@ -351,7 +361,7 @@ QUY TẮC BẮT BUỘC:
         best_index: parsed.best_index,
         answer_text: options[parsed.best_index]?.text || parsed.answer_text,
         confidence: parsed.confidence || 0.95,
-        reason: parsed.reason || "Giải bằng Gemini AI",
+        reason: parsed.reason || "Giải bằng ShopAIKey AI",
         modelUsed: mod
       };
     } catch (err) {
@@ -360,18 +370,27 @@ QUY TẮC BẮT BUỘC:
     }
   }
 
-  throw lastError || new Error("Không thể kết nối với Gemini AI.");
+  throw lastError || new Error("Không thể kết nối với ShopAIKey API.");
 }
 
-async function testApiKey(apiKey, model = "gemini-1.5-flash") {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+async function testApiKey(apiKey, model = "gpt-4o-mini") {
+  const key = apiKey || (await getSetting("apiKey")) || DEFAULT_API_KEY;
+  const targetModel = model || "gpt-4o-mini";
+  const url = DEFAULT_API_URL;
   const payload = {
-    contents: [{ parts: [{ text: "Trả lời ngắn gọn chữ 'OK' nếu bạn nhận được tin này." }] }]
+    model: targetModel,
+    messages: [
+      { role: "user", content: "Trả lời ngắn gọn chữ 'OK' nếu bạn nhận được tin này." }
+    ],
+    max_tokens: 10
   };
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${key}`
+    },
     body: JSON.stringify(payload)
   });
 
@@ -381,7 +400,7 @@ async function testApiKey(apiKey, model = "gemini-1.5-flash") {
   }
 
   const data = await res.json();
-  const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "OK";
+  const answer = data.choices?.[0]?.message?.content || "OK";
   return { status: "success", reply: answer.trim() };
 }
 

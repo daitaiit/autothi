@@ -1,7 +1,7 @@
 # 🚀 HƯỚNG DẪN CÀI ĐẶT & SỬ DỤNG EXTENSION AUTOTHI AI
 **Tác giả:** Tafinex
 
-Trợ lý mở rộng (Chrome Extension Manifest V3) tự động phân tích câu hỏi, giải đề trắc nghiệm bằng **Gemini AI** và **Ngân hàng đề thông minh**.
+Trợ lý mở rộng (Chrome Extension Manifest V3) tự động phân tích câu hỏi, giải đề trắc nghiệm bằng **ShopAIKey AI** và **Ngân hàng đề thông minh**.
 
 ---
 
@@ -18,13 +18,13 @@ Trợ lý mở rộng (Chrome Extension Manifest V3) tự động phân tích c�
 
 ---
 
-## 🔑 2. Cấu hình API Key Gemini
+## 🔑 2. Cấu hình API Key (ShopAIKey)
 
-Extension đã được cấu hình sẵn API Key bạn cung cấp:
-`AIzaSyBsWhAEb7UaJcjGYiVZ0obLJPj3olo77Cw`
+Extension đã được cấu hình sẵn API Key chất lượng cao từ [ShopAIKey](https://shopaikey.com):
+`sk-4OmuvVaeLHVgJozU3EjsteCapGXuwZu5rUBUkRcVrjXeLHXd`
 
-- Bạn có thể bấm vào icon extension -> chọn tab **"Gemini AI"** -> bấm nút **"Kiểm tra kết nối API Key"** để kiểm tra trạng thái hoạt động bất kỳ lúc nào.
-- Sử dụng mô hình `Gemini 1.5 Flash` (mặc định) cho tốc độ siêu nhanh và hoàn toàn miễn phí.
+- Sử dụng mô hình `gpt-4o-mini` tốc độ siêu nhanh và chính xác vượt trội để giải văn bản trắc nghiệm.
+- Hỗ trợ fallback tự động sang các model dự phòng: `gpt-4o`, `qwen-flash`, `grok-3-mini`.
 
 ---
 
@@ -34,10 +34,10 @@ Khi bạn mở một trang thi trắc nghiệm trực tuyến:
 
 ### Cách 1: Sử dụng Thanh Điều Khiển Nổi (Floating HUD)
 - Ngay khi vào trang thi, ở góc trên bên phải màn hình sẽ có thanh công cụ nổi **AutoThi AI**.
-- Bấm **"⚡ Tự động làm"**: Hệ thống sẽ tự động phân tích từng câu hỏi, gọi AI chọn đáp án và bấm câu tiếp theo (có delay chống phát hiện bot).
-- Bấm **"🎯 Chỉ gợi ý"**: Hệ thống sẽ chỉ tô viền xanh neon quanh đáp án đúng nhất để bạn tự bấm.
-- Bấm **"🔍 Giải trang này"**: Giải hàng loạt tất cả các câu hỏi đang hiển thị trên trang cùng lúc.
+- Bấm **"⚡ Tự động làm"**: Hệ thống sẽ tự động quét câu hỏi, lăn chuột mượt mà đến từng câu, chọn đáp án chuẩn và tự chuyển câu tiếp theo.
+- Bấm **"🎯 Chỉ gợi ý"**: Hệ thống sẽ chỉ tô viền xanh quanh đáp án đúng nhất để bạn tự bấm.
 - Bấm **"⏹ Dừng"**: Dừng ngay lập tức.
+- Thanh công cụ có thể kéo thả tự do trên màn hình hoặc bấm dấu `_` để thu gọn.
 - Thanh công cụ có thể kéo thả tự do trên màn hình hoặc bấm dấu `_` để thu gọn.
 
 ### Cách 2: Sử dụng Popup Extension
