@@ -155,10 +155,19 @@
       solveCurrentPage();
       sendResponse({ status: "solving" });
     } else if (request.action === "TOGGLE_FLOATING_DOCK") {
-      const dock = document.getElementById("autothi-floating-dock");
+      let dock = document.getElementById("autothi-floating-dock");
+      if (!dock) {
+        createFloatingDock();
+        dock = document.getElementById("autothi-floating-dock");
+      }
       if (dock) {
         dock.classList.toggle("hidden");
-        sendResponse({ status: "toggled", isVisible: !dock.classList.contains("hidden") });
+        const isVisible = !dock.classList.contains("hidden");
+        settings.showFloatingDock = isVisible;
+        chrome.storage.local.set({ settings });
+        sendResponse({ status: "toggled", isVisible: isVisible });
+      } else {
+        sendResponse({ status: "error" });
       }
     }
     return true;
@@ -1046,6 +1055,8 @@
     const dock = document.getElementById("autothi-floating-dock");
     if (dock) {
       dock.classList.add("hidden");
+      settings.showFloatingDock = false;
+      chrome.storage.local.set({ settings });
     }
   }
 

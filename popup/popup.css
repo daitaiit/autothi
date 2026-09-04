@@ -257,6 +257,44 @@ body {
   opacity: 0.92;
 }
 
+/* Quick Action Sub-Row */
+.sub-action-row {
+  display: flex;
+  margin-top: 8px;
+}
+
+.btn-sub-action {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-sub-action:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+  transform: translateY(-1px);
+}
+
+.btn-sub-action:active {
+  transform: translateY(0);
+}
+
+.btn-sub-icon {
+  font-size: 14px;
+}
+
 /* Mode Selector */
 .mode-selector {
   display: grid;

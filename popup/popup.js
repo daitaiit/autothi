@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Elements
     const btnStart = document.getElementById("btn-start");
     const btnStop = document.getElementById("btn-stop");
+    const btnToggleDock = document.getElementById("btn-toggle-dock");
     const modeAuto = document.getElementById("mode-auto");
     const modeHighlight = document.getElementById("mode-highlight");
     const chkAutoNext = document.getElementById("chk-auto-next");
@@ -137,6 +138,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         sendActionToActiveTab("STOP_AUTO");
         setRunningState(false);
         showToast("⏹ Đã dừng lại!");
+      });
+    }
+
+    if (btnToggleDock) {
+      btnToggleDock.addEventListener("click", async () => {
+        const res = await sendActionToActiveTab("TOGGLE_FLOATING_DOCK");
+        if (res && res.status === "toggled") {
+          showToast(res.isVisible ? "📌 Đã mở thanh nổi trên trang web!" : "📌 Đã ẩn thanh nổi trên web!");
+        } else {
+          showToast("📌 Đã bật / ẩn thanh nổi trên trang web!");
+        }
       });
     }
 
