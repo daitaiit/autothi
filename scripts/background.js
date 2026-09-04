@@ -2,7 +2,7 @@
 
 const DEFAULT_API_KEY = "sk-4OmuvVaeLHVgJozU3EjsteCapGXuwZu5rUBUkRcVrjXeLHXd";
 const DEFAULT_API_URL = "https://api.shopaikey.com/v1/chat/completions";
-const DEFAULT_MODEL = "gpt-4o";
+const DEFAULT_MODEL = "gpt-4o-mini";
 const DEFAULT_SERVER_URL = "https://raw.githubusercontent.com/daitaiit/autothi/main/contests_manifest.json";
 
 const DEFAULT_SETTINGS = {
@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     if (!updated.apiKey || updated.apiKey.startsWith("AIzaSy")) {
       updated.apiKey = DEFAULT_API_KEY;
     }
-    if (!updated.model || updated.model.includes("gemini") || updated.model.includes("1.5") || updated.model.includes("2.0") || updated.model === "gpt-4o-mini") {
+    if (!updated.model || updated.model.includes("gemini") || updated.model.includes("1.5") || updated.model.includes("2.0")) {
       updated.model = DEFAULT_MODEL;
     }
     await chrome.storage.local.set({ settings: updated });
@@ -59,7 +59,7 @@ chrome.runtime.onStartup.addListener(async () => {
       data.settings.apiKey = DEFAULT_API_KEY;
       changed = true;
     }
-    if (!data.settings.model || data.settings.model.includes("gemini") || data.settings.model.includes("1.5") || data.settings.model.includes("2.0") || data.settings.model === "gpt-4o-mini") {
+    if (!data.settings.model || data.settings.model.includes("gemini") || data.settings.model.includes("1.5") || data.settings.model.includes("2.0")) {
       data.settings.model = DEFAULT_MODEL;
       changed = true;
     }
@@ -293,7 +293,7 @@ async function installContestPackage(contest) {
 async function handleSolveQuestion({ questionText, options, apiKey, model }) {
   const key = apiKey || (await getSetting("apiKey")) || DEFAULT_API_KEY;
   let targetModel = model || (await getSetting("model")) || DEFAULT_MODEL;
-  if (!targetModel || targetModel.includes("gemini") || targetModel === "gpt-4o-mini") {
+  if (!targetModel || targetModel.includes("gemini")) {
     targetModel = DEFAULT_MODEL;
   }
 
@@ -301,29 +301,23 @@ async function handleSolveQuestion({ questionText, options, apiKey, model }) {
     .map((opt, idx) => `[${idx}] ${opt.text}`)
     .join("\n");
 
-  const systemInstruction = `Bạn là một chuyên gia tư duy phản biện và giải đề thi trắc nghiệm học thuật, kỹ thuật, lịch sử, chính trị, pháp luật, triết học và kiến thức chung đỉnh cao tại Việt Nam.
-Nhiệm vụ của bạn: Giải quyết câu hỏi trắc nghiệm một cách chính xác tuyệt đối 100%.
+  const systemInstruction = `Bạn là một chuyên gia giải đề thi trắc nghiệm học thuật, kỹ thuật, lịch sử, chính trị, pháp luật và kiến thức chung tại Việt Nam.
+Nhiệm vụ của bạn: Giải quyết câu hỏi trắc nghiệm một cách chính xác nhất.
 
-QUY TRÌNH TƯ DUY PHẢN BIỆN (CHAIN-OF-THOUGHT BẮT BUỘC):
-1. Phân tích ngữ cảnh và yêu cầu cốt lõi của câu hỏi:
-   - Xác định chính xác sự kiện lịch sử, nhân vật, mốc thời gian, công thức, định lý, quy định pháp luật (Hiến pháp, Luật hiện hành) hoặc đặc tính công nghệ.
-   - Nhận diện và cẩn trọng với các bẫy ngữ nghĩa: đảo ngược thứ tự chuyển đổi (ví dụ: "chuyển từ A sang B" khác hoàn toàn với "chuyển từ B sang A"), từ phủ định ("KHÔNG", "NGOẠI TRỪ"), hoặc các mốc ngưỡng số liệu tiệm cận.
-2. Phân tích phản biện từng phương án ([0], [1], [2], [3]...):
-   - So sánh kỹ lưỡng các phương án gần giống nhau.
-   - Phân tích rõ ràng tại sao từng phương án sai hoặc đúng dựa trên căn cứ khoa học/lịch sử thực tế để loại trừ phương án gây nhiễu.
-3. Chốt phương án chính xác nhất.
-
-BẮT BUỘC TRẢ VỀ ĐỊNH DẠNG JSON DUY NHẤT (phải xuất thinking_process trước để kích hoạt tư duy rồi mới kết luận best_index):
+QUY TRÌNH TƯ DUY (TIẾT KIỆM TOKEN & CHÍNH XÁC):
+1. Phân tích ngữ cảnh câu hỏi: chú ý các bẫy ngữ nghĩa đảo ngược (ví dụ: chuyển "từ A sang B" khác "từ B sang A"), từ phủ định ("KHÔNG", "NGOẠI TRỪ") và các mốc thời gian/khoa học chính xác.
+2. Đối chiếu từng phương án ([0], [1], [2], [3]...) để loại trừ phương án gây nhiễu.
+3. Trả về định dạng JSON duy nhất (viết thinking_process súc tích 1-2 câu để tiết kiệm token tối đa rồi mới kết luận best_index):
 {
-  "thinking_process": "<phân tích tư duy logic chi tiết từng bước, phản biện và loại trừ các phương án gây nhiễu>",
+  "thinking_process": "<phân tích tư duy súc tích 1-2 câu, nêu lý do chọn>",
   "best_index": <số nguyên index của phương án đúng nhất từ 0 đến ${options.length - 1}>,
   "answer_text": "<nội dung phương án đã chọn>",
   "confidence": 0.99,
-  "reason": "<kết luận ngắn gọn súc tích lý do chọn>"
+  "reason": "<kết luận ngắn gọn 1 câu>"
 }`;
 
   const prompt = `Câu hỏi:\n${questionText}\n\nCác lựa chọn:\n${optionsFormatted}`;
-  const modelsToTry = [targetModel, "gpt-4o", "deepseek-v3", "qwen3.7-max", "gpt-4o-mini"];
+  const modelsToTry = [targetModel, "gpt-4o-mini", "gpt-4o", "qwen-flash"];
   const uniqueModels = [...new Set(modelsToTry)];
 
   let lastError = null;
@@ -337,7 +331,8 @@ BẮT BUỘC TRẢ VỀ ĐỊNH DẠNG JSON DUY NHẤT (phải xuất thinking_p
         messages: [
           { role: "system", content: systemInstruction },
           { role: "user", content: prompt }
-        ]
+        ],
+        max_tokens: 300
       };
 
       if (!isReasoningOnly) {
