@@ -22,7 +22,7 @@
     .btn-next { background: #2563eb; color: #fff; }
     .btn-submit { background: #16a34a; color: #fff; }
 
-    /* Result Score Card */
+    /* Result Score Card & Overlay Modal */
     .result-box {
       background: linear-gradient(135deg, #f0fdf4, #dcfce7);
       border: 2px solid #86efac;
@@ -48,6 +48,90 @@
       margin-top: 15px;
       font-size: 14px;
       line-height: 1.6;
+    }
+
+    /* Modal Chấm Điểm Popup Giữa Màn Hình */
+    .result-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .result-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .result-card {
+      background: #ffffff;
+      border: 2px solid #22c55e;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .result-overlay.active .result-card {
+      transform: scale(1);
+    }
+
+    .result-score {
+      font-size: 46px;
+      font-weight: 800;
+      color: #16a34a;
+      margin: 10px 0 4px;
+    }
+
+    .result-badge {
+      font-size: 14px;
+      font-weight: 600;
+      color: #15803d;
+      background: #dcfce7;
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 15px;
+    }
+
+    .result-details {
+      text-align: left;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 20px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .btn-close-result {
+      background: #2563eb;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-close-result:hover {
+      background: #1d4ed8;
     }
   </style>
 </head>
@@ -151,6 +235,26 @@
       <div id="score-text" style="font-size: 38px; font-weight: 800; color: #16a34a;">3/3 (100%)</div>
       <p id="score-comment" style="font-size: 13.5px; color: #475569; margin-top: 4px;">Xuất sắc! AI đã trả lời chính xác tất cả các câu hỏi.</p>
       <div id="score-breakdown" class="result-breakdown"></div>
+      <div style="margin-top: 15px;">
+        <button class="btn btn-next" type="button" onclick="resetExam()">🔄 Làm lại bài thi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Chấm Điểm Sau Khi Nộp Bài (Hiện Lên Giữa Màn Hình) -->
+  <div class="result-overlay" id="result-modal">
+    <div class="result-card">
+      <div style="font-size: 44px;">🎉</div>
+      <h2 style="font-size: 22px; color: #15803d; margin-top: 5px;">KẾT QUẢ BÀI THI</h2>
+      <div class="result-score" id="modal-score-display">3/3</div>
+      <div class="result-badge" id="modal-score-percentage">Đạt 100% Điểm</div>
+      <div class="result-details" id="modal-score-details">
+        Đang tổng hợp kết quả...
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button class="btn-close-result" type="button" onclick="closeResultModal()">Xem lại bài làm</button>
+        <button class="btn-close-result" type="button" onclick="resetExam()" style="background: #16a34a;">Làm lại bài thi</button>
+      </div>
     </div>
   </div>
 
@@ -182,7 +286,10 @@
       }
 
       const percent = Math.round((score / total) * 100);
-      document.getElementById("score-text").innerText = `${score}/${total} (${percent} Điểm)`;
+      const scoreStr = `${score}/${total}`;
+      
+      // Cập nhật thẻ in-page
+      document.getElementById("score-text").innerText = `${scoreStr} (${percent} Điểm)`;
       
       const commentEl = document.getElementById("score-comment");
       if (score === total) {
@@ -201,7 +308,30 @@
       
       const resultCard = document.getElementById("quiz-result-card");
       resultCard.style.display = "block";
-      resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      // Cập nhật và BẬT MODAL POPUP HIỆN ĐIỂM NGAY LẬP TỨC
+      document.getElementById("modal-score-display").innerText = scoreStr;
+      document.getElementById("modal-score-percentage").innerText = `Đạt ${percent}% Điểm (${score}/${total} câu đúng)`;
+      document.getElementById("modal-score-details").innerHTML = html;
+      document.getElementById("result-modal").classList.add("active");
+    }
+
+    function closeResultModal() {
+      document.getElementById("result-modal").classList.remove("active");
+      const resultCard = document.getElementById("quiz-result-card");
+      if (resultCard) {
+        resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+
+    function resetExam() {
+      document.getElementById("result-modal").classList.remove("active");
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      const predictInp = document.querySelector('input[name="du_doan_so_nguoi"]');
+      if (predictInp) predictInp.value = "";
+      const resultCard = document.getElementById("quiz-result-card");
+      if (resultCard) resultCard.style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   </script>
 </body>

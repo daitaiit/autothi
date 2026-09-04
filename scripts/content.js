@@ -534,13 +534,133 @@
       }
       log("🎉 ĐÃ NỘP BÀI THÀNH CÔNG!", "success");
 
-      // Tự động lăn chuột đến bảng điểm hiển thị ngay sau khi nộp bài
-      await sleep(500);
-      const scoreEl = document.querySelector('#quiz-result-card, #result-modal, .result-card, .result-box, .result-overlay, .score, [class*="score"], [class*="ket-qua"], [id*="ket-qua"], [id*="score"]');
-      if (scoreEl) {
-        smoothScrollTo(scoreEl, "center");
+      // Chờ giao diện hiển thị điểm và tự động hiển thị bảng thông báo điểm
+      await sleep(600);
+      await displayScoreNotice();
+    }
+  }
+
+  async function displayScoreNotice() {
+    // 1. Thử cuộn tới phần tử bảng điểm trên trang
+    const scoreSelectors = [
+      '#quiz-result-card',
+      '#result-modal',
+      '.result-card',
+      '.result-box',
+      '.result-overlay',
+      '.score',
+      '[class*="score"]',
+      '[class*="ket-qua"]',
+      '[class*="ketqua"]',
+      '[id*="ket-qua"]',
+      '[id*="ketqua"]',
+      '[id*="score"]',
+      '.swal2-popup',
+      '.modal.show'
+    ];
+
+    let scoreEl = null;
+    for (const sel of scoreSelectors) {
+      const el = document.querySelector(sel);
+      if (el && isVisible(el)) {
+        scoreEl = el;
+        break;
       }
     }
+
+    if (scoreEl) {
+      smoothScrollTo(scoreEl, "center");
+    }
+
+    // 2. Tìm điểm số từ DOM để hiển thị Banner thông báo nổi của AutoThi
+    let detectedScoreText = "";
+    if (scoreEl) {
+      const text = scoreEl.innerText || "";
+      const match = text.match(/(\d+\s*\/\s*\d+|\d+[\.,]?\d*\s*(?:điểm|pts|point)|\d+\s*%)/i);
+      if (match) {
+        detectedScoreText = match[0].trim();
+      }
+    }
+
+    if (!detectedScoreText) {
+      const allTextCandidates = Array.from(document.querySelectorAll('h1, h2, h3, .score, b, strong'));
+      for (const cand of allTextCandidates) {
+        if (!isVisible(cand)) continue;
+        const txt = cand.innerText || "";
+        const m = txt.match(/(\d+\s*\/\s*\d+|\d+[\.,]?\d*\s*điểm)/i);
+        if (m) {
+          detectedScoreText = m[0].trim();
+          break;
+        }
+      }
+    }
+
+    // 3. Hiển thị thông báo nổi (Score Notification Banner)
+    showAutoThiScoreBanner(detectedScoreText);
+  }
+
+  function showAutoThiScoreBanner(scoreText) {
+    const existing = document.getElementById("autothi-score-banner");
+    if (existing) existing.remove();
+
+    const banner = document.createElement("div");
+    banner.id = "autothi-score-banner";
+    banner.style.cssText = `
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: linear-gradient(135deg, #064e3b, #047857);
+      border: 2px solid #34d399;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+      border-radius: 14px;
+      padding: 16px 24px;
+      color: #ffffff;
+      z-index: 2147483647;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 320px;
+      max-width: 90vw;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    `;
+
+    const scoreDisplay = scoreText ? `<div style="font-size: 20px; font-weight: 800; color: #a7f3d0; margin-top: 2px;">Điểm số: ${scoreText}</div>` : `<div style="font-size: 13px; color: #d1fae5; margin-top: 2px;">Đã hoàn thành toàn bộ bài thi!</div>`;
+
+    banner.innerHTML = `
+      <div style="font-size: 32px; line-height: 1;">🎉</div>
+      <div style="flex: 1;">
+        <div style="font-size: 15px; font-weight: 700; color: #ffffff; letter-spacing: 0.3px;">AutoThi AI - ĐÃ NỘP BÀI THÀNH CÔNG!</div>
+        ${scoreDisplay}
+      </div>
+      <button type="button" id="autothi-close-banner-btn" style="background: rgba(255,255,255,0.15); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px;">✕</button>
+    `;
+
+    document.body.appendChild(banner);
+
+    requestAnimationFrame(() => {
+      banner.style.opacity = "1";
+      banner.style.transform = "translateX(-50%) translateY(0)";
+    });
+
+    const closeBtn = banner.querySelector("#autothi-close-banner-btn");
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        banner.style.opacity = "0";
+        banner.style.transform = "translateX(-50%) translateY(-20px)";
+        setTimeout(() => banner.remove(), 350);
+      };
+    }
+
+    setTimeout(() => {
+      if (document.body.contains(banner)) {
+        banner.style.opacity = "0";
+        banner.style.transform = "translateX(-50%) translateY(-20px)";
+        setTimeout(() => banner.remove(), 350);
+      }
+    }, 12000);
   }
 
   function findModalConfirmButton() {
@@ -818,6 +938,9 @@
     ["pointerdown", "mousedown", "pointerup", "mouseup", "click", "change"].forEach(evtName => {
       el.dispatchEvent(new MouseEvent(evtName, { bubbles: true, cancelable: true, view: window }));
     });
+    if (typeof el.click === "function") {
+      try { el.click(); } catch (e) {}
+    }
   }
 
   function isVisible(el) {
