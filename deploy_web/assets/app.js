@@ -908,8 +908,9 @@ function renderParsedPreviewList() {
     return;
   }
 
-  // Chuẩn hóa chuỗi so khớp: loại bỏ toàn bộ dấu câu, dấu cách thừa
-  const norm = str => (str || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  // Chuẩn hóa chuỗi so khớp: loại bỏ tiền tố "Câu 1.", "Bài 1.", dấu câu, dấu cách thừa
+  const cleanQText = str => (str || "").trim().replace(/^(câu|bài|question)\s*\d+[\s:.-]*/i, "").trim();
+  const norm = str => cleanQText(str).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
 
   // Lấy toàn bộ câu hỏi đã có trên GitHub để kiểm tra trùng
   const allGithubMap = new Map(); // normalized_question -> { contestName, contestId, correctAnswer }

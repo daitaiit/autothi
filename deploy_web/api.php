@@ -295,19 +295,34 @@ if ($action === 'get_contests') {
 
             foreach ($manifest['contests'] as $c) {
                 $qList = [];
+                $seenQKeys = [];
                 if (!empty($c['questions'])) {
                     if (is_array($c['questions'])) {
                         $isAssoc = array_keys($c['questions']) !== range(0, count($c['questions']) - 1);
                         if ($isAssoc) {
                             foreach ($c['questions'] as $k => $qItem) {
-                                $qList[] = [
-                                    'question' => $qItem['question'] ?? $k,
-                                    'correctAnswer' => $qItem['correctAnswer'] ?? $qItem['answer'] ?? '',
-                                    'options' => $qItem['options'] ?? []
-                                ];
+                                $rawQ = $qItem['question'] ?? $k;
+                                $cleanT = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($rawQ));
+                                $normK = preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($cleanT, 'UTF-8'));
+                                if (!empty($normK) && !isset($seenQKeys[$normK])) {
+                                    $seenQKeys[$normK] = true;
+                                    $qList[] = [
+                                        'question' => $rawQ,
+                                        'correctAnswer' => $qItem['correctAnswer'] ?? $qItem['answer'] ?? '',
+                                        'options' => $qItem['options'] ?? []
+                                    ];
+                                }
                             }
                         } else {
-                            $qList = $c['questions'];
+                            foreach ($c['questions'] as $qItem) {
+                                $rawQ = $qItem['question'] ?? '';
+                                $cleanT = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($rawQ));
+                                $normK = preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($cleanT, 'UTF-8'));
+                                if (!empty($normK) && !isset($seenQKeys[$normK])) {
+                                    $seenQKeys[$normK] = true;
+                                    $qList[] = $qItem;
+                                }
+                            }
                         }
                     }
                 }
@@ -377,7 +392,8 @@ if ($action === 'delete_github_question') {
     $manifest = json_decode(base64_decode($fileData['content'] ?? ''), true);
 
     function normStr($t) {
-        return preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower(trim($t), 'UTF-8'));
+        $c = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($t));
+        return preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($c, 'UTF-8'));
     }
     $targetNorm = normStr($qText);
     $deleted = false;
@@ -637,9 +653,10 @@ if ($action === 'push_to_github') {
         $contestIndex = count($manifest['contests']) - 1;
     }
 
-    // B3: Chuẩn hóa và gộp câu hỏi mới (chống trùng lặp)
+    // B3: Chuẩn hóa và gộp câu hỏi mới (chống trùng lặp tuyệt đối, tự động bỏ tiền tố Câu 1, Câu 2...)
     function normalizeQ($text) {
-        $t = mb_strtolower(trim($text), 'UTF-8');
+        $c = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($text));
+        $t = mb_strtolower($c, 'UTF-8');
         return preg_replace('/[^\p{L}\p{N}]+/u', '', $t);
     }
 
