@@ -235,15 +235,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
 
-      // 2. Nếu không mở trang web cụ thể, ưu tiên lấy cuộc thi mới nhất (bch_tw_khoa_xiv_2026 hoặc đề đầu tiên)
+      // 2. Nếu không mở trang web cụ thể, ưu tiên lấy cuộc thi mới nhất
       if (!targetContest) {
-        targetContest = installedList["bch_tw_khoa_xiv_2026"] || (installedValues.length > 0 ? installedValues[0] : null);
+        targetContest = installedList["hoi_nghi_bct_03092026"] || installedList["bch_tw_khoa_xiv_2026"] || (installedValues.length > 0 ? installedValues[0] : null);
       }
 
       const lastUpdatedText = document.getElementById("last-updated-text");
       if (lastUpdatedText) {
         if (targetContest) {
-          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "27/08/2026";
+          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "03/09/2026";
         } else {
           lastUpdatedText.innerText = "27/08/2026";
         }
