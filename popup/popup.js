@@ -47,6 +47,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     currentDelay = settings.minDelay || 2200;
     setSpeedUI(currentDelay);
 
+    if (btnToggleDock) {
+      btnToggleDock.classList.toggle("active", !!settings.showFloatingDock);
+    }
+
     updateBankUI(questionBank, installed);
 
     // 2. Mode Selection (Tự động vs Gợi ý)
@@ -145,6 +149,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       btnToggleDock.addEventListener("click", async () => {
         const res = await sendActionToActiveTab("TOGGLE_FLOATING_DOCK");
         if (res && res.status === "toggled") {
+          btnToggleDock.classList.toggle("active", !!res.isVisible);
           showToast(res.isVisible ? "📌 Đã mở thanh nổi trên trang web!" : "📌 Đã ẩn thanh nổi trên web!");
         } else {
           showToast("📌 Đã bật / ẩn thanh nổi trên trang web!");

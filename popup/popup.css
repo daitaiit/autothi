@@ -119,6 +119,54 @@ body {
   font-size: 9px;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-pin-dock {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
+  outline: none;
+}
+
+.btn-pin-dock .pin-icon {
+  font-size: 13px;
+  transition: transform 0.2s ease;
+  line-height: 1;
+}
+
+.btn-pin-dock:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-pin-dock:hover .pin-icon {
+  transform: rotate(-15deg) scale(1.15);
+}
+
+.btn-pin-dock:active {
+  transform: translateY(0);
+}
+
+.btn-pin-dock.active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
 .status-pill {
   display: flex;
   align-items: center;
@@ -255,44 +303,6 @@ body {
 
 .btn-action-stop:hover {
   opacity: 0.92;
-}
-
-/* Quick Action Sub-Row */
-.sub-action-row {
-  display: flex;
-  margin-top: 8px;
-}
-
-.btn-sub-action {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  color: #cbd5e1;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-sub-action:hover {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: #60a5fa;
-  transform: translateY(-1px);
-}
-
-.btn-sub-action:active {
-  transform: translateY(0);
-}
-
-.btn-sub-icon {
-  font-size: 14px;
 }
 
 /* Mode Selector */
