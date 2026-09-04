@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đề Thi Thử Thách Độ Khó Cao - Test AutoThi AI (ShopAIKey)</title>
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 30px 16px; min-height: 100vh; }
+    
+    .container {
+      max-width: 840px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 35px 30px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-box {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .badge-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2));
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .notice-card {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 25px;
+      font-size: 13px;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .question-item {
+      margin-bottom: 24px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .question-item:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .question-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .answer-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    .answer-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .answer-item input[type="radio"] {
+      cursor: pointer;
+      width: 17px;
+      height: 17px;
+      accent-color: #3b82f6;
+    }
+
+    .prediction-box {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+
+    .prediction-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      margin-top: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .prediction-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-next {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+    }
+    .btn-next:hover { background: rgba(255, 255, 255, 0.18); color: #fff; }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Score Result Modal */
+    .result-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .result-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .result-card {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .result-overlay.active .result-card {
+      transform: scale(1);
+    }
+
+    .result-score {
+      font-size: 48px;
+      font-weight: 800;
+      color: #10b981;
+      margin: 15px 0 5px;
+    }
+
+    .result-badge {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+
+    .result-details {
+      text-align: left;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .btn-close-result {
+      width: 100%;
+      padding: 12px;
+      background: #3b82f6;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-box">
+      <span class="badge-tag">🔥 Đề Khảo Sát Thử Nghiệm Độ Khó Cao (AI Evaluation)</span>
+      <h1>BỘ ĐỀ ĐÁNH GIÁ NĂNG LỰC TƯ DUY & KIẾN THỨC CHUYÊN SÂU</h1>
+      <p class="subtitle">
+        Các câu hỏi dưới đây <b>hoàn toàn không có trong ngân hàng đề có sẵn</b>.<br>
+        Hệ thống AutoThi AI sẽ bắt buộc phải gọi <b>ShopAIKey API (gpt-4o-mini)</b> để tự suy luận và giải đề trực tiếp.
+      </p>
+    </div>
+
+    <div class="notice-card">
+      <span style="font-size: 18px;">💡</span>
+      <span>Hãy mở Extension <b>AutoThi AI</b> và bấm <b>"⚡ BẮT ĐẦU LÀM BÀI"</b> để xem mô hình tự suy luận và tự động lăn chuột giải từng câu!</span>
+    </div>
+
+    <!-- Câu 1: Thuật toán & Cấu trúc dữ liệu -->
+    <div class="question-item" data-question="1" data-correct="B">
+      <div class="question-title">Câu 1: Trong lý thuyết độ phức tạp tính toán, thuật toán sắp xếp nào dưới đây có độ phức tạp thời gian trong trường hợp xấu nhất (Worst-Case) luôn đạt O(n log n) mà KHÔNG đòi hỏi bộ nhớ phụ O(n) như Merge Sort?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q1" value="A">
+          <span>A. Quick Sort</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="B">
+          <span>B. Heap Sort</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="C">
+          <span>C. Bubble Sort</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q1" value="D">
+          <span>D. Counting Sort</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 2: Triết học & Lý luận -->
+    <div class="question-item" data-question="2" data-correct="C">
+      <div class="question-title">Câu 2: Theo quy luật phủ định của phủ định trong phép biện chứng duy vật, đặc trưng căn bản nhất của sự phát triển biện chứng qua chu kỳ phủ định là gì?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q2" value="A">
+          <span>A. Sự phát triển diễn ra theo đường thẳng tắp tiến lên vô hạn không gián đoạn</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="B">
+          <span>B. Sự phát triển diễn ra theo một vòng tròn tuần hoàn khép kín, lặp lại nguyên trạng ban đầu</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="C">
+          <span>C. Sự phát triển diễn ra theo đường xoáy ốc (xoắn ốc), dường như quay trở lại cái ban đầu nhưng trên nền tảng cao hơn về chất</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q2" value="D">
+          <span>D. Phủ định sạch trơn và xóa bỏ triệt để toàn bộ các yếu tố của cái cũ</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 3: Mạng máy tính & Bảo mật -->
+    <div class="question-item" data-question="3" data-correct="A">
+      <div class="question-title">Câu 3: Trong giao thức mã hóa mạng TLS 1.3 (RFC 8446), quá trình bắt tay thiết lập kết nối an toàn (Handshake) thông thường đã được tối ưu hóa như thế nào so với phiên bản TLS 1.2?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q3" value="A">
+          <span>A. Rút ngắn độ trễ bắt tay thông thường từ 2 RTT (Round Trip Time) xuống còn 1 RTT (hỗ trợ 0-RTT khi phục hồi phiên)</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="B">
+          <span>B. Tăng thời gian bắt tay từ 1 RTT lên 3 RTT để tích hợp thêm kiểm tra chứng chỉ kép</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="C">
+          <span>C. Loại bỏ hoàn toàn mã hóa khóa công khai RSA và chỉ sử dụng mật mã đối xứng tĩnh</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q3" value="D">
+          <span>D. Giữ nguyên 2 RTT nhưng bắt buộc chuyển toàn bộ sang giao thức tầng mạng IPv6</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 4: Lịch sử chiến dịch Điện Biên Phủ -->
+    <div class="question-item" data-question="4" data-correct="C">
+      <div class="question-title">Câu 4: Trong Chiến dịch lịch sử Điện Biên Phủ (năm 1954), Đại tướng Võ Nguyên Giáp đã đưa ra quyết định quân sự mang tính bước ngoặt vào ngày 26/01/1954 khi thay đổi phương châm tác chiến như thế nào?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q4" value="A">
+          <span>A. Chuyển từ "Đánh chắc, tiến chắc" sang "Đánh nhanh, thắng nhanh"</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q4" value="B">
+          <span>B. Chuyển từ "Bao vây tiêu diệt" sang "Vũ trang biểu tình"</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q4" value="C">
+          <span>C. Chuyển từ "Đánh nhanh, thắng nhanh" sang "Đánh chắc, tiến chắc"</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q4" value="D">
+          <span>D. Chuyển từ "Chiến tranh du kích" sang "Vũ trang khởi nghĩa toàn dân"</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 5: Kinh tế học vĩ mô -->
+    <div class="question-item" data-question="5" data-correct="B">
+      <div class="question-title">Câu 5: Trong kinh tế học vĩ mô theo trường phái Keynes, khi nền kinh tế rơi vào tình trạng "Bẫy thanh khoản" (Liquidity Trap) với lãi suất danh nghĩa xấp xỉ mức 0%, chính sách can thiệp nào sau đây được chứng minh là mang lại hiệu quả cao nhất?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q5" value="A">
+          <span>A. Chính sách tiền tệ mở rộng (tiếp tục hạ lãi suất tái cấp vốn và bơm tiền ngân hàng)</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q5" value="B">
+          <span>B. Chính sách tài khóa mở rộng (chính phủ trực tiếp tăng chi tiêu, kích cầu đầu tư công và hạ thuế)</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q5" value="C">
+          <span>C. Chính sách thắt chặt cung tiền nhằm kiềm chế lạm phát</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q5" value="D">
+          <span>D. Nâng tỷ lệ dự trữ bắt buộc tại tất cả các ngân hàng thương mại</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 6: Hệ thống phân tán & Cơ sở dữ liệu -->
+    <div class="question-item" data-question="6" data-correct="B">
+      <div class="question-title">Câu 6: Theo Định lý CAP (Brewer's Theorem) trong thiết kế hệ thống phân tán, một hệ thống đạt chuẩn CP (Consistency & Partition Tolerance) khi xảy ra sự cố phân đoạn mạng (Network Partition) sẽ hành xử như thế nào?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q6" value="A">
+          <span>A. Tiếp tục ghi và đọc bình thường trên mọi node, chấp nhận dữ liệu bị xung đột hoặc sai lệch tạm thời</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q6" value="B">
+          <span>B. Từ chối hoặc hoãn thực thi một số yêu cầu (hy sinh Availability) để bảo đảm tính nhất quán dữ liệu tuyệt đối giữa các node</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q6" value="C">
+          <span>C. Tự động xóa sạch cơ sở dữ liệu trên toàn cụm để tránh rò rỉ thông tin</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q6" value="D">
+          <span>D. Chỉ hỗ trợ tối đa 1 người dùng truy cập tại cùng một thời điểm</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 7: Luật pháp & Hiến pháp -->
+    <div class="question-item" data-question="7" data-correct="D">
+      <div class="question-title">Câu 7: Theo Hiến pháp nước Cộng hòa Xã hội Chủ nghĩa Việt Nam năm 2013, cơ quan nào là cơ quan đại biểu cao nhất của Nhân dân, cơ quan quyền lực nhà nước cao nhất và là cơ quan duy nhất có quyền lập hiến và lập pháp?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q7" value="A">
+          <span>A. Chủ tịch nước</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q7" value="B">
+          <span>B. Chính phủ</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q7" value="C">
+          <span>C. Tòa án nhân dân tối cao</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q7" value="D">
+          <span>D. Quốc hội</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu 8: Công nghệ vi mạch Bán dẫn -->
+    <div class="question-item" data-question="8" data-correct="C">
+      <div class="question-title">Câu 8: Trong kỹ thuật sản xuất vi mạch bán dẫn hiện đại, hiện tượng rò rỉ dòng điện do "Hiệu ứng đường hầm lượng tử" (Quantum Tunneling) trở thành rào cản vật lý nan giải nhất khi kích thước cổng transistor bị thu hẹp xuống dưới ngưỡng nào?</div>
+      <div class="options-list">
+        <label class="answer-item">
+          <input type="radio" name="q8" value="A">
+          <span>A. Dưới ngưỡng 90 nanomet (nm)</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q8" value="B">
+          <span>B. Dưới ngưỡng 45 nanomet (nm)</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q8" value="C">
+          <span>C. Dưới ngưỡng 3 nanomet (nm) đến 2 nanomet (nm) và tiến gần kích thước nguyên tử</span>
+        </label>
+        <label class="answer-item">
+          <input type="radio" name="q8" value="D">
+          <span>D. Dưới ngưỡng 180 nanomet (nm)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Câu hỏi phụ: Dự đoán -->
+    <div class="prediction-box question-item">
+      <div class="question-title" style="color: #60a5fa;">Câu hỏi phụ: Dự đoán số lượng người sẽ trả lời chính xác tất cả các câu hỏi trên?</div>
+      <div>
+        <input type="number" name="du_doan_so_nguoi" class="prediction-input" placeholder="Nhập số người dự đoán...">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-next" type="button" onclick="alert('Đang hiển thị toàn bộ câu hỏi trên trang này!')">Tiếp theo</button>
+      <button class="btn btn-submit" type="button" id="btn-submit-exam">Nộp bài thi</button>
+    </div>
+  </div>
+
+  <!-- Modal Chấm Điểm Sau Khi Nộp -->
+  <div class="result-overlay" id="result-modal">
+    <div class="result-card">
+      <div style="font-size: 40px;">🎉</div>
+      <div class="result-score" id="score-display">0/8</div>
+      <div class="result-badge" id="score-percentage">Đạt 0%</div>
+      <div class="result-details" id="score-details">
+        Đang phân tích kết quả...
+      </div>
+      <button class="btn-close-result" type="button" onclick="document.getElementById('result-modal').classList.remove('active')">Đóng & Xem lại bài làm</button>
+    </div>
+  </div>
+
+  <script>
+    // Xử lý nộp bài và chấm điểm tự động để kiểm tra độ chính xác của AI
+    const correctAnswers = {
+      q1: { ans: "B", text: "Heap Sort" },
+      q2: { ans: "C", text: "Đường xoáy ốc (xoắn ốc), quay trở lại nhưng trên nền tảng cao hơn" },
+      q3: { ans: "A", text: "Rút ngắn từ 2 RTT xuống còn 1 RTT (hỗ trợ 0-RTT)" },
+      q4: { ans: "C", text: "Chuyển từ 'Đánh nhanh, thắng nhanh' sang 'Đánh chắc, tiến chắc'" },
+      q5: { ans: "B", text: "Chính sách tài khóa mở rộng (tăng đầu tư công và kích cầu)" },
+      q6: { ans: "B", text: "Từ chối/hoãn một số yêu cầu để đảm bảo tính nhất quán dữ liệu" },
+      q7: { ans: "D", text: "Quốc hội" },
+      q8: { ans: "C", text: "Dưới ngưỡng 3nm đến 2nm tiến gần kích thước nguyên tử" }
+    };
+
+    document.getElementById("btn-submit-exam").addEventListener("click", () => {
+      let score = 0;
+      let total = 8;
+      let detailHtml = "";
+
+      for (let i = 1; i <= total; i++) {
+        const qKey = "q" + i;
+        const selected = document.querySelector(`input[name="${qKey}"]:checked`);
+        const correct = correctAnswers[qKey];
+        const isRight = selected && selected.value === correct.ans;
+
+        if (isRight) {
+          score++;
+          detailHtml += `<div style="color: #34d399; margin-bottom: 4px;">✓ Câu ${i}: Đúng (${correct.ans})</div>`;
+        } else {
+          const userAns = selected ? selected.value : "Chưa chọn";
+          detailHtml += `<div style="color: #f87171; margin-bottom: 4px;">✗ Câu ${i}: Chọn ${userAns} (Đáp án đúng: ${correct.ans})</div>`;
+        }
+      }
+
+      const percent = Math.round((score / total) * 100);
+      document.getElementById("score-display").innerText = `${score}/${total}`;
+      document.getElementById("score-percentage").innerText = `Độ chính xác AI: ${percent}%`;
+      
+      const predictVal = document.querySelector('input[name="du_doan_so_nguoi"]')?.value || "Chưa điền";
+      detailHtml += `<hr style="margin: 10px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);">`;
+      detailHtml += `<div>🎯 Số người dự đoán đã điền: <b>${predictVal}</b></div>`;
+
+      document.getElementById("score-details").innerHTML = detailHtml;
+      document.getElementById("result-modal").classList.add("active");
+    });
+  </script>
+</body>
+</html>
