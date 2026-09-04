@@ -650,6 +650,7 @@ if ($action === 'push_to_github') {
     }
 
     $addedCount = 0;
+    $updatedCount = 0;
     foreach ($questions as $newQ) {
         $qText = trim($newQ['question'] ?? '');
         $ansText = trim($newQ['correctAnswer'] ?? $newQ['answer'] ?? '');
@@ -664,6 +665,7 @@ if ($action === 'push_to_github') {
                 if (normalizeQ($eq['question']) === $key) {
                     $eq['correctAnswer'] = $ansText;
                     if (!empty($opts)) $eq['options'] = $opts;
+                    $updatedCount++;
                 }
             }
         } else {
@@ -686,7 +688,7 @@ if ($action === 'push_to_github') {
     // B4: Gọi GitHub API commit & push
     $updatedJsonStr = json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     $commitPayload = [
-        'message' => "AutoThi Admin: Cap nhat " . $addedCount . " cau hoi cho " . $contestName . " [" . date('d/m/Y H:i') . "]",
+        'message' => "AutoThi Admin: Cap nhat " . $addedCount . " cau moi, " . $updatedCount . " cau sua cho " . $contestName . " [" . date('d/m/Y H:i') . "]",
         'content' => base64_encode($updatedJsonStr),
         'sha' => $sha,
         'branch' => GITHUB_BRANCH
@@ -712,11 +714,13 @@ if ($action === 'push_to_github') {
     $putData = json_decode($putRes, true);
     if ($putHttpCode === 200 || $putHttpCode === 201) {
         $commitUrl = $putData['commit']['html_url'] ?? '';
+        $msg = "🎉 Đã đồng bộ thành công lên GitHub!\n• Thêm mới: {$addedCount} câu\n• Cập nhật đáp án: {$updatedCount} câu\n• Tổng số câu hiện tại trong cuộc thi: " . count($existingQuestions) . " câu.";
         jsonResponse(true, [
             'addedCount' => $addedCount,
+            'updatedCount' => $updatedCount,
             'totalInContest' => count($existingQuestions),
             'commitUrl' => $commitUrl,
-            'message' => "🎉 Đã đẩy thành công " . $addedCount . " câu hỏi lên GitHub! Tất cả Extension sẽ tự động cập nhật."
+            'message' => $msg
         ]);
     } else {
         $errMsg = $putData['message'] ?? "Lỗi Commit GitHub (Mã HTTP $putHttpCode)";

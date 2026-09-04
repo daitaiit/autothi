@@ -689,13 +689,13 @@ async function handleParse() {
   }
 }
 
-// 5. Render Parsed Preview List
+// 5. Render Parsed Preview List (Có phát hiện trùng lặp trực quan)
 function renderParsedPreviewList() {
   const container = document.getElementById("questions-list");
   const countEl = document.getElementById("parsed-count");
-  countEl.innerText = `${parsedQuestions.length} câu`;
 
   if (parsedQuestions.length === 0) {
+    countEl.innerText = `0 câu`;
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">📝</div>
@@ -706,8 +706,39 @@ function renderParsedPreviewList() {
     return;
   }
 
+  // Lấy danh sách câu hỏi hiện có của cuộc thi đang chọn để kiểm tra trùng
+  const selContestVal = document.getElementById("sel-contest")?.value;
+  const currentContest = availableContests.find(c => c.id === selContestVal);
+  const existingQuestions = currentContest?.questions || [];
+
+  const norm = str => (str || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  const existingMap = new Set(existingQuestions.map(q => norm(q.question)));
+
+  let newCount = 0;
+  let dupCount = 0;
+
+  // Kiểm tra trùng lặp nội bộ ngay trong mảng parsedQuestions
+  const seenInBatch = new Set();
+
   let html = "";
   parsedQuestions.forEach((q, idx) => {
+    const qKey = norm(q.question);
+    const isAlreadyOnGithub = existingMap.has(qKey);
+    const isDuplicateInBatch = seenInBatch.has(qKey);
+    seenInBatch.add(qKey);
+
+    let badgeHtml = "";
+    if (isAlreadyOnGithub) {
+      dupCount++;
+      badgeHtml = `<span class="badge-tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); font-size: 11px; padding: 2px 7px;">🔄 Đã có trên GitHub (Sẽ cập nhật đáp án)</span>`;
+    } else if (isDuplicateInBatch) {
+      dupCount++;
+      badgeHtml = `<span class="badge-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3); font-size: 11px; padding: 2px 7px;">⚠️ Trùng lặp trong đoạn văn bản</span>`;
+    } else {
+      newCount++;
+      badgeHtml = `<span class="badge-tag" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3); font-size: 11px; padding: 2px 7px;">✨ Câu mới</span>`;
+    }
+
     let optsHtml = "";
     (q.options || []).forEach(opt => {
       const isCorrect = isMatchingAnswer(opt, q.correctAnswer);
@@ -718,23 +749,28 @@ function renderParsedPreviewList() {
 
     html += `
       <div class="question-card" id="q-card-${idx}">
-        <div class="question-header">
-          <span class="question-num">Câu ${idx + 1}</span>
-          <div class="question-text">${escapeHtml(q.question)}</div>
+        <div class="question-header" style="flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="question-num">Câu ${idx + 1}</span>
+            ${badgeHtml}
+          </div>
           <div class="card-actions">
             <button class="btn-icon" onclick="deleteParsedQuestion(${idx})" title="Xóa câu này">🗑️</button>
           </div>
+          <div class="question-text" style="width: 100%; margin-top: 4px;">${escapeHtml(q.question)}</div>
         </div>
         <div class="preview-options">
           ${optsHtml}
         </div>
-        <div style="font-size: 12px; color: #34d399; font-weight: 600;">
-          Đáp án đúng: ${escapeHtml(q.correctAnswer || 'Chưa xác định')}
+        <div style="font-size: 12px; color: #34d399; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+          <span>🎯 Đáp án AI chọn:</span>
+          <span>${escapeHtml(q.correctAnswer || 'Chưa rõ')}</span>
         </div>
       </div>
     `;
   });
 
+  countEl.innerHTML = `<b>${parsedQuestions.length}</b> câu (${newCount} mới, ${dupCount} trùng/cập nhật)`;
   container.innerHTML = html;
 }
 
