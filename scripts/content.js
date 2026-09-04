@@ -104,27 +104,33 @@
       const data = await chrome.storage.local.get(["settings", "questionBank"]);
       if (data.settings) settings = { ...settings, ...data.settings };
       if (data.questionBank && Object.keys(data.questionBank).length > 0) {
-        questionBank = data.questionBank;
-      } else {
-        // Fallback tự động nạp ngân hàng đề có sẵn nếu máy mới tinh chưa đồng bộ
-        try {
-          const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
-          if (res.ok) {
-            const manifest = await res.json();
-            if (manifest.contests && Array.isArray(manifest.contests)) {
-              let mergedBank = {};
-              for (const contest of manifest.contests) {
-                if (contest.questions) {
-                  mergedBank = { ...mergedBank, ...contest.questions };
+        questionBank = { ...data.questionBank };
+      }
+
+      // Luôn nạp và bổ sung các đề có sẵn trong contests_manifest.json vào questionBank
+      try {
+        const res = await fetch(chrome.runtime.getURL("contests_manifest.json"));
+        if (res.ok) {
+          const manifest = await res.json();
+          if (manifest.contests && Array.isArray(manifest.contests)) {
+            let hasNew = false;
+            for (const contest of manifest.contests) {
+              if (contest.questions) {
+                for (const [rawKey, qItem] of Object.entries(contest.questions)) {
+                  const normKey = normalizeText(qItem.question || rawKey);
+                  if (normKey && !questionBank[normKey]) {
+                    questionBank[normKey] = qItem;
+                    hasNew = true;
+                  }
                 }
               }
-              questionBank = mergedBank;
+            }
+            if (hasNew) {
               await chrome.storage.local.set({ questionBank });
-              console.log("✓ AutoThi: Đã nạp trọn bộ ngân hàng đề vào bộ nhớ cục bộ!");
             }
           }
-        } catch (manifestErr) {}
-      }
+        }
+      } catch (manifestErr) {}
 
       createFloatingDock();
       setupObserver();
@@ -986,13 +992,25 @@
 
   function sendToBackground(msg) {
     return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage(msg, res => {
-        if (chrome.runtime.lastError) {
-          reject(new Error(chrome.runtime.lastError.message));
-        } else {
-          resolve(res);
+      try {
+        if (!chrome.runtime || !chrome.runtime.sendMessage) {
+          return reject(new Error("Tiện ích vừa được Tải lại (Reload). Vui lòng bấm F5 để kết nối lại!"));
         }
-      });
+        chrome.runtime.sendMessage(msg, res => {
+          if (chrome.runtime.lastError) {
+            const err = chrome.runtime.lastError.message || "";
+            if (err.includes("Extension context invalidated") || err.includes("context invalidated")) {
+              reject(new Error("Tiện ích vừa được Tải lại (Reload). Vui lòng bấm F5 để kết nối lại!"));
+            } else {
+              reject(new Error(err));
+            }
+          } else {
+            resolve(res);
+          }
+        });
+      } catch (e) {
+        reject(new Error("Tiện ích vừa được Tải lại (Reload). Vui lòng bấm F5 để kết nối lại!"));
+      }
     });
   }
 
