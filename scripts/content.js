@@ -407,6 +407,9 @@
       const delay = getRandomDelay(settings.minDelay || 1200, settings.maxDelay || 2500);
       await sleep(delay);
     }
+    if (settings.autoPredict !== false) {
+      handlePredictionInput();
+    }
     isRunning = false;
     updateDockUI();
     log("🎉 Đã giải xong toàn bộ câu hỏi trên trang!", "success");
@@ -414,11 +417,6 @@
 
   async function processNextStep(mode) {
     if (!isRunning) return;
-
-    // Check & fill prediction input if present on current page
-    if (settings.autoPredict !== false) {
-      handlePredictionInput();
-    }
 
     const questions = findQuestionsOnPage();
     if (questions.length === 0) {
@@ -445,14 +443,16 @@
       await sleep(delay);
     }
 
-    // Fill prediction input again after questions
-    if (settings.autoPredict !== false) {
-      handlePredictionInput();
-    }
-
     // Auto next question / submit if enabled
     const submitBtn = findSubmitButton();
     const nextBtn = findNextButton();
+
+    // Chỉ điền số người dự đoán SAU KHI ĐÃ GIẢI XONG TOÀN BỘ CÂU HỎI (chuẩn bị nộp bài)
+    const isFinalStep = !nextBtn || !isVisible(nextBtn) || nextBtn.disabled || nextBtn.classList.contains("disabled") || (submitBtn && isVisible(submitBtn));
+    if (isFinalStep && settings.autoPredict !== false) {
+      handlePredictionInput();
+      await sleep(700);
+    }
 
     // Nếu đã có nút nộp bài hiển thị và không còn nút tiếp theo hợp lệ, ưu tiên nộp bài ngay
     if (settings.autoSubmit && submitBtn && isVisible(submitBtn) && (!nextBtn || !isVisible(nextBtn) || nextBtn.disabled || nextBtn.classList.contains("disabled"))) {
