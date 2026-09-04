@@ -553,11 +553,14 @@ async function runApiHealthCheck() {
 
 // 2. Load contests & live bank from GitHub
 async function loadContests() {
+  const btnRef = document.getElementById("btn-refresh-bank");
   try {
-    const btnRef = document.getElementById("btn-refresh-bank");
-    if (btnRef) btnRef.innerText = "⏳ Đang tải...";
+    if (btnRef) {
+      btnRef.innerText = "⏳ Đang tải...";
+      btnRef.disabled = true;
+    }
 
-    const res = await fetch("api.php?action=get_contests");
+    const res = await fetch("api.php?action=get_contests&t=" + Date.now(), { cache: "no-store" });
     const json = await res.json();
     if (json.success) {
       availableContests = json.data.contests || [];
@@ -592,7 +595,9 @@ async function loadContests() {
       // Update stats banner
       document.getElementById("stat-contests-count").innerText = `${availableContests.length} cuộc thi`;
       document.getElementById("stat-questions-count").innerText = `${json.data.total_questions_all || 0} câu`;
-      document.getElementById("stat-last-sync").innerText = json.data.updated_at || "Vừa xong";
+      
+      const syncTime = json.data.updated_at || "";
+      document.getElementById("stat-last-sync").innerText = syncTime ? `${syncTime} (Giờ VN)` : "Vừa xong";
       document.getElementById("badge-bank-total").innerText = `${json.data.total_questions_all || 0}`;
 
       // Update Extension Settings Preset Dropdown
@@ -615,8 +620,10 @@ async function loadContests() {
   } catch (e) {
     console.warn("Không tải được danh sách cuộc thi:", e);
   } finally {
-    const btnRef = document.getElementById("btn-refresh-bank");
-    if (btnRef) btnRef.innerText = "🔄 Tải Lại Từ GitHub";
+    if (btnRef) {
+      btnRef.innerText = "🔄 Tải Lại Từ GitHub";
+      btnRef.disabled = false;
+    }
   }
 }
 
@@ -1138,7 +1145,7 @@ function escapeAttr(text) {
 // -------------------------------------------------------------
 async function loadExtensionSettings() {
   try {
-    const res = await fetch("api.php?action=get_extension_settings");
+    const res = await fetch("api.php?action=get_extension_settings&t=" + Date.now(), { cache: "no-store" });
     const json = await res.json();
     if (!json.success || !json.data) return;
 

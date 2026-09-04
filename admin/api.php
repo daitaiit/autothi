@@ -2,7 +2,10 @@
 // API Xử Lý Backend Cho Trang Quản Trị AutoThi (autothi.tafinex.com)
 // -------------------------------------------------------------
 
+date_default_timezone_set('Asia/Ho_Chi_Minh');
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 require_once __DIR__ . '/config.php';
 
 // Hàm gửi phản hồi JSON
@@ -275,79 +278,165 @@ if ($action === 'save_github_token') {
 }
 
 // -------------------------------------------------------------
+// Hàm Tải Manifest Mới Nhất 100% Thời Gian Thực Từ GitHub
+// (Ưu tiên GitHub REST API không qua Fastly Varnish CDN cache)
+// -------------------------------------------------------------
+function fetchLatestManifestFromGitHub() {
+    $token = getEffectiveGithubToken();
+    $manifest = null;
+    $sha = '';
+
+    // 1. GitHub REST API (Thời gian thực 100% từ nhánh chính, không bị cache 5 phút)
+    $apiUrl = 'https://api.github.com/repos/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/contents/' . GITHUB_FILE_PATH . '?ref=' . GITHUB_BRANCH;
+    $ch = curl_init($apiUrl);
+    $headers = [
+        'User-Agent: AutoThi-Admin',
+        'Accept: application/vnd.github.v3+json',
+        'Cache-Control: no-cache, no-store'
+    ];
+    if (!empty($token)) {
+        $headers[] = 'Authorization: Bearer ' . $token;
+    }
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => $headers,
+        CURLOPT_TIMEOUT => 15
+    ]);
+    $apiRes = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode === 200 && $apiRes) {
+        $fileData = json_decode($apiRes, true);
+        if (!empty($fileData['content'])) {
+            $sha = $fileData['sha'] ?? '';
+            $manifest = json_decode(base64_decode($fileData['content']), true);
+            if ($manifest && isset($manifest['contests'])) {
+                return [$manifest, $sha];
+            }
+        }
+    }
+
+    // 2. Dự phòng: raw.githubusercontent.com qua cURL có no-cache
+    $rawUrl = 'https://raw.githubusercontent.com/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/' . GITHUB_BRANCH . '/' . GITHUB_FILE_PATH . '?t=' . time();
+    $ch = curl_init($rawUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => [
+            'User-Agent: AutoThi-Admin',
+            'Cache-Control: no-cache, no-store'
+        ]
+    ]);
+    $rawRes = curl_exec($ch);
+    $rawCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($rawCode === 200 && $rawRes) {
+        $manifest = json_decode($rawRes, true);
+        if ($manifest && isset($manifest['contests'])) {
+            return [$manifest, $sha];
+        }
+    }
+
+    // 3. Dự phòng CDN jsdelivr
+    $cdnUrl = 'https://cdn.jsdelivr.net/gh/' . GITHUB_OWNER . '/' . GITHUB_REPO . '@' . GITHUB_BRANCH . '/' . GITHUB_FILE_PATH . '?t=' . time();
+    $ch = curl_init($cdnUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => ['User-Agent: AutoThi-Admin']
+    ]);
+    $cdnRes = curl_exec($ch);
+    $cdnCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($cdnCode === 200 && $cdnRes) {
+        $manifest = json_decode($cdnRes, true);
+        if ($manifest && isset($manifest['contests'])) {
+            return [$manifest, $sha];
+        }
+    }
+
+    // 4. Dự phòng file cục bộ
+    $localPaths = [
+        __DIR__ . '/../contests_manifest.json',
+        __DIR__ . '/contests_manifest.json'
+    ];
+    foreach ($localPaths as $p) {
+        if (file_exists($p)) {
+            $manifest = json_decode(@file_get_contents($p), true);
+            if ($manifest && isset($manifest['contests'])) {
+                return [$manifest, $sha];
+            }
+        }
+    }
+
+    return [null, $sha];
+}
+
+// -------------------------------------------------------------
 // 2. Lấy Danh Sách Cuộc Thi & Câu Hỏi Trực Quan Từ GitHub
 // -------------------------------------------------------------
 if ($action === 'get_contests') {
-    $url = 'https://raw.githubusercontent.com/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/' . GITHUB_BRANCH . '/' . GITHUB_FILE_PATH . '?t=' . time();
-    $ctx = stream_context_create([
-        'http' => [
-            'timeout' => 10,
-            'header' => "User-Agent: AutoThi-Admin\r\n"
-        ]
-    ]);
-    $json = @file_get_contents($url, false, $ctx);
+    list($manifest, $sha) = fetchLatestManifestFromGitHub();
     
-    if ($json) {
-        $manifest = json_decode($json, true);
-        if ($manifest && isset($manifest['contests'])) {
-            $formattedContests = [];
-            $totalQuestionsAll = 0;
+    if ($manifest && isset($manifest['contests'])) {
+        $formattedContests = [];
+        $totalQuestionsAll = 0;
 
-            foreach ($manifest['contests'] as $c) {
-                $qList = [];
-                $seenQKeys = [];
-                if (!empty($c['questions'])) {
-                    if (is_array($c['questions'])) {
-                        $isAssoc = array_keys($c['questions']) !== range(0, count($c['questions']) - 1);
-                        if ($isAssoc) {
-                            foreach ($c['questions'] as $k => $qItem) {
-                                $rawQ = $qItem['question'] ?? $k;
-                                $cleanT = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($rawQ));
-                                $normK = preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($cleanT, 'UTF-8'));
-                                if (!empty($normK) && !isset($seenQKeys[$normK])) {
-                                    $seenQKeys[$normK] = true;
-                                    $qList[] = [
-                                        'question' => $rawQ,
-                                        'correctAnswer' => $qItem['correctAnswer'] ?? $qItem['answer'] ?? '',
-                                        'options' => $qItem['options'] ?? []
-                                    ];
-                                }
+        foreach ($manifest['contests'] as $c) {
+            $qList = [];
+            $seenQKeys = [];
+            if (!empty($c['questions'])) {
+                if (is_array($c['questions'])) {
+                    $isAssoc = array_keys($c['questions']) !== range(0, count($c['questions']) - 1);
+                    if ($isAssoc) {
+                        foreach ($c['questions'] as $k => $qItem) {
+                            $rawQ = $qItem['question'] ?? $k;
+                            $cleanT = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($rawQ));
+                            $normK = preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($cleanT, 'UTF-8'));
+                            if (!empty($normK) && !isset($seenQKeys[$normK])) {
+                                $seenQKeys[$normK] = true;
+                                $qList[] = [
+                                    'question' => $rawQ,
+                                    'correctAnswer' => $qItem['correctAnswer'] ?? $qItem['answer'] ?? '',
+                                    'options' => $qItem['options'] ?? []
+                                ];
                             }
-                        } else {
-                            foreach ($c['questions'] as $qItem) {
-                                $rawQ = $qItem['question'] ?? '';
-                                $cleanT = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($rawQ));
-                                $normK = preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($cleanT, 'UTF-8'));
-                                if (!empty($normK) && !isset($seenQKeys[$normK])) {
-                                    $seenQKeys[$normK] = true;
-                                    $qList[] = $qItem;
-                                }
+                        }
+                    } else {
+                        foreach ($c['questions'] as $qItem) {
+                            $rawQ = $qItem['question'] ?? '';
+                            $cleanT = preg_replace('/^(câu|bài|question)\s*\d+[\s:.-]*/ui', '', trim($rawQ));
+                            $normK = preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($cleanT, 'UTF-8'));
+                            if (!empty($normK) && !isset($seenQKeys[$normK])) {
+                                $seenQKeys[$normK] = true;
+                                $qList[] = $qItem;
                             }
                         }
                     }
                 }
-                $c['questions_normalized'] = $qList;
-                $c['question_count'] = count($qList);
-                $totalQuestionsAll += count($qList);
-                $formattedContests[] = $c;
             }
-
-            jsonResponse(true, [
-                'contests' => $formattedContests,
-                'total_questions_all' => $totalQuestionsAll,
-                'manifest_version' => $manifest['version'] ?? $manifest['manifest_version'] ?? '1.0',
-                'updated_at' => $manifest['updated_at'] ?? date('Y-m-d H:i:s'),
-                'announcement' => $manifest['announcement'] ?? ''
-            ]);
+            $c['questions_normalized'] = $qList;
+            $c['question_count'] = count($qList);
+            $totalQuestionsAll += count($qList);
+            $formattedContests[] = $c;
         }
+
+        jsonResponse(true, [
+            'contests' => $formattedContests,
+            'total_questions_all' => $totalQuestionsAll,
+            'manifest_version' => $manifest['version'] ?? $manifest['manifest_version'] ?? '1.0',
+            'updated_at' => $manifest['updated_at'] ?? date('Y-m-d H:i:s'),
+            'announcement' => $manifest['announcement'] ?? ''
+        ]);
     }
 
-    // Fallback nếu không gọi được raw
+    // Fallback nếu không tải được manifest
     jsonResponse(true, [
         'contests' => [],
         'total_questions_all' => 0,
         'manifest_version' => '1.0',
-        'updated_at' => date('Y-m-d')
+        'updated_at' => date('Y-m-d H:i:s')
     ]);
 }
 
@@ -764,15 +853,7 @@ if ($action === 'push_to_github') {
 // 5. Lấy Cấu Hình Đồng Bộ Extension (Global Settings & Active Contest)
 // -------------------------------------------------------------
 if ($action === 'get_extension_settings') {
-    $url = 'https://raw.githubusercontent.com/' . GITHUB_OWNER . '/' . GITHUB_REPO . '/' . GITHUB_BRANCH . '/' . GITHUB_FILE_PATH . '?t=' . time();
-    $ctx = stream_context_create([
-        'http' => [
-            'timeout' => 10,
-            'header' => "User-Agent: AutoThi-Admin\r\n"
-        ]
-    ]);
-    $json = @file_get_contents($url, false, $ctx);
-    $manifest = $json ? json_decode($json, true) : null;
+    list($manifest, $sha) = fetchLatestManifestFromGitHub();
 
     $contestsList = [];
     if ($manifest && !empty($manifest['contests'])) {

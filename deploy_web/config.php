@@ -2,6 +2,9 @@
 // Cấu hình Hệ thống Admin AutoThi - autothi.tafinex.com
 // -------------------------------------------------------------
 
+// Thiết lập múi giờ Việt Nam (GMT+7)
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
 // 1. Tài khoản đăng nhập trang Quản trị Admin
 define('ADMIN_USERNAME', 'daitaiadmin');
 define('ADMIN_PASSWORD', 'D@iT@i1998');
