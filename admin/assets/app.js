@@ -110,6 +110,12 @@ async function handleLogin() {
   const pwd = document.getElementById("txt-password").value;
   const token = document.getElementById("txt-login-token").value;
   const msgEl = document.getElementById("login-msg");
+
+  if (!usr || !pwd) {
+    msgEl.innerText = "Vui lòng nhập đầy đủ tài khoản và mật khẩu!";
+    return;
+  }
+
   msgEl.innerText = "Đang kiểm tra...";
 
   try {

@@ -217,7 +217,7 @@ B. Chính phủ
 
       <div class="form-group">
         <label class="form-label">Tài khoản Admin:</label>
-        <input type="text" id="txt-username" class="form-control" value="daitaiadmin" placeholder="Tên đăng nhập...">
+        <input type="text" id="txt-username" class="form-control" placeholder="Nhập tên đăng nhập...">
       </div>
 
       <div class="form-group">
