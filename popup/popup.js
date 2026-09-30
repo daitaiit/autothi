@@ -306,11 +306,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             ...matched,
             id: activeC.id || matched.id,
             name: activeC.name, // Luôn ưu tiên tên cuộc thi được ghim từ Web Admin
-            displayDate: activeC.date || matched.displayDate || "04/09/2026", // Luôn ưu tiên ngày từ Web Admin
-            updated_at: activeC.date || matched.updated_at || "04/09/2026"
+            displayDate: activeC.date || matched.displayDate || "30/09/2026", // Luôn ưu tiên ngày từ Web Admin
+            updated_at: activeC.date || matched.updated_at || "30/09/2026"
           };
         } else {
-          targetContest = (installedList && (installedList["hoi_nghi_bct_03092026"] || installedList["bch_tw_khoa_xiv_2026"])) || (installedValues.length > 0 ? installedValues[0] : null);
+          targetContest = (installedList && (installedList["hoi_nghi_bct_30092026"] || installedList["kiem_tra_nghi_quyet_30092026"] || installedList["hoi_nghi_bct_03092026"] || installedList["bch_tw_khoa_xiv_2026"])) || (installedValues.length > 0 ? installedValues[0] : null);
         }
       } else if (activeC && targetContest.id === activeC.id) {
         if (activeC.name) targetContest.name = activeC.name;
@@ -320,9 +320,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const lastUpdatedText = document.getElementById("last-updated-text");
       if (lastUpdatedText) {
         if (targetContest) {
-          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "04/09/2026";
+          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "30/09/2026";
         } else {
-          lastUpdatedText.innerText = (activeC && activeC.date) ? activeC.date : "04/09/2026";
+          lastUpdatedText.innerText = (activeC && activeC.date) ? activeC.date : "30/09/2026";
         }
       }
 

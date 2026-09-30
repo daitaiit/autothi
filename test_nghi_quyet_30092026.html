@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CÂU HỎI THU HOẠCH - Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026)</title>
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #f59e0b;
+      --bg: #0b1120;
+      --card-bg: #1e293b;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 30px 16px; min-height: 100vh; }
+    
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 35px 30px;
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .header-box {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .badge-tag {
+      display: inline-block;
+      padding: 5px 14px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(59, 130, 246, 0.25));
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    h1 {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+      line-height: 1.4;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .notice-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(16, 185, 129, 0.08));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      font-size: 13.5px;
+      color: #bfdbfe;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quick-key {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #fde68a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .question-item {
+      margin-bottom: 24px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .question-item:hover {
+      border-color: rgba(59, 130, 246, 0.35);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .question-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 14px;
+      line-height: 1.55;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .answer-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    .answer-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .answer-item input[type="radio"] {
+      cursor: pointer;
+      width: 17px;
+      height: 17px;
+      accent-color: #3b82f6;
+    }
+
+    .answer-toggle-btn {
+      margin-top: 12px;
+      background: none;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .answer-toggle-btn:hover {
+      color: #f8fafc;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .answer-preview {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    .submit-bar {
+      margin-top: 35px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-reset {
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    #result-box {
+      margin-top: 25px;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-box">
+    <span class="badge-tag">CÂU HỎI THU HOẠCH • 30/09/2026</span>
+    <h1>Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị</h1>
+    <p class="subtitle">(Ngày 30 tháng 9 năm 2026 - Tỉnh ủy Lâm Đồng / Đảng ủy Khối Các cơ quan Đảng)</p>
+  </div>
+
+  <div class="quick-key">
+    <span><strong>📌 Đáp án chuẩn xác 10/10:</strong> 1C — 2A — 3C — 4B — 5C — 6A — 7A — 8A — 9A — 10A</span>
+    <span style="color: #6ee7b7; font-size: 13px;">✓ Đã nạp vào AutoThi QuestionBank</span>
+  </div>
+
+  <div class="notice-card">
+    <span style="font-size: 20px;">⚡</span>
+    <span>AutoThi Extension sẽ tự động nhận diện câu hỏi và đánh dấu đáp án chính xác 100%. Hãy bật AutoThi trên thanh công cụ hoặc Floating Dock để giải tự động.</span>
+  </div>
+
+  <form id="quiz-form">
+    <!-- Câu 1 -->
+    <div class="question-item" data-question-num="1">
+      <div class="question-title">Câu 1: Theo Chương trình số 45-CTr/TU, ngày 28/8/2026 của Ban Thường vụ Tỉnh uỷ về thực hiện Nghị quyết số 23-NQ/TW, ngày 02/8/2026 của Bộ Chính trị về công tác người Việt Nam ở nước ngoài có bao nhiêu nhóm nhiệm vụ, giải pháp?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q1_opt0">
+          <input type="radio" name="question_1" id="q1_opt0" value="A. 05 nhiệm vụ, giải pháp" data-correct="false">
+          <span>A. 05 nhiệm vụ, giải pháp</span>
+        </label>
+        <label class="answer-item" for="q1_opt1">
+          <input type="radio" name="question_1" id="q1_opt1" value="B. 06 nhiệm vụ giải pháp" data-correct="false">
+          <span>B. 06 nhiệm vụ giải pháp</span>
+        </label>
+        <label class="answer-item" for="q1_opt2">
+          <input type="radio" name="question_1" id="q1_opt2" value="C. 07 nhiệm vụ, giải pháp" data-correct="true">
+          <span>C. 07 nhiệm vụ, giải pháp</span>
+        </label>
+        <label class="answer-item" for="q1_opt3">
+          <input type="radio" name="question_1" id="q1_opt3" value="D. 08 nhiệm vụ, giải pháp" data-correct="false">
+          <span>D. 08 nhiệm vụ, giải pháp</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(1)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_1" class="answer-preview">✓ Đáp án đúng: <strong>07 nhiệm vụ, giải pháp</strong></div>
+    </div>
+    <!-- Câu 2 -->
+    <div class="question-item" data-question-num="2">
+      <div class="question-title">Câu 2: Kế hoạch số 108-KH/TU, ngày 22/8/2026 của Ban Thường vụ Tỉnh uỷ về triển khai thực hiện Chỉ thị số 07-CT/TW, ngày 13/7/2026 của Bộ Chính trị về nội dung gì?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q2_opt0">
+          <input type="radio" name="question_2" id="q2_opt0" value="A. Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới" data-correct="true">
+          <span>A. Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới</span>
+        </label>
+        <label class="answer-item" for="q2_opt1">
+          <input type="radio" name="question_2" id="q2_opt1" value="B. Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh trong giai đoạn phát triển mới" data-correct="false">
+          <span>B. Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh trong giai đoạn phát triển mới</span>
+        </label>
+        <label class="answer-item" for="q2_opt2">
+          <input type="radio" name="question_2" id="q2_opt2" value="C. Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phong cách Hồ Chí Minh" data-correct="false">
+          <span>C. Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phong cách Hồ Chí Minh</span>
+        </label>
+        <label class="answer-item" for="q2_opt3">
+          <input type="radio" name="question_2" id="q2_opt3" value="D. Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh" data-correct="false">
+          <span>D. Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(2)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_2" class="answer-preview">✓ Đáp án đúng: <strong>Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới</strong></div>
+    </div>
+    <!-- Câu 3 -->
+    <div class="question-item" data-question-num="3">
+      <div class="question-title">Câu 3: Kế hoạch số 124-KH/TU, ngày 21/9/2026 của Ban Thường vụ Tỉnh uỷ ban hành để triển khai thực hiện Chỉ thị nào của Ban Bí thư?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q3_opt0">
+          <input type="radio" name="question_3" id="q3_opt0" value="A. Chỉ thị số 07-CT/TW." data-correct="false">
+          <span>A. Chỉ thị số 07-CT/TW.</span>
+        </label>
+        <label class="answer-item" for="q3_opt1">
+          <input type="radio" name="question_3" id="q3_opt1" value="B. Chỉ thị số 10-CT/TW." data-correct="false">
+          <span>B. Chỉ thị số 10-CT/TW.</span>
+        </label>
+        <label class="answer-item" for="q3_opt2">
+          <input type="radio" name="question_3" id="q3_opt2" value="C. Chỉ thị số 12-CT/TW." data-correct="true">
+          <span>C. Chỉ thị số 12-CT/TW.</span>
+        </label>
+        <label class="answer-item" for="q3_opt3">
+          <input type="radio" name="question_3" id="q3_opt3" value="D. Chỉ thị số 23-CT/TW." data-correct="false">
+          <span>D. Chỉ thị số 23-CT/TW.</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(3)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_3" class="answer-preview">✓ Đáp án đúng: <strong>Chỉ thị số 12-CT/TW.</strong></div>
+    </div>
+    <!-- Câu 4 -->
+    <div class="question-item" data-question-num="4">
+      <div class="question-title">Câu 4: Mục đích, yêu cầu Kế hoạch số 112-KH/TU, ngày 28/8/2026 của Ban Thường vụ Tỉnh uỷ, hướng đến mục đích nào sau đây?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q4_opt0">
+          <input type="radio" name="question_4" id="q4_opt0" value="A. Tạo bước chuyển mạnh mẽ trong xây dựng tổ chức Đảng." data-correct="false">
+          <span>A. Tạo bước chuyển mạnh mẽ trong xây dựng tổ chức Đảng.</span>
+        </label>
+        <label class="answer-item" for="q4_opt1">
+          <input type="radio" name="question_4" id="q4_opt1" value="B. Tạo bước chuyển mạnh mẽ trong việc tự đổi mới, tự chỉnh đốn Đảng." data-correct="true">
+          <span>B. Tạo bước chuyển mạnh mẽ trong việc tự đổi mới, tự chỉnh đốn Đảng.</span>
+        </label>
+        <label class="answer-item" for="q4_opt2">
+          <input type="radio" name="question_4" id="q4_opt2" value="C. Tạo bước chuyển mạnh mẽ trong xây dựng chính quyền địa phương 2 cấp" data-correct="false">
+          <span>C. Tạo bước chuyển mạnh mẽ trong xây dựng chính quyền địa phương 2 cấp</span>
+        </label>
+        <label class="answer-item" for="q4_opt3">
+          <input type="radio" name="question_4" id="q4_opt3" value="D. Nâng cao vai trò lãnh đạo của chính quyền địa phương." data-correct="false">
+          <span>D. Nâng cao vai trò lãnh đạo của chính quyền địa phương.</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(4)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_4" class="answer-preview">✓ Đáp án đúng: <strong>Tạo bước chuyển mạnh mẽ trong việc tự đổi mới, tự chỉnh đốn Đảng.</strong></div>
+    </div>
+    <!-- Câu 5 -->
+    <div class="question-item" data-question-num="5">
+      <div class="question-title">Câu 5: Kế hoạch số 127-KH/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh uỷ, đề ra mục tiêu nào sau đây?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q5_opt0">
+          <input type="radio" name="question_5" id="q5_opt0" value="A. Xây dựng cán bộ, công chức đáp ứng yêu cầu trong tình hình mới." data-correct="false">
+          <span>A. Xây dựng cán bộ, công chức đáp ứng yêu cầu trong tình hình mới.</span>
+        </label>
+        <label class="answer-item" for="q5_opt1">
+          <input type="radio" name="question_5" id="q5_opt1" value="B. Xây dựng tổ chức đảng trong sạch, vững mạnh." data-correct="false">
+          <span>B. Xây dựng tổ chức đảng trong sạch, vững mạnh.</span>
+        </label>
+        <label class="answer-item" for="q5_opt2">
+          <input type="radio" name="question_5" id="q5_opt2" value="C. Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp có bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần dấn thân." data-correct="true">
+          <span>C. Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp có bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần dấn thân.</span>
+        </label>
+        <label class="answer-item" for="q5_opt3">
+          <input type="radio" name="question_5" id="q5_opt3" value="D. Xây dựng các cơ quan, đơn vị vững mạnh, phát triển." data-correct="false">
+          <span>D. Xây dựng các cơ quan, đơn vị vững mạnh, phát triển.</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(5)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_5" class="answer-preview">✓ Đáp án đúng: <strong>Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp có bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần dấn thân.</strong></div>
+    </div>
+    <!-- Câu 6 -->
+    <div class="question-item" data-question-num="6">
+      <div class="question-title">Câu 6: Chương trình số 48-Ctr/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh ủy về đề ra mục tiêu đến năm 2030, Lâm Đồng trở thành tỉnh phát triển như thế nào?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q6_opt0">
+          <input type="radio" name="question_6" id="q6_opt0" value="A. Phát triển khá của cả nước, là một cực tăng trưởng phía Nam của vùng duyên hải Nam Trung Bộ và Tây Nguyên" data-correct="true">
+          <span>A. Phát triển khá của cả nước, là một cực tăng trưởng phía Nam của vùng duyên hải Nam Trung Bộ và Tây Nguyên</span>
+        </label>
+        <label class="answer-item" for="q6_opt1">
+          <input type="radio" name="question_6" id="q6_opt1" value="B. Phát triển khá của cả nước, là một trung tâm tăng trưởng của vùng duyên hải Nam Trung Bộ và Tây Nguyên" data-correct="false">
+          <span>B. Phát triển khá của cả nước, là một trung tâm tăng trưởng của vùng duyên hải Nam Trung Bộ và Tây Nguyên</span>
+        </label>
+        <label class="answer-item" for="q6_opt2">
+          <input type="radio" name="question_6" id="q6_opt2" value="C. Phát triển nhanh, bền vững của cả nước, là một cực tăng trưởng quan trọng của vùng duyên hải Nam Trung Bộ và Tây Nguyên" data-correct="false">
+          <span>C. Phát triển nhanh, bền vững của cả nước, là một cực tăng trưởng quan trọng của vùng duyên hải Nam Trung Bộ và Tây Nguyên</span>
+        </label>
+        <label class="answer-item" for="q6_opt3">
+          <input type="radio" name="question_6" id="q6_opt3" value="D. Phát triển khá, toàn diện của cả nước, trở thành trung tâm kinh tế - xã hội của vùng duyên hải Nam Trung Bộ và Tây Nguyên." data-correct="false">
+          <span>D. Phát triển khá, toàn diện của cả nước, trở thành trung tâm kinh tế - xã hội của vùng duyên hải Nam Trung Bộ và Tây Nguyên.</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(6)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_6" class="answer-preview">✓ Đáp án đúng: <strong>Phát triển khá của cả nước, là một cực tăng trưởng phía Nam của vùng duyên hải Nam Trung Bộ và Tây Nguyên</strong></div>
+    </div>
+    <!-- Câu 7 -->
+    <div class="question-item" data-question-num="7">
+      <div class="question-title">Câu 7: Chương trình số 49-Ctr/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh ủy đề ra mục tiêu phát triển dịch vụ, du lịch Lâm Đồng thực sự trở thành ngành kinh tế như thế nào?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q7_opt0">
+          <input type="radio" name="question_7" id="q7_opt0" value="A. Mũi nhọn, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao." data-correct="true">
+          <span>A. Mũi nhọn, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.</span>
+        </label>
+        <label class="answer-item" for="q7_opt1">
+          <input type="radio" name="question_7" id="q7_opt1" value="B. Động lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao." data-correct="false">
+          <span>B. Động lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.</span>
+        </label>
+        <label class="answer-item" for="q7_opt2">
+          <input type="radio" name="question_7" id="q7_opt2" value="C. Trọng điểm, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao." data-correct="false">
+          <span>C. Trọng điểm, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.</span>
+        </label>
+        <label class="answer-item" for="q7_opt3">
+          <input type="radio" name="question_7" id="q7_opt3" value="D. Chủ lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao." data-correct="false">
+          <span>D. Chủ lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(7)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_7" class="answer-preview">✓ Đáp án đúng: <strong>Mũi nhọn, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.</strong></div>
+    </div>
+    <!-- Câu 8 -->
+    <div class="question-item" data-question-num="8">
+      <div class="question-title">Câu 8: Nghị quyết số 19-NQ/TU, ngày 25/8/2026 của Tỉnh ủy về đào tạo, bồi dưỡng, phát triển nguồn nhân lực tỉnh Lâm Đồng đến năm 2030, định hướng đến năm 2035, mục tiêu phấn đấu đến năm 2030 có bao nhiêu % cán bộ lãnh đạo, quản lý cấp tỉnh đủ khả năng làm việc trong môi trường quốc tế, phấn đấu tăng dần trong các năm tiếp theo?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q8_opt0">
+          <input type="radio" name="question_8" id="q8_opt0" value="A. 25% - 35%" data-correct="true">
+          <span>A. 25% - 35%</span>
+        </label>
+        <label class="answer-item" for="q8_opt1">
+          <input type="radio" name="question_8" id="q8_opt1" value="B. 10% - 20%" data-correct="false">
+          <span>B. 10% - 20%</span>
+        </label>
+        <label class="answer-item" for="q8_opt2">
+          <input type="radio" name="question_8" id="q8_opt2" value="C. 20% - 30%" data-correct="false">
+          <span>C. 20% - 30%</span>
+        </label>
+        <label class="answer-item" for="q8_opt3">
+          <input type="radio" name="question_8" id="q8_opt3" value="D. 30% - 40%" data-correct="false">
+          <span>D. 30% - 40%</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(8)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_8" class="answer-preview">✓ Đáp án đúng: <strong>25% - 35%</strong></div>
+    </div>
+    <!-- Câu 9 -->
+    <div class="question-item" data-question-num="9">
+      <div class="question-title">Câu 9: Kế hoạch số 132-KH/TU, ngày 29/9/2026 của Ban Thường vụ Tỉnh ủy về thực hiện Nghị quyết số 25-NQ/TW, ngày 22/8/2026 của Bộ Chính trị về Chiến lược công tác tư tưởng trong bối cảnh mới và Kế hoạch số 08-KH/TW, ngày 22/8/2026 của Ban Bí thư về thực hiện Nghị quyết của Bộ Chính trị về Chiến lược công tác tư tưởng trong giai đoạn mới, trong nhiệm vụ trọng tâm ưu tiên thực hiện mấy khâu đột phá?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q9_opt0">
+          <input type="radio" name="question_9" id="q9_opt0" value="A. 03" data-correct="true">
+          <span>A. 03</span>
+        </label>
+        <label class="answer-item" for="q9_opt1">
+          <input type="radio" name="question_9" id="q9_opt1" value="B. 04" data-correct="false">
+          <span>B. 04</span>
+        </label>
+        <label class="answer-item" for="q9_opt2">
+          <input type="radio" name="question_9" id="q9_opt2" value="C. 05" data-correct="false">
+          <span>C. 05</span>
+        </label>
+        <label class="answer-item" for="q9_opt3">
+          <input type="radio" name="question_9" id="q9_opt3" value="D. 06" data-correct="false">
+          <span>D. 06</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(9)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_9" class="answer-preview">✓ Đáp án đúng: <strong>03</strong></div>
+    </div>
+    <!-- Câu 10 -->
+    <div class="question-item" data-question-num="10">
+      <div class="question-title">Câu 10: Theo Nghị quyết số 27-NQ/TW, ngày 28/8/2026 của Bộ Chính trị về Phát triển các vùng và tổ chức không gian phát triển quốc gia trong giai đoạn mới, mục tiêu tầm nhìn đến 2045 các vùng phát triển và vận hành theo phương thức nào?</div>
+      <div class="options-list">
+        <label class="answer-item" for="q10_opt0">
+          <input type="radio" name="question_10" id="q10_opt0" value="A. Kinh tế số, kinh tế xanh, kinh tế dữ liệu, kinh tế tuần hoàn" data-correct="true">
+          <span>A. Kinh tế số, kinh tế xanh, kinh tế dữ liệu, kinh tế tuần hoàn</span>
+        </label>
+        <label class="answer-item" for="q10_opt1">
+          <input type="radio" name="question_10" id="q10_opt1" value="B. Kinh tế số, kinh tế xanh, kinh tế tri thức, kinh tế tuần hoàn" data-correct="false">
+          <span>B. Kinh tế số, kinh tế xanh, kinh tế tri thức, kinh tế tuần hoàn</span>
+        </label>
+        <label class="answer-item" for="q10_opt2">
+          <input type="radio" name="question_10" id="q10_opt2" value="C. Kinh tế số, kinh tế xanh, kinh tế tuần hoàn" data-correct="false">
+          <span>C. Kinh tế số, kinh tế xanh, kinh tế tuần hoàn</span>
+        </label>
+        <label class="answer-item" for="q10_opt3">
+          <input type="radio" name="question_10" id="q10_opt3" value="D. Kinh tế số, kinh tế tri thức, kinh tế dữ liệu, kinh tế tuần hoàn." data-correct="false">
+          <span>D. Kinh tế số, kinh tế tri thức, kinh tế dữ liệu, kinh tế tuần hoàn.</span>
+        </label>
+      </div>
+      <button type="button" class="answer-toggle-btn" onclick="toggleAnswer(10)">👁️ Xem trước đáp án chuẩn</button>
+      <div id="preview_10" class="answer-preview">✓ Đáp án đúng: <strong>Kinh tế số, kinh tế xanh, kinh tế dữ liệu, kinh tế tuần hoàn</strong></div>
+    </div>
+    <div class="submit-bar">
+      <button type="button" class="btn btn-submit" id="btn-submit-exam" onclick="gradeExam()">Nộp Bài Thi</button>
+      <button type="reset" class="btn btn-reset">Làm Lại</button>
+    </div>
+  </form>
+
+  <div id="result-box">
+    <h3 id="result-title" style="font-size: 20px; margin-bottom: 8px;"></h3>
+    <p id="result-score" style="font-size: 16px; color: #34d399;"></p>
+  </div>
+</div>
+
+<script>
+  function toggleAnswer(num) {
+    const el = document.getElementById("preview_" + num);
+    if (el) {
+      el.style.display = (el.style.display === "block") ? "none" : "block";
+    }
+  }
+
+  function gradeExam() {
+    let total = 10;
+    let correct = 0;
+    
+    for (let i = 1; i <= total; i++) {
+      const checked = document.querySelector(`input[name="question_${i}"]:checked`);
+      if (checked && checked.getAttribute("data-correct") === "true") {
+        correct++;
+      }
+    }
+
+    const resBox = document.getElementById("result-box");
+    const resTitle = document.getElementById("result-title");
+    const resScore = document.getElementById("result-score");
+
+    resBox.style.display = "block";
+    if (correct === 10) {
+      resTitle.innerHTML = "🎉 TUYỆT VỜI! XUẤT SẮC 10/10!";
+      resTitle.style.color = "#34d399";
+    } else {
+      resTitle.innerHTML = "Kết quả bài làm:";
+      resTitle.style.color = "#f59e0b";
+    }
+    resScore.innerHTML = `Số câu đúng: <strong>${correct}/${total}</strong> (${(correct / total * 100).toFixed(0)}%)`;
+    resBox.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

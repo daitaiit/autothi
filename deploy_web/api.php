@@ -884,8 +884,8 @@ if ($action === 'get_extension_settings') {
     ];
 
     $defaultActiveContest = [
-        'id' => 'hoi_nghi_bct_03092026',
-        'name' => 'Hội nghị toàn quốc học tập, quán triệt Nghị quyết',
+        'id' => 'hoi_nghi_bct_30092026',
+        'name' => 'Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026)',
         'date' => date('d/m/Y'),
         'pinned' => true,
         'updated_at' => date('Y-m-d H:i:s')

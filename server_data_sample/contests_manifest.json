@@ -1,14 +1,14 @@
 {
-    "version": "2.5.0",
-    "updated_at": "2026-09-04 11:22:00",
+    "version": "2.6.0",
+    "updated_at": "2026-09-30 15:50:00",
     "author": "Tafinex",
-    "announcement": "",
+    "announcement": "Đã cập nhật bộ đề Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026): 1C – 2A – 3C – 4B – 5C – 6A – 7A – 8A – 9A – 10A!",
     "active_contest": {
-        "id": "hoi_nghi_bct_03092026",
-        "name": "Hội nghị toàn quốc học tập, quán triệt Nghị quyết, Chỉ thị của Bộ Chính trị (03\/9\/2026)",
-        "date": "04\/09\/2026",
+        "id": "hoi_nghi_bct_30092026",
+        "name": "Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026)",
+        "date": "30/09/2026",
         "pinned": true,
-        "updated_at": "2026-09-04 11:22:00"
+        "updated_at": "2026-09-30 15:50:00"
     },
     "global_settings": {
         "autoNext": true,
@@ -21,23 +21,210 @@
         "solveSpeed": "normal",
         "delayPerQuestion": 2200,
         "forceOverrideUser": false,
-        "version": 5,
-        "updated_at": "2026-09-04 04:08:38"
+        "version": 7,
+        "updated_at": "2026-09-30 15:50:00"
     },
     "contests": [
         {
-            "id": "hoi_nghi_bct_03092026",
-            "name": "Hội nghị toàn quốc học tập, quán triệt Nghị quyết, Chỉ thị của Bộ Chính trị (03\/9\/2026)",
-            "organizer": "Ban Tuyên giáo Trung ương",
+            "id": "hoi_nghi_bct_30092026",
+            "name": "Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026)",
+            "organizer": "Tỉnh ủy Lâm Đồng - Đảng ủy các cơ quan Đảng",
             "domain_match": "danguyccqdanglamdong.vn",
-            "contest_url": "https:\/\/nghiquyet.danguyccqdanglamdong.vn\/cuoc-thi\/hoi-nghi-toan-quoc-nghien-cuu-hoc-tap-quan-triet-nghi-quyet-chi-thi-bct-03092026.html",
+            "contest_url": "https://nghiquyet.danguyccqdanglamdong.vn/",
             "version": 1,
             "total_questions": 10,
-            "updated_at": "04\/09\/2026",
+            "updated_at": "30/09/2026",
+            "description": "Câu hỏi thu hoạch: Trọn bộ 10 câu hỏi & đáp án chuẩn (1C – 2A – 3C – 4B – 5C – 6A – 7A – 8A – 9A – 10A) do Tafinex cập nhật.",
+            "questions": {
+                "theo chương trình số 45-ctr/tu, ngày 28/8/2026 của ban thường vụ tỉnh uỷ về thực hiện nghị quyết số 23-nq/tw, ngày 02/8/2026 của bộ chính trị về công tác người việt nam ở nước ngoài có bao nhiêu nhóm nhiệm vụ, giải pháp?": {
+                    "question": "Theo Chương trình số 45-CTr/TU, ngày 28/8/2026 của Ban Thường vụ Tỉnh uỷ về thực hiện Nghị quyết số 23-NQ/TW, ngày 02/8/2026 của Bộ Chính trị về công tác người Việt Nam ở nước ngoài có bao nhiêu nhóm nhiệm vụ, giải pháp?",
+                    "correctAnswer": "07 nhiệm vụ, giải pháp",
+                    "options": [
+                        "05 nhiệm vụ, giải pháp",
+                        "06 nhiệm vụ giải pháp",
+                        "07 nhiệm vụ, giải pháp",
+                        "08 nhiệm vụ, giải pháp"
+                    ]
+                },
+                "theo chương trình số 45-ctr/tu, ngày 28/8/2026 của ban thường vụ tỉnh ủy về thực hiện nghị quyết số 03-nq/tw, ngày 02/8/2026 của bộ chính trị về công tác người việt nam ở nước ngoài có bao nhiêu nhóm nhiệm vụ, giải pháp?": {
+                    "question": "Theo Chương trình số 45-CTr/TU, ngày 28/8/2026 của Ban Thường vụ Tỉnh ủy về thực hiện Nghị quyết số 03-NQ/TW, ngày 02/8/2026 của Bộ Chính trị về công tác người Việt Nam ở nước ngoài có bao nhiêu nhóm nhiệm vụ, giải pháp?",
+                    "correctAnswer": "07 nhiệm vụ, giải pháp",
+                    "options": [
+                        "05 nhiệm vụ, giải pháp",
+                        "06 nhiệm vụ giải pháp",
+                        "07 nhiệm vụ, giải pháp",
+                        "08 nhiệm vụ, giải pháp"
+                    ]
+                },
+                "kế hoạch số 108-kh/tu, ngày 22/8/2026 của ban thường vụ tỉnh uỷ về triển khai thực hiện chỉ thị số 07-ct/tw, ngày 13/7/2026 của bộ chính trị về nội dung gì?": {
+                    "question": "Kế hoạch số 108-KH/TU, ngày 22/8/2026 của Ban Thường vụ Tỉnh uỷ về triển khai thực hiện Chỉ thị số 07-CT/TW, ngày 13/7/2026 của Bộ Chính trị về nội dung gì?",
+                    "correctAnswer": "Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới",
+                    "options": [
+                        "Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới",
+                        "Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh trong giai đoạn phát triển mới",
+                        "Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phong cách Hồ Chí Minh",
+                        "Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh"
+                    ]
+                },
+                "kế hoạch số 108-kh/tu, ngày 22/8/2026 của ban thường vụ tỉnh ủy về triển khai thực hiện chỉ thị số 07-ct/tw, ngày 13/7/2026 của bộ chính trị về nội dung gì?": {
+                    "question": "Kế hoạch số 108-KH/TU, ngày 22/8/2026 của Ban Thường vụ Tỉnh ủy về triển khai thực hiện Chỉ thị số 07-CT/TW, ngày 13/7/2026 của Bộ Chính trị về nội dung gì?",
+                    "correctAnswer": "Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới",
+                    "options": [
+                        "Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới",
+                        "Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh trong giai đoạn phát triển mới",
+                        "Đẩy mạnh học tập, thực hành, tư tưởng, đạo đức, phong cách Hồ Chí Minh",
+                        "Đẩy mạnh học tập và làm theo tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh"
+                    ]
+                },
+                "kế hoạch số 124-kh/tu, ngày 21/9/2026 của ban thường vụ tỉnh uỷ ban hành để triển khai thực hiện chỉ thị nào của ban bí thư?": {
+                    "question": "Kế hoạch số 124-KH/TU, ngày 21/9/2026 của Ban Thường vụ Tỉnh uỷ ban hành để triển khai thực hiện Chỉ thị nào của Ban Bí thư?",
+                    "correctAnswer": "Chỉ thị số 12-CT/TW.",
+                    "options": [
+                        "Chỉ thị số 07-CT/TW.",
+                        "Chỉ thị số 10-CT/TW.",
+                        "Chỉ thị số 12-CT/TW.",
+                        "Chỉ thị số 23-CT/TW."
+                    ]
+                },
+                "kế hoạch số 124-kh/tu, ngày 21/9/2026 của ban thường vụ tỉnh ủy ban hành để triển khai thực hiện chỉ thị nào của ban bí thư?": {
+                    "question": "Kế hoạch số 124-KH/TU, ngày 21/9/2026 của Ban Thường vụ Tỉnh ủy ban hành để triển khai thực hiện Chỉ thị nào của Ban Bí thư?",
+                    "correctAnswer": "Chỉ thị số 12-CT/TW.",
+                    "options": [
+                        "Chỉ thị số 07-CT/TW.",
+                        "Chỉ thị số 10-CT/TW.",
+                        "Chỉ thị số 12-CT/TW.",
+                        "Chỉ thị số 23-CT/TW."
+                    ]
+                },
+                "mục đích, yêu cầu kế hoạch số 112-kh/tu, ngày 28/8/2026 của ban thường vụ tỉnh uỷ, hướng đến mục đích nào sau đây?": {
+                    "question": "Mục đích, yêu cầu Kế hoạch số 112-KH/TU, ngày 28/8/2026 của Ban Thường vụ Tỉnh uỷ, hướng đến mục đích nào sau đây?",
+                    "correctAnswer": "Tạo bước chuyển mạnh mẽ trong việc tự đổi mới, tự chỉnh đốn Đảng.",
+                    "options": [
+                        "Tạo bước chuyển mạnh mẽ trong xây dựng tổ chức Đảng.",
+                        "Tạo bước chuyển mạnh mẽ trong việc tự đổi mới, tự chỉnh đốn Đảng.",
+                        "Tạo bước chuyển mạnh mẽ trong xây dựng chính quyền địa phương 2 cấp",
+                        "Nâng cao vai trò lãnh đạo của chính quyền địa phương."
+                    ]
+                },
+                "mục đích, yêu cầu kế hoạch số 112-kh/tu, ngày 28/8/2026 của ban thường vụ tỉnh ủy, hướng đến mục đích nào sau đây?": {
+                    "question": "Mục đích, yêu cầu Kế hoạch số 112-KH/TU, ngày 28/8/2026 của Ban Thường vụ Tỉnh ủy, hướng đến mục đích nào sau đây?",
+                    "correctAnswer": "Tạo bước chuyển mạnh mẽ trong việc tự đổi mới, tự chỉnh đốn Đảng.",
+                    "options": [
+                        "Tạo bước chuyển mạnh mẽ trong xây dựng tổ chức Đảng.",
+                        "Tạo bước chuyển mạnh mẽ trong việc tự đổi mới, tự chỉnh đốn Đảng.",
+                        "Tạo bước chuyển mạnh mẽ trong xây dựng chính quyền địa phương 2 cấp",
+                        "Nâng cao vai trò lãnh đạo của chính quyền địa phương."
+                    ]
+                },
+                "kế hoạch số 127-kh/tu, ngày 28/9/2026 của ban thường vụ tỉnh uỷ, đề ra mục tiêu nào sau đây?": {
+                    "question": "Kế hoạch số 127-KH/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh uỷ, đề ra mục tiêu nào sau đây?",
+                    "correctAnswer": "Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp có bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần dấn thân.",
+                    "options": [
+                        "Xây dựng cán bộ, công chức đáp ứng yêu cầu trong tình hình mới.",
+                        "Xây dựng tổ chức đảng trong sạch, vững mạnh.",
+                        "Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp có bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần dấn thân.",
+                        "Xây dựng các cơ quan, đơn vị vững mạnh, phát triển."
+                    ]
+                },
+                "kế hoạch số 127-kh/tu, ngày 28/9/2026 của ban thường vụ tỉnh ủy, đề ra mục tiêu nào sau đây?": {
+                    "question": "Kế hoạch số 127-KH/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh ủy, đề ra mục tiêu nào sau đây?",
+                    "correctAnswer": "Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp có bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần dấn thân.",
+                    "options": [
+                        "Xây dựng cán bộ, công chức đáp ứng yêu cầu trong tình hình mới.",
+                        "Xây dựng tổ chức đảng trong sạch, vững mạnh.",
+                        "Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp có bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần dấn thân.",
+                        "Xây dựng các cơ quan, đơn vị vững mạnh, phát triển.",
+                        "Xây dựng đội ngũ cán bộ, đảng viên, nhất là cán bộ lãnh đạo, quản lý các cấp bản lĩnh, trí tuệ, đạo đức, năng lực, hành động và tinh thần tận tâm."
+                    ]
+                },
+                "chương trình số 48-ctr/tu, ngày 28/9/2026 của ban thường vụ tỉnh ủy về đề ra mục tiêu đến năm 2030, lâm đồng trở thành tỉnh phát triển như thế nào?": {
+                    "question": "Chương trình số 48-Ctr/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh ủy về đề ra mục tiêu đến năm 2030, Lâm Đồng trở thành tỉnh phát triển như thế nào?",
+                    "correctAnswer": "Phát triển khá của cả nước, là một cực tăng trưởng phía Nam của vùng duyên hải Nam Trung Bộ và Tây Nguyên",
+                    "options": [
+                        "Phát triển khá của cả nước, là một cực tăng trưởng phía Nam của vùng duyên hải Nam Trung Bộ và Tây Nguyên",
+                        "Phát triển khá của cả nước, là một trung tâm tăng trưởng của vùng duyên hải Nam Trung Bộ và Tây Nguyên",
+                        "Phát triển nhanh, bền vững của cả nước, là một cực tăng trưởng quan trọng của vùng duyên hải Nam Trung Bộ và Tây Nguyên",
+                        "Phát triển khá, toàn diện của cả nước, trở thành trung tâm kinh tế - xã hội của vùng duyên hải Nam Trung Bộ và Tây Nguyên."
+                    ]
+                },
+                "chương trình số 49-ctr/tu, ngày 28/9/2026 của ban thường vụ tỉnh ủy đề ra mục tiêu phát triển dịch vụ, du lịch lâm đồng thực sự trở thành ngành kinh tế như thế nào?": {
+                    "question": "Chương trình số 49-Ctr/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh ủy đề ra mục tiêu phát triển dịch vụ, du lịch Lâm Đồng thực sự trở thành ngành kinh tế như thế nào?",
+                    "correctAnswer": "Mũi nhọn, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                    "options": [
+                        "Mũi nhọn, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                        "Động lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                        "Trọng điểm, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                        "Chủ lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao."
+                    ]
+                },
+                "chương trình số 49-ctr/tu, ngày 28/9/2026 của ban thường vụ tỉnh ủy về đề ra mục tiêu phát triển kinh tế du lịch lâm đồng thực sự trở thành ngành kinh tế như thế nào?": {
+                    "question": "Chương trình số 49-CTr/TU, ngày 28/9/2026 của Ban Thường vụ Tỉnh ủy về đề ra mục tiêu phát triển kinh tế du lịch Lâm Đồng thực sự trở thành ngành kinh tế như thế nào?",
+                    "correctAnswer": "Mũi nhọn, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                    "options": [
+                        "Mũi nhọn, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                        "Động lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                        "Trọng điểm, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                        "Chủ lực, có tinh tổng hợp, liên ngành, liên vùng và sức lan tỏa cao.",
+                        "Mũi nhọn, có tính tổng hợp, liên ngành, liên vùng và sức lan tỏa cao."
+                    ]
+                },
+                "nghị quyết số 19-nq/tu, ngày 25/8/2026 của tỉnh ủy về đào tạo, bồi dưỡng, phát triển nguồn nhân lực tỉnh lâm đồng đến năm 2030, định hướng đến năm 2035, mục tiêu phấn đấu đến năm 2030 có bao nhiêu % cán bộ lãnh đạo, quản lý cấp tỉnh đủ khả năng làm việc trong môi trường quốc tế, phấn đấu tăng dần trong các năm tiếp theo?": {
+                    "question": "Nghị quyết số 19-NQ/TU, ngày 25/8/2026 của Tỉnh ủy về đào tạo, bồi dưỡng, phát triển nguồn nhân lực tỉnh Lâm Đồng đến năm 2030, định hướng đến năm 2035, mục tiêu phấn đấu đến năm 2030 có bao nhiêu % cán bộ lãnh đạo, quản lý cấp tỉnh đủ khả năng làm việc trong môi trường quốc tế, phấn đấu tăng dần trong các năm tiếp theo?",
+                    "correctAnswer": "25% - 35%",
+                    "options": [
+                        "25% - 35%",
+                        "10% - 20%",
+                        "20% - 30%",
+                        "30% - 40%"
+                    ]
+                },
+                "kế hoạch số 132-kh/tu, ngày 29/9/2026 của ban thường vụ tỉnh ủy về thực hiện nghị quyết số 25-nq/tw, ngày 22/8/2026 của bộ chính trị về chiến lược công tác tư tưởng trong bối cảnh mới và kế hoạch số 08-kh/tw, ngày 22/8/2026 của ban bí thư về thực hiện nghị quyết của bộ chính trị về chiến lược công tác tư tưởng trong giai đoạn mới, trong nhiệm vụ trọng tâm ưu tiên thực hiện mấy khâu đột phá?": {
+                    "question": "Kế hoạch số 132-KH/TU, ngày 29/9/2026 của Ban Thường vụ Tỉnh ủy về thực hiện Nghị quyết số 25-NQ/TW, ngày 22/8/2026 của Bộ Chính trị về Chiến lược công tác tư tưởng trong bối cảnh mới và Kế hoạch số 08-KH/TW, ngày 22/8/2026 của Ban Bí thư về thực hiện Nghị quyết của Bộ Chính trị về Chiến lược công tác tư tưởng trong giai đoạn mới, trong nhiệm vụ trọng tâm ưu tiên thực hiện mấy khâu đột phá?",
+                    "correctAnswer": "03",
+                    "options": [
+                        "03",
+                        "04",
+                        "05",
+                        "06"
+                    ]
+                },
+                "theo nghị quyết số 27-nq/tw, ngày 28/8/2026 của bộ chính trị về phát triển các vùng và tổ chức không gian phát triển quốc gia trong giai đoạn mới, mục tiêu tầm nhìn đến 2045 các vùng phát triển và vận hành theo phương thức nào?": {
+                    "question": "Theo Nghị quyết số 27-NQ/TW, ngày 28/8/2026 của Bộ Chính trị về Phát triển các vùng và tổ chức không gian phát triển quốc gia trong giai đoạn mới, mục tiêu tầm nhìn đến 2045 các vùng phát triển và vận hành theo phương thức nào?",
+                    "correctAnswer": "Kinh tế số, kinh tế xanh, kinh tế dữ liệu, kinh tế tuần hoàn",
+                    "options": [
+                        "Kinh tế số, kinh tế xanh, kinh tế dữ liệu, kinh tế tuần hoàn",
+                        "Kinh tế số, kinh tế xanh, kinh tế tri thức, kinh tế tuần hoàn",
+                        "Kinh tế số, kinh tế xanh, kinh tế tuần hoàn",
+                        "Kinh tế số, kinh tế tri thức, kinh tế dữ liệu, kinh tế tuần hoàn."
+                    ]
+                },
+                "theo nghị quyết số 27-nq/tw, ngày 28/8/2026 của bộ chính trị về phát triển công nghiệp và tổ chức không gian phát triển quốc gia trong giai đoạn mới, mục tiêu tầm nhìn đến 2045 các vùng phát triển và vận hành theo phương thức nào?": {
+                    "question": "Theo Nghị quyết số 27-NQ/TW, ngày 28/8/2026 của Bộ Chính trị về Phát triển công nghiệp và tổ chức không gian phát triển quốc gia trong giai đoạn mới, mục tiêu tầm nhìn đến 2045 các vùng phát triển và vận hành theo phương thức nào?",
+                    "correctAnswer": "Kinh tế số, kinh tế xanh, kinh tế dữ liệu, kinh tế tuần hoàn",
+                    "options": [
+                        "Kinh tế số, kinh tế xanh, kinh tế dữ liệu, kinh tế tuần hoàn",
+                        "Kinh tế số, kinh tế xanh, kinh tế tri thức, kinh tế tuần hoàn",
+                        "Kinh tế số, kinh tế xanh, kinh tế tuần hoàn",
+                        "Kinh tế số, kinh tế tri thức, kinh tế dữ liệu, kinh tế tuần hoàn."
+                    ]
+                }
+            },
+            "last_updated": "2026-09-30",
+            "question_count": 10
+        },
+        {
+            "id": "hoi_nghi_bct_03092026",
+            "name": "Hội nghị toàn quốc học tập, quán triệt Nghị quyết, Chỉ thị của Bộ Chính trị (03/9/2026)",
+            "organizer": "Ban Tuyên giáo Trung ương",
+            "domain_match": "danguyccqdanglamdong.vn",
+            "contest_url": "https://nghiquyet.danguyccqdanglamdong.vn/cuoc-thi/hoi-nghi-toan-quoc-nghien-cuu-hoc-tap-quan-triet-nghi-quyet-chi-thi-bct-03092026.html",
+            "version": 1,
+            "total_questions": 10,
+            "updated_at": "04/09/2026",
             "description": "Trọn bộ 10 câu hỏi & đáp án chuẩn (1B – 2C – 3B – 4B – 5D – 6D – 7A – 8B – 9C – 10A) do Tafinex cập nhật.",
             "questions": {
-                "chỉ thị số 07-ct\/tw, ngày 13\/7\/2026 của bộ chính trị về nội dung nào sau đây?": {
-                    "question": "Chỉ thị số 07-CT\/TW, ngày 13\/7\/2026 của Bộ Chính trị về nội dung nào sau đây?",
+                "chỉ thị số 07-ct/tw, ngày 13/7/2026 của bộ chính trị về nội dung nào sau đây?": {
+                    "question": "Chỉ thị số 07-CT/TW, ngày 13/7/2026 của Bộ Chính trị về nội dung nào sau đây?",
                     "correctAnswer": "Về đẩy mạnh học tập, thực hành tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới.",
                     "options": [
                         "Về tăng cường công tác kiểm tra, giám sát và kỷ luật của Đảng trong giai đoạn mới.",
@@ -46,18 +233,18 @@
                         "Về xây dựng đội ngũ cán bộ, công chức đáp ứng yêu cầu phát triển đất nước."
                     ]
                 },
-                "chỉ thị số 07-ct\/tw, của bộ chính trị về đẩy mạnh học tập, thực hành tư tưởng, đạo đức, phương pháp, phong cách hồ chí minh trong giai đoạn phát triển mới, ban hành vào thời gian nào?": {
-                    "question": "Chỉ thị số 07-CT\/TW, của Bộ Chính trị về đẩy mạnh học tập, thực hành tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới, ban hành vào thời gian nào?",
-                    "correctAnswer": "Ngày 13\/7\/2026",
+                "chỉ thị số 07-ct/tw, của bộ chính trị về đẩy mạnh học tập, thực hành tư tưởng, đạo đức, phương pháp, phong cách hồ chí minh trong giai đoạn phát triển mới, ban hành vào thời gian nào?": {
+                    "question": "Chỉ thị số 07-CT/TW, của Bộ Chính trị về đẩy mạnh học tập, thực hành tư tưởng, đạo đức, phương pháp, phong cách Hồ Chí Minh trong giai đoạn phát triển mới, ban hành vào thời gian nào?",
+                    "correctAnswer": "Ngày 13/7/2026",
                     "options": [
-                        "Ngày 13\/5\/2026",
-                        "Ngày 13\/6\/2026",
-                        "Ngày 13\/7\/2026",
-                        "Ngày 20\/7\/2026."
+                        "Ngày 13/5/2026",
+                        "Ngày 13/6/2026",
+                        "Ngày 13/7/2026",
+                        "Ngày 20/7/2026."
                     ]
                 },
-                "theo chỉ thị số 07-ct\/tw, ngày 13\/7\/2026 của bộ chính trị, một trong những hạn chế được chỉ ra trong việc học tập và làm theo tư tưởng, đạo đức, phong cách hồ chí minh thời gian qua là gì?": {
-                    "question": "Theo Chỉ thị số 07-CT\/TW, ngày 13\/7\/2026 của Bộ Chính trị, một trong những hạn chế được chỉ ra trong việc học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh thời gian qua là gì?",
+                "theo chỉ thị số 07-ct/tw, ngày 13/7/2026 của bộ chính trị, một trong những hạn chế được chỉ ra trong việc học tập và làm theo tư tưởng, đạo đức, phong cách hồ chí minh thời gian qua là gì?": {
+                    "question": "Theo Chỉ thị số 07-CT/TW, ngày 13/7/2026 của Bộ Chính trị, một trong những hạn chế được chỉ ra trong việc học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh thời gian qua là gì?",
                     "correctAnswer": "Một số nơi còn hình thức, thiếu chiều sâu, chưa chú trọng đúng mức việc thực hành, vận dụng phương pháp Hồ Chí Minh",
                     "options": [
                         "Việc tổ chức học tập chưa được triển khai ở các tổ chức cơ sở đảng",
@@ -66,8 +253,8 @@
                         "Cán bộ, đảng viên chưa được nghiên cứu các tác phẩm của Chủ tịch Hồ Chí Minh"
                     ]
                 },
-                "theo nghị quyết số 25-nq\/tw, ngày 22\/8\/2026 của bộ chính trị, về chiến lược công tác tư tưởng trong bối cảnh mới cần quán triệt sâu sắc và thực hiện tốt phương châm nào?": {
-                    "question": "Theo Nghị quyết số 25-NQ\/TW, ngày 22\/8\/2026 của Bộ Chính trị, về chiến lược công tác tư tưởng trong bối cảnh mới cần quán triệt sâu sắc và thực hiện tốt phương châm nào?",
+                "theo nghị quyết số 25-nq/tw, ngày 22/8/2026 của bộ chính trị, về chiến lược công tác tư tưởng trong bối cảnh mới cần quán triệt sâu sắc và thực hiện tốt phương châm nào?": {
+                    "question": "Theo Nghị quyết số 25-NQ/TW, ngày 22/8/2026 của Bộ Chính trị, về chiến lược công tác tư tưởng trong bối cảnh mới cần quán triệt sâu sắc và thực hiện tốt phương châm nào?",
                     "correctAnswer": "Chủ động - Sắc bén - Thuyết phục - Hiệu quả",
                     "options": [
                         "Chủ động - Sáng tạo - Linh hoạt - Hiệu quả",
@@ -76,8 +263,8 @@
                         "Sâu sát - Đổi mới - Thực chất - Hiệu quả"
                     ]
                 },
-                "theo nghị quyết số 25-nq\/tw, ngày 22\/8\/2026 của bộ chính trị có bao nhiêu nhiệm vụ, giải pháp chủ yếu?": {
-                    "question": "Theo Nghị quyết số 25-NQ\/TW, ngày 22\/8\/2026 của Bộ Chính trị có bao nhiêu nhiệm vụ, giải pháp chủ yếu?",
+                "theo nghị quyết số 25-nq/tw, ngày 22/8/2026 của bộ chính trị có bao nhiêu nhiệm vụ, giải pháp chủ yếu?": {
+                    "question": "Theo Nghị quyết số 25-NQ/TW, ngày 22/8/2026 của Bộ Chính trị có bao nhiêu nhiệm vụ, giải pháp chủ yếu?",
                     "correctAnswer": "08",
                     "options": [
                         "05",
@@ -86,8 +273,8 @@
                         "08"
                     ]
                 },
-                "nghị quyết số 23-nq\/tw, ngày 02\/8\/2026 của bộ chính trị về công tác người việt nam ở nước ngoài đề ra bao nhiêu nhiệm vụ, giải pháp?": {
-                    "question": "Nghị quyết số 23-NQ\/TW, ngày 02\/8\/2026 của Bộ Chính trị về công tác người Việt Nam ở nước ngoài đề ra bao nhiêu nhiệm vụ, giải pháp?",
+                "nghị quyết số 23-nq/tw, ngày 02/8/2026 của bộ chính trị về công tác người việt nam ở nước ngoài đề ra bao nhiêu nhiệm vụ, giải pháp?": {
+                    "question": "Nghị quyết số 23-NQ/TW, ngày 02/8/2026 của Bộ Chính trị về công tác người Việt Nam ở nước ngoài đề ra bao nhiêu nhiệm vụ, giải pháp?",
                     "correctAnswer": "07",
                     "options": [
                         "04",
@@ -96,8 +283,8 @@
                         "07"
                     ]
                 },
-                "theo hướng dẫn số 03-hd\/btgtw, ngày 27\/8\/2026 của ban tuyên giáo trung ương, về thực hiện quy định số 19-qđ\/tw, ngày 08\/4\/2026 của ban chấp hành trung ương đảng về công tác chính trị tư tưởng trong đảng, khung tiêu chí đánh giá đối với cán bộ đảng viên thực hiện theo bao nhiêu nội dung về “trách nhiệm của cán bộ, đảng viên”?": {
-                    "question": "Theo Hướng dẫn số 03-HD\/BTGTW, ngày 27\/8\/2026 của Ban Tuyên giáo Trung ương, về thực hiện Quy định số 19-QĐ\/TW, ngày 08\/4\/2026 của Ban Chấp hành Trung ương Đảng về công tác chính trị tư tưởng trong Đảng, khung tiêu chí đánh giá đối với cán bộ đảng viên thực hiện theo bao nhiêu nội dung về “trách nhiệm của cán bộ, đảng viên”?",
+                "theo hướng dẫn số 03-hd/btgtw, ngày 27/8/2026 của ban tuyên giáo trung ương, về thực hiện quy định số 19-qđ/tw, ngày 08/4/2026 của ban chấp hành trung ương đảng về công tác chính trị tư tưởng trong đảng, khung tiêu chí đánh giá đối với cán bộ đảng viên thực hiện theo bao nhiêu nội dung về “trách nhiệm của cán bộ, đảng viên”?": {
+                    "question": "Theo Hướng dẫn số 03-HD/BTGTW, ngày 27/8/2026 của Ban Tuyên giáo Trung ương, về thực hiện Quy định số 19-QĐ/TW, ngày 08/4/2026 của Ban Chấp hành Trung ương Đảng về công tác chính trị tư tưởng trong Đảng, khung tiêu chí đánh giá đối với cán bộ đảng viên thực hiện theo bao nhiêu nội dung về “trách nhiệm của cán bộ, đảng viên”?",
                     "correctAnswer": "04",
                     "options": [
                         "04",
@@ -106,8 +293,8 @@
                         "07"
                     ]
                 },
-                "theo nghị quyết số 24-nq\/tw, ngày 22\/8\/2026 của bộ chính trị về phát huy tính tiên phong, gương mẫu, tinh thần đổi mới, dám nghĩ, dám làm, dám chịu trách nhiệm của đội ngũ cán bộ, đảng viên trong kỷ nguyên mới, có bao nhiêu nhiệm vụ, giải pháp?": {
-                    "question": "Theo Nghị quyết số 24-NQ\/TW, ngày 22\/8\/2026 của Bộ Chính trị về phát huy tính tiên phong, gương mẫu, tinh thần đổi mới, dám nghĩ, dám làm, dám chịu trách nhiệm của đội ngũ cán bộ, đảng viên trong kỷ nguyên mới, có bao nhiêu nhiệm vụ, giải pháp?",
+                "theo nghị quyết số 24-nq/tw, ngày 22/8/2026 của bộ chính trị về phát huy tính tiên phong, gương mẫu, tinh thần đổi mới, dám nghĩ, dám làm, dám chịu trách nhiệm của đội ngũ cán bộ, đảng viên trong kỷ nguyên mới, có bao nhiêu nhiệm vụ, giải pháp?": {
+                    "question": "Theo Nghị quyết số 24-NQ/TW, ngày 22/8/2026 của Bộ Chính trị về phát huy tính tiên phong, gương mẫu, tinh thần đổi mới, dám nghĩ, dám làm, dám chịu trách nhiệm của đội ngũ cán bộ, đảng viên trong kỷ nguyên mới, có bao nhiêu nhiệm vụ, giải pháp?",
                     "correctAnswer": "05",
                     "options": [
                         "04",
@@ -116,8 +303,8 @@
                         "07"
                     ]
                 },
-                "theo nghị quyết số 24-nq\/tw, ngày 22\/8\/2026 của bộ chính trị, để đánh giá cán bộ, đảng viên về tinh thần dấn thân, đổi mới, dám nghĩ, dám làm vì lợi ích chung, cần lấy yếu tố nào làm thước đo?": {
-                    "question": "Theo Nghị quyết số 24-NQ\/TW, ngày 22\/8\/2026 của Bộ Chính trị, để đánh giá cán bộ, đảng viên về tinh thần dấn thân, đổi mới, dám nghĩ, dám làm vì lợi ích chung, cần lấy yếu tố nào làm thước đo?",
+                "theo nghị quyết số 24-nq/tw, ngày 22/8/2026 của bộ chính trị, để đánh giá cán bộ, đảng viên về tinh thần dấn thân, đổi mới, dám nghĩ, dám làm vì lợi ích chung, cần lấy yếu tố nào làm thước đo?": {
+                    "question": "Theo Nghị quyết số 24-NQ/TW, ngày 22/8/2026 của Bộ Chính trị, để đánh giá cán bộ, đảng viên về tinh thần dấn thân, đổi mới, dám nghĩ, dám làm vì lợi ích chung, cần lấy yếu tố nào làm thước đo?",
                     "correctAnswer": "Kết quả, sản phẩm cụ thể, hiệu quả thực thi, khả năng tháo gỡ điểm nghẽn và mức độ hài lòng của Nhân dân, doanh nghiệp.",
                     "options": [
                         "Thâm niên công tác và mức độ hoàn thành nhiệm vụ hằng năm.",
@@ -126,8 +313,8 @@
                         "Mức độ hoàn thành các chỉ tiêu thi đua của cơ quan, đơn vị."
                     ]
                 },
-                "theo nghị quyết số 26-nq\/tw, ngày 22\/8\/2026 của bộ chính trị về phát triển du lịch việt nam trở thành ngành kinh tế mũi nhọn trong kỷ nguyên mới. mục tiêu đến năm 2030, du lịch việt nam phấn đấu đón bao nhiêu lượt khách quốc tế?": {
-                    "question": "Theo Nghị quyết số 26-NQ\/TW, ngày 22\/8\/2026 của Bộ Chính trị về phát triển du lịch Việt Nam trở thành ngành kinh tế mũi nhọn trong kỷ nguyên mới. Mục tiêu đến năm 2030, Du lịch Việt Nam phấn đấu đón bao nhiêu lượt khách quốc tế?",
+                "theo nghị quyết số 26-nq/tw, ngày 22/8/2026 của bộ chính trị về phát triển du lịch việt nam trở thành ngành kinh tế mũi nhọn trong kỷ nguyên mới. mục tiêu đến năm 2030, du lịch việt nam phấn đấu đón bao nhiêu lượt khách quốc tế?": {
+                    "question": "Theo Nghị quyết số 26-NQ/TW, ngày 22/8/2026 của Bộ Chính trị về phát triển du lịch Việt Nam trở thành ngành kinh tế mũi nhọn trong kỷ nguyên mới. Mục tiêu đến năm 2030, Du lịch Việt Nam phấn đấu đón bao nhiêu lượt khách quốc tế?",
                     "correctAnswer": "45-50 triệu",
                     "options": [
                         "45-50 triệu",
@@ -142,27 +329,27 @@
         },
         {
             "id": "bch_tw_khoa_xiv_2026",
-            "name": "Nghị quyết Hội nghị lần thứ ba BCH Trung ương Đảng khóa XIV (27\/8\/2026)",
+            "name": "Nghị quyết Hội nghị lần thứ ba BCH Trung ương Đảng khóa XIV (27/8/2026)",
             "organizer": "Đảng ủy các cơ quan Đảng tỉnh Lâm Đồng",
             "domain_match": "danguyccqdanglamdong.vn",
-            "contest_url": "https:\/\/nghiquyet.danguyccqdanglamdong.vn\/cuoc-thi\/nghi-quyet-hoi-nghi-lan-thu-ba-bch-trung-uong-dang-khoa-xiv-2782026-2.html",
+            "contest_url": "https://nghiquyet.danguyccqdanglamdong.vn/cuoc-thi/nghi-quyet-hoi-nghi-lan-thu-ba-bch-trung-uong-dang-khoa-xiv-2782026-2.html",
             "version": 2,
             "total_questions": 5,
-            "updated_at": "27\/08\/2026",
+            "updated_at": "27/08/2026",
             "description": "Trọn bộ 5 câu hỏi & đáp án chuẩn (1A – 2B – 3A – 4C – 5B) do Tafinex cập nhật.",
             "questions": {
-                "chương trình số 40-ctr\/tu, ngày 24\/8\/2026 của ban chấp hành đảng bộ tỉnh về triển khai thực hiện nghị quyết số 20-nq\/tw, ngày 28\/7\/2026 của ban chấp hành trung ương đảng và chương trình hành động số 34-ctr\/tw, ngày 28\/7\/2026 của bộ chính trị về xây dựng và phát triển việt nam trở thành quốc gia biển mạnh đề ra grdp đến năm 2030 phấn đấu đạt bao nhiêu?": {
-                    "question": "Chương trình số 40-CTr\/TU, ngày 24\/8\/2026 của Ban Chấp hành Đảng bộ tỉnh về triển khai thực hiện Nghị quyết số 20-NQ\/TW, ngày 28\/7\/2026 của Ban Chấp hành Trung ương Đảng và Chương trình hành động số 34-CTr\/TW, ngày 28\/7\/2026 của Bộ Chính trị về xây dựng và phát triển Việt Nam trở thành quốc gia biển mạnh đề ra GRDP đến năm 2030 phấn đấu đạt bao nhiêu?",
-                    "correctAnswer": "10,5%\/năm",
+                "chương trình số 40-ctr/tu, ngày 24/8/2026 của ban chấp hành đảng bộ tỉnh về triển khai thực hiện nghị quyết số 20-nq/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng và chương trình hành động số 34-ctr/tw, ngày 28/7/2026 của bộ chính trị về xây dựng và phát triển việt nam trở thành quốc gia biển mạnh đề ra grdp đến năm 2030 phấn đấu đạt bao nhiêu?": {
+                    "question": "Chương trình số 40-CTr/TU, ngày 24/8/2026 của Ban Chấp hành Đảng bộ tỉnh về triển khai thực hiện Nghị quyết số 20-NQ/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng và Chương trình hành động số 34-CTr/TW, ngày 28/7/2026 của Bộ Chính trị về xây dựng và phát triển Việt Nam trở thành quốc gia biển mạnh đề ra GRDP đến năm 2030 phấn đấu đạt bao nhiêu?",
+                    "correctAnswer": "10,5%/năm",
                     "options": [
-                        "10,5%\/năm",
-                        "9-10%\/năm",
-                        "10%\/năm",
-                        "8-9%\/năm"
+                        "10,5%/năm",
+                        "9-10%/năm",
+                        "10%/năm",
+                        "8-9%/năm"
                     ]
                 },
-                "chương trình số 42-ctr\/tu, ngày 24\/8\/2026 của ban chấp hành đảng bộ tỉnh lâm đồng triển khai thực hiện kết luận số 75-kl\/tw, ngày 28\/7\/2026 của ban chấp hành trung ương đảng khóa xiv và chương trình hành động số 31-ctr\/tw, ngày 28\/7\/2026 của bộ chính trị về bảo vệ môi trường và chủ động ứng phó với biến đổi khí hậu trong thời kỳ mới đề ra bao nhiêu nhiệm vụ, giải pháp?": {
-                    "question": "Chương trình số 42-CTr\/TU, ngày 24\/8\/2026 của Ban Chấp hành Đảng bộ tỉnh Lâm Đồng triển khai thực hiện Kết luận số 75-KL\/TW, ngày 28\/7\/2026 của Ban Chấp hành Trung ương Đảng khóa XIV và Chương trình hành động số 31-CTr\/TW, ngày 28\/7\/2026 của Bộ Chính trị về bảo vệ môi trường và chủ động ứng phó với biến đổi khí hậu trong thời kỳ mới đề ra bao nhiêu nhiệm vụ, giải pháp?",
+                "chương trình số 42-ctr/tu, ngày 24/8/2026 của ban chấp hành đảng bộ tỉnh lâm đồng triển khai thực hiện kết luận số 75-kl/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng khóa xiv và chương trình hành động số 31-ctr/tw, ngày 28/7/2026 của bộ chính trị về bảo vệ môi trường và chủ động ứng phó với biến đổi khí hậu trong thời kỳ mới đề ra bao nhiêu nhiệm vụ, giải pháp?": {
+                    "question": "Chương trình số 42-CTr/TU, ngày 24/8/2026 của Ban Chấp hành Đảng bộ tỉnh Lâm Đồng triển khai thực hiện Kết luận số 75-KL/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng khóa XIV và Chương trình hành động số 31-CTr/TW, ngày 28/7/2026 của Bộ Chính trị về bảo vệ môi trường và chủ động ứng phó với biến đổi khí hậu trong thời kỳ mới đề ra bao nhiêu nhiệm vụ, giải pháp?",
                     "correctAnswer": "09",
                     "options": [
                         "06",
@@ -171,8 +358,8 @@
                         "08"
                     ]
                 },
-                "kế hoạch số 109-kh\/tu, ngày 24\/8\/2026 của tỉnh uỷ lâm đồng về thực hiện nghị quyết số 18-nq\/tw, ngày 28\/7\/2026 của ban chấp hành trung ương về xây dựng xã hội kỷ cương, an toàn, văn minh, hài hoà, phát triển, tỷ lệ kết nạp đảng viên mới hằng năm trong giai đoạn 2025-2030 đạt từ bao nhiêu % tổng số đảng viên?": {
-                    "question": "Kế hoạch số 109-KH\/TU, ngày 24\/8\/2026 của Tỉnh uỷ Lâm Đồng về thực hiện Nghị quyết số 18-NQ\/TW, ngày 28\/7\/2026 của Ban Chấp hành Trung ương về xây dựng xã hội kỷ cương, an toàn, văn minh, hài hoà, phát triển, tỷ lệ kết nạp đảng viên mới hằng năm trong giai đoạn 2025-2030 đạt từ bao nhiêu % tổng số đảng viên?",
+                "kế hoạch số 109-kh/tu, ngày 24/8/2026 của tỉnh uỷ lâm đồng về thực hiện nghị quyết số 18-nq/tw, ngày 28/7/2026 của ban chấp hành trung ương về xây dựng xã hội kỷ cương, an toàn, văn minh, hài hoà, phát triển, tỷ lệ kết nạp đảng viên mới hằng năm trong giai đoạn 2025-2030 đạt từ bao nhiêu % tổng số đảng viên?": {
+                    "question": "Kế hoạch số 109-KH/TU, ngày 24/8/2026 của Tỉnh uỷ Lâm Đồng về thực hiện Nghị quyết số 18-NQ/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương về xây dựng xã hội kỷ cương, an toàn, văn minh, hài hoà, phát triển, tỷ lệ kết nạp đảng viên mới hằng năm trong giai đoạn 2025-2030 đạt từ bao nhiêu % tổng số đảng viên?",
                     "correctAnswer": "3-4%",
                     "options": [
                         "3-4%",
@@ -181,8 +368,8 @@
                         "5-6%"
                     ]
                 },
-                "chương trình số 41-ctr\/tu, ngày 24\/8\/2026 của ban chấp hành đảng bộ tỉnh lâm đồng triển khai thực hiện nghị quyết số 21-nq\/tw, ngày 28\/7\/2026 của ban chấp hành trung ương đảng khóa xiv về quan điểm, định hướng sửa đổi luật đất đai và các luật có liên quan và kế hoạch số 07-kh\/tw, ngày 28\/7\/2026 của bộ chính trị có bao nhiêu nhiệm vụ, giải pháp trọng tâm?": {
-                    "question": "Chương trình số 41-CTr\/TU, ngày 24\/8\/2026 của Ban Chấp hành Đảng bộ tỉnh Lâm Đồng triển khai thực hiện Nghị quyết số 21-NQ\/TW, ngày 28\/7\/2026 của Ban Chấp hành Trung ương Đảng Khóa XIV về quan điểm, định hướng sửa đổi luật đất đai và các luật có liên quan và Kế hoạch số 07-KH\/TW, ngày 28\/7\/2026 của Bộ Chính trị có bao nhiêu nhiệm vụ, giải pháp trọng tâm?",
+                "chương trình số 41-ctr/tu, ngày 24/8/2026 của ban chấp hành đảng bộ tỉnh lâm đồng triển khai thực hiện nghị quyết số 21-nq/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng khóa xiv về quan điểm, định hướng sửa đổi luật đất đai và các luật có liên quan và kế hoạch số 07-kh/tw, ngày 28/7/2026 của bộ chính trị có bao nhiêu nhiệm vụ, giải pháp trọng tâm?": {
+                    "question": "Chương trình số 41-CTr/TU, ngày 24/8/2026 của Ban Chấp hành Đảng bộ tỉnh Lâm Đồng triển khai thực hiện Nghị quyết số 21-NQ/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng Khóa XIV về quan điểm, định hướng sửa đổi luật đất đai và các luật có liên quan và Kế hoạch số 07-KH/TW, ngày 28/7/2026 của Bộ Chính trị có bao nhiêu nhiệm vụ, giải pháp trọng tâm?",
                     "correctAnswer": "09",
                     "options": [
                         "07",
@@ -191,8 +378,8 @@
                         "10"
                     ]
                 },
-                "theo kế hoạch 106-kh\/tu, ngày 20\/8\/2026 của ban chấp hành đảng bộ tỉnh về thực hiện kết luận số 76-kl\/tw, ngày 28\/7\/2026 của ban chấp hành trung ương đảng khóa xiv, về tiếp tục hoàn thiện, vận hành hiệu quả mô hình tổ chức tổng thể của hệ thống chính trị, mô hình chính quyền địa phương 2 cấp thực hiện chủ trương của trung ương chuyển giao chức năng, nhiệm vụ tham mưu về lĩnh vực nào từ ban tuyên giáo và dân vận tỉnh ủy về đảng ủy mặt trận tổ quốc việt nam tỉnh?": {
-                    "question": "Theo Kế hoạch 106-KH\/TU, ngày 20\/8\/2026 của Ban Chấp hành Đảng bộ tỉnh về thực hiện Kết luận số 76-KL\/TW, ngày 28\/7\/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, về tiếp tục hoàn thiện, vận hành hiệu quả mô hình tổ chức tổng thể của hệ thống chính trị, mô hình chính quyền địa phương 2 cấp thực hiện chủ trương của Trung ương chuyển giao chức năng, nhiệm vụ tham mưu về lĩnh vực nào từ Ban Tuyên giáo và Dân vận Tỉnh ủy về Đảng ủy Mặt trận Tổ quốc Việt Nam tỉnh?",
+                "theo kế hoạch 106-kh/tu, ngày 20/8/2026 của ban chấp hành đảng bộ tỉnh về thực hiện kết luận số 76-kl/tw, ngày 28/7/2026 của ban chấp hành trung ương đảng khóa xiv, về tiếp tục hoàn thiện, vận hành hiệu quả mô hình tổ chức tổng thể của hệ thống chính trị, mô hình chính quyền địa phương 2 cấp thực hiện chủ trương của trung ương chuyển giao chức năng, nhiệm vụ tham mưu về lĩnh vực nào từ ban tuyên giáo và dân vận tỉnh ủy về đảng ủy mặt trận tổ quốc việt nam tỉnh?": {
+                    "question": "Theo Kế hoạch 106-KH/TU, ngày 20/8/2026 của Ban Chấp hành Đảng bộ tỉnh về thực hiện Kết luận số 76-KL/TW, ngày 28/7/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, về tiếp tục hoàn thiện, vận hành hiệu quả mô hình tổ chức tổng thể của hệ thống chính trị, mô hình chính quyền địa phương 2 cấp thực hiện chủ trương của Trung ương chuyển giao chức năng, nhiệm vụ tham mưu về lĩnh vực nào từ Ban Tuyên giáo và Dân vận Tỉnh ủy về Đảng ủy Mặt trận Tổ quốc Việt Nam tỉnh?",
                     "correctAnswer": "Công tác Dân vận",
                     "options": [
                         "Công tác Lý luận chính trị, lịch sử Đảng",
@@ -210,14 +397,14 @@
             "domain_match": "chuyendoiso.cuocthi.vn",
             "version": 4,
             "total_questions": 20,
-            "updated_at": "17\/08\/2026",
+            "updated_at": "17/08/2026",
             "description": "Trọn bộ 20 câu hỏi & đáp án chuẩn (1A–2C–3D–4C–5A–6C–7C–8A–9C–10A–11B–12D–13A–14B–15C–16A–17D–18D–19C–20A) do Tafinex cập nhật.",
             "questions": {
                 "giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “học từ làm việc thực tế” được quy định triển khai như thế nào?": {
                     "question": "Giải pháp đào tạo kỹ năng số cho học sinh, sinh viên theo chương trình “Học từ làm việc thực tế” được quy định triển khai như thế nào?",
-                    "correctAnswer": "Liên kết giữa nhà trường (đại học, cao đẳng, nghề) và doanh nghiệp để xây dựng chương trình đào tạo theo nhu cầu thực tế và đặt hàng của doanh nghiệp\/AI",
+                    "correctAnswer": "Liên kết giữa nhà trường (đại học, cao đẳng, nghề) và doanh nghiệp để xây dựng chương trình đào tạo theo nhu cầu thực tế và đặt hàng của doanh nghiệp/AI",
                     "options": [
-                        "Liên kết giữa nhà trường (đại học, cao đẳng, nghề) và doanh nghiệp để xây dựng chương trình đào tạo theo nhu cầu thực tế và đặt hàng của doanh nghiệp\/AI",
+                        "Liên kết giữa nhà trường (đại học, cao đẳng, nghề) và doanh nghiệp để xây dựng chương trình đào tạo theo nhu cầu thực tế và đặt hàng của doanh nghiệp/AI",
                         "Yêu cầu học sinh tự nghiên cứu giáo trình trực tuyến từ nước ngoài",
                         "Giao hoàn toàn cho các trung tâm tin học tư nhân bên ngoài giảng dạy",
                         "Chỉ tổ chức đào tạo lý thuyết tại lớp học chính khóa của trường"
@@ -225,12 +412,12 @@
                 },
                 "kế hoạch triển khai phong trào “bình dân học vụ số” của tỉnh lâm đồng có ký hiệu là gì và ban hành vào ngày nào?": {
                     "question": "Kế hoạch triển khai Phong trào “Bình dân học vụ số” của tỉnh Lâm Đồng có ký hiệu là gì và ban hành vào ngày nào?",
-                    "correctAnswer": "Kế hoạch số 13-KH\/TU ngày 15\/09\/2025",
+                    "correctAnswer": "Kế hoạch số 13-KH/TU ngày 15/09/2025",
                     "options": [
-                        "Kế hoạch số 1410\/KH-UBND ngày 08\/08\/2025",
-                        "Kế hoạch số 6388\/KH-UBND ngày 08\/05\/2026",
-                        "Kế hoạch số 13-KH\/TU ngày 15\/09\/2025",
-                        "Kế hoạch số 45-KH\/TU ngày 15\/09\/2025"
+                        "Kế hoạch số 1410/KH-UBND ngày 08/08/2025",
+                        "Kế hoạch số 6388/KH-UBND ngày 08/05/2026",
+                        "Kế hoạch số 13-KH/TU ngày 15/09/2025",
+                        "Kế hoạch số 45-KH/TU ngày 15/09/2025"
                     ]
                 },
                 "dấu hiệu nào có thể cho thấy một đường link là không an toàn?": {
@@ -253,8 +440,8 @@
                         "Là số tài khoản ngân hàng"
                     ]
                 },
-                "một trong các mục tiêu chung của kế hoạch 5567\/kh-ubnd ngày 23\/4\/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026 là gì?": {
-                    "question": "Một trong các mục tiêu chung của Kế hoạch 5567\/KH-UBND ngày 23\/4\/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026 là gì?",
+                "một trong các mục tiêu chung của kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026 là gì?": {
+                    "question": "Một trong các mục tiêu chung của Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026 là gì?",
                     "correctAnswer": "Đưa công nghệ số, kỹ năng số đến từng hộ gia đình, từng người dân",
                     "options": [
                         "Đưa công nghệ số, kỹ năng số đến từng hộ gia đình, từng người dân",
@@ -263,8 +450,8 @@
                         "Tăng số doanh nghiệp công nghệ số"
                     ]
                 },
-                "theo kế hoạch 5567\/kh-ubnd ngày 23\/4\/2026 của ubnd tỉnh lâm đồng triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, tỷ lệ hỗ trợ, hướng dẫn người dân từ 15 tuổi trở lên đăng ký tài khoản giao dịch thanh toán số là bao nhiêu?": {
-                    "question": "Theo Kế hoạch 5567\/KH-UBND ngày 23\/4\/2026 của UBND tỉnh Lâm Đồng triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, tỷ lệ hỗ trợ, hướng dẫn người dân từ 15 tuổi trở lên đăng ký tài khoản giao dịch thanh toán số là bao nhiêu?",
+                "theo kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh lâm đồng triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, tỷ lệ hỗ trợ, hướng dẫn người dân từ 15 tuổi trở lên đăng ký tài khoản giao dịch thanh toán số là bao nhiêu?": {
+                    "question": "Theo Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh Lâm Đồng triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, tỷ lệ hỗ trợ, hướng dẫn người dân từ 15 tuổi trở lên đăng ký tài khoản giao dịch thanh toán số là bao nhiêu?",
                     "correctAnswer": "50%",
                     "options": [
                         "46%",
@@ -293,8 +480,8 @@
                         "Bao gồm nộp hồ sơ"
                     ]
                 },
-                "theo kế hoạch số 1410\/kh-ubnd ngày 08\/8\/2025 của ubnd tỉnh lâm đồng, đơn vị nào chủ trì triển khai phong trào “bình dân học vụ số” trong lực lượng đoàn viên, thanh niên trên địa bàn tỉnh?": {
-                    "question": "Theo Kế hoạch số 1410\/KH-UBND ngày 08\/8\/2025 của UBND tỉnh Lâm Đồng, đơn vị nào chủ trì triển khai Phong trào “Bình dân học vụ số” trong lực lượng đoàn viên, thanh niên trên địa bàn tỉnh?",
+                "theo kế hoạch số 1410/kh-ubnd ngày 08/8/2025 của ubnd tỉnh lâm đồng, đơn vị nào chủ trì triển khai phong trào “bình dân học vụ số” trong lực lượng đoàn viên, thanh niên trên địa bàn tỉnh?": {
+                    "question": "Theo Kế hoạch số 1410/KH-UBND ngày 08/8/2025 của UBND tỉnh Lâm Đồng, đơn vị nào chủ trì triển khai Phong trào “Bình dân học vụ số” trong lực lượng đoàn viên, thanh niên trên địa bàn tỉnh?",
                     "correctAnswer": "Tỉnh đoàn Lâm Đồng",
                     "options": [
                         "Sở Giáo dục và Đào tạo",
@@ -305,20 +492,20 @@
                 },
                 "khi cần thực hiện thủ tục hành chính trực tuyến trên cổng dịch vụ công quốc gia, người dân cần truy cập vào tên miền nào dưới đây?": {
                     "question": "Khi cần thực hiện thủ tục hành chính trực tuyến trên Cổng Dịch vụ công Quốc gia, người dân cần truy cập vào tên miền nào dưới đây?",
-                    "correctAnswer": "https:\/\/dichvucong.gov.vn",
+                    "correctAnswer": "https://dichvucong.gov.vn",
                     "options": [
-                        "https:\/\/dichvucong.gov.vn",
-                        "https:\/\/dichvucong.lamdong.gov.vn",
-                        "https:\/\/dichvucongquocgia.gov.vn",
-                        "https:\/\/dvcquocgia.gov.vn"
+                        "https://dichvucong.gov.vn",
+                        "https://dichvucong.lamdong.gov.vn",
+                        "https://dichvucongquocgia.gov.vn",
+                        "https://dvcquocgia.gov.vn"
                     ]
                 },
                 "khi thực hiện thanh toán trực tuyến, thao tác nào giúp giảm nguy cơ bị mất tiền do trang giả mạo?": {
                     "question": "Khi thực hiện thanh toán trực tuyến, thao tác nào giúp giảm nguy cơ bị mất tiền do trang giả mạo?",
-                    "correctAnswer": "Kiểm tra địa chỉ website\/ứng dụng chính thức, kết nối an toàn và không nhập thông tin trên trang nghi ngờ giả mạo",
+                    "correctAnswer": "Kiểm tra địa chỉ website/ứng dụng chính thức, kết nối an toàn và không nhập thông tin trên trang nghi ngờ giả mạo",
                     "options": [
                         "Truy cập qua link khuyến mãi lạ",
-                        "Kiểm tra địa chỉ website\/ứng dụng chính thức, kết nối an toàn và không nhập thông tin trên trang nghi ngờ giả mạo",
+                        "Kiểm tra địa chỉ website/ứng dụng chính thức, kết nối an toàn và không nhập thông tin trên trang nghi ngờ giả mạo",
                         "Lưu thông tin thẻ trên mọi trình duyệt để tiện thanh toán",
                         "Nhập thông tin thẻ vào bất kỳ trang nào có giao diện đẹp"
                     ]
@@ -343,14 +530,14 @@
                         "Nội dung email thúc giục người nhận mở tệp, bấm link hoặc cung cấp thông tin cá nhân ngay lập tức"
                     ]
                 },
-                "theo kế hoạch 5567\/kh-ubnd ngày 23\/4\/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, tổ công nghệ số cộng đồng là cánh tay nối dài của ban chỉ đạo tỉnh về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số đến cấp nào?": {
-                    "question": "Theo Kế hoạch 5567\/KH-UBND ngày 23\/4\/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, Tổ công nghệ số cộng đồng là cánh tay nối dài của Ban Chỉ đạo tỉnh về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số đến cấp nào?",
-                    "correctAnswer": "Xã\/phường; tổ dân phố\/thôn\/buôn\/bản",
+                "theo kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, tổ công nghệ số cộng đồng là cánh tay nối dài của ban chỉ đạo tỉnh về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số đến cấp nào?": {
+                    "question": "Theo Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, Tổ công nghệ số cộng đồng là cánh tay nối dài của Ban Chỉ đạo tỉnh về phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số đến cấp nào?",
+                    "correctAnswer": "Xã/phường; tổ dân phố/thôn/buôn/bản",
                     "options": [
-                        "Xã\/phường",
-                        "Xã\/phường; tổ dân phố\/thôn\/buôn\/bản",
+                        "Xã/phường",
+                        "Xã/phường; tổ dân phố/thôn/buôn/bản",
                         "Đến cơ quan hành chính cấp tỉnh",
-                        "Tổ dân phố\/thôn\/buôn\/bản"
+                        "Tổ dân phố/thôn/buôn/bản"
                     ]
                 },
                 "thông tin cá nhân nào dưới đây không nên công khai hoặc chia sẻ tùy tiện trên môi trường số?": {
@@ -373,8 +560,8 @@
                         "Gọi xe công nghệ"
                     ]
                 },
-                "phương châm hoạt động của tổ công nghệ số cộng đồng được nêu trong kế hoạch 5567\/kh-ubnd ngày 23\/4\/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026?": {
-                    "question": "Phương châm hoạt động của Tổ công nghệ số cộng đồng được nêu trong Kế hoạch 5567\/KH-UBND ngày 23\/4\/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026?",
+                "phương châm hoạt động của tổ công nghệ số cộng đồng được nêu trong kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026?": {
+                    "question": "Phương châm hoạt động của Tổ công nghệ số cộng đồng được nêu trong Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026?",
                     "correctAnswer": "“Đi từng ngõ, gõ từng nhà, hướng dẫn từng người”",
                     "options": [
                         "Làm nhanh, gọn, tiết kiệm",
@@ -383,8 +570,8 @@
                         "“Đi từng ngõ, gõ từng nhà, hướng dẫn từng người”"
                     ]
                 },
-                "theo kế hoạch số 3450\/kh-ubnd ngày 18\/3\/2026 của ubnd tỉnh lâm đồng triển khai thực hiện nghị quyết số 57-nq\/tw ngày 22\/12\/2024 của bộ chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh lâm đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?": {
-                    "question": "Theo Kế hoạch số 3450\/KH-UBND ngày 18\/3\/2026 của UBND tỉnh Lâm Đồng triển khai thực hiện Nghị quyết số 57-NQ\/TW ngày 22\/12\/2024 của Bộ Chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh Lâm Đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?",
+                "theo kế hoạch số 3450/kh-ubnd ngày 18/3/2026 của ubnd tỉnh lâm đồng triển khai thực hiện nghị quyết số 57-nq/tw ngày 22/12/2024 của bộ chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh lâm đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?": {
+                    "question": "Theo Kế hoạch số 3450/KH-UBND ngày 18/3/2026 của UBND tỉnh Lâm Đồng triển khai thực hiện Nghị quyết số 57-NQ/TW ngày 22/12/2024 của Bộ Chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia trên địa bàn tỉnh Lâm Đồng năm 2026, chỉ số chuyển đổi số cấp tỉnh năm 2026 có chỉ tiêu đạt mức nào?",
                     "correctAnswer": "Từ 0,65 trở lên",
                     "options": [
                         "Từ 0,75 trở lên",
@@ -393,18 +580,18 @@
                         "Từ 0,65 trở lên"
                     ]
                 },
-                "luật chuyển đổi số số 148\/2025\/qh15 có hiệu lực thi hành từ ngày nào?": {
-                    "question": "Luật Chuyển đổi số số 148\/2025\/QH15 có hiệu lực thi hành từ ngày nào?",
-                    "correctAnswer": "01\/7\/2026",
+                "luật chuyển đổi số số 148/2025/qh15 có hiệu lực thi hành từ ngày nào?": {
+                    "question": "Luật Chuyển đổi số số 148/2025/QH15 có hiệu lực thi hành từ ngày nào?",
+                    "correctAnswer": "01/7/2026",
                     "options": [
-                        "01\/01\/2027",
-                        "01\/01\/2026",
-                        "01\/7\/2026",
-                        "30\/4\/2026"
+                        "01/01/2027",
+                        "01/01/2026",
+                        "01/7/2026",
+                        "30/4/2026"
                     ]
                 },
-                "kế hoạch 5567\/kh-ubnd ngày 23\/4\/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, nhấn mạnh nâng cao nhận thức về vai trò, trách nhiệm của lực lượng nào trong hoạt động chuyển đổi số cộng đồng dân cư?": {
-                    "question": "Kế hoạch 5567\/KH-UBND ngày 23\/4\/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, nhấn mạnh nâng cao nhận thức về vai trò, trách nhiệm của lực lượng nào trong hoạt động chuyển đổi số cộng đồng dân cư?",
+                "kế hoạch 5567/kh-ubnd ngày 23/4/2026 của ubnd tỉnh triển khai hoạt động của tổ công nghệ số cộng đồng trên địa bàn tỉnh lâm đồng năm 2026, nhấn mạnh nâng cao nhận thức về vai trò, trách nhiệm của lực lượng nào trong hoạt động chuyển đổi số cộng đồng dân cư?": {
+                    "question": "Kế hoạch 5567/KH-UBND ngày 23/4/2026 của UBND tỉnh triển khai hoạt động của Tổ Công nghệ số cộng đồng trên địa bàn tỉnh Lâm Đồng năm 2026, nhấn mạnh nâng cao nhận thức về vai trò, trách nhiệm của lực lượng nào trong hoạt động chuyển đổi số cộng đồng dân cư?",
                     "correctAnswer": "Đoàn viên, thanh niên",
                     "options": [
                         "Đoàn viên, thanh niên",
@@ -423,7 +610,7 @@
             "contest_url": "",
             "version": 1,
             "total_questions": 3,
-            "updated_at": "04\/09\/2026",
+            "updated_at": "04/09/2026",
             "description": "Bộ 3 câu hỏi trắc nghiệm tìm hiểu Chuyển đổi số và Công nghệ 2026",
             "questions": {
                 "ngày chuyển đổi số quốc gia của việt nam được chọn là ngày nào hằng năm?": {
