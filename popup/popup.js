@@ -271,26 +271,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       } catch (e) {}
 
-      let targetContest = null;
-      const installedValues = Object.values(installedList || {});
-
-      // 1. Khớp theo tên miền của trang web người dùng đang mở
-      if (currentUrl) {
-        for (const c of installedValues) {
-          if (c.domain_match && c.domain_match !== "*" && currentUrl.toLowerCase().includes(c.domain_match.toLowerCase())) {
-            targetContest = c;
-            break;
-          }
-          if (c.contest_url && (currentUrl.toLowerCase().includes("danguyccqdanglamdong.vn") || currentUrl.toLowerCase().includes("chuyendoiso.cuocthi.vn"))) {
-            if (c.contest_url.toLowerCase().includes("danguyccqdanglamdong.vn") && currentUrl.toLowerCase().includes("danguyccqdanglamdong.vn")) {
-              targetContest = c;
-              break;
-            }
-          }
-        }
-      }
-
-      // 2. Lấy thông tin cuộc thi được ghim toàn hệ thống từ Web Admin
+      // 1. Lấy thông tin cuộc thi đang ghim (activeContest)
       let activeC = activeContestOverride;
       if (!activeC) {
         try {
@@ -299,40 +280,101 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (e) {}
       }
 
-      if (!targetContest) {
-        if (activeC && activeC.name) {
-          const matched = (installedList && installedList[activeC.id]) ? { ...installedList[activeC.id] } : {};
-          targetContest = {
-            ...matched,
-            id: activeC.id || matched.id,
-            name: activeC.name, // Luôn ưu tiên tên cuộc thi được ghim từ Web Admin
-            displayDate: activeC.date || matched.displayDate || "30/09/2026", // Luôn ưu tiên ngày từ Web Admin
-            updated_at: activeC.date || matched.updated_at || "30/09/2026"
-          };
-        } else {
-          targetContest = (installedList && (installedList["hoi_nghi_bct_30092026"] || installedList["kiem_tra_nghi_quyet_30092026"] || installedList["hoi_nghi_bct_03092026"] || installedList["bch_tw_khoa_xiv_2026"])) || (installedValues.length > 0 ? installedValues[0] : null);
+      // Tự động kiểm tra file manifest nội bộ nếu storage chưa có hoặc đang vướng cuộc thi cũ
+      try {
+        const manifestRes = await fetch(chrome.runtime.getURL("contests_manifest.json"));
+        if (manifestRes.ok) {
+          const manifestJson = await manifestRes.json();
+          if (manifestJson.active_contest) {
+            // Luôn đồng bộ activeContest mới nhất từ manifest nếu có
+            if (!activeC || activeC.id !== manifestJson.active_contest.id) {
+              activeC = manifestJson.active_contest;
+              chrome.storage.local.set({ activeContest: activeC });
+            }
+          }
         }
-      } else if (activeC && targetContest.id === activeC.id) {
-        if (activeC.name) targetContest.name = activeC.name;
-        if (activeC.date) targetContest.displayDate = activeC.date;
+      } catch (mErr) {}
+
+      let targetContest = null;
+      const installedValues = Object.values(installedList || {});
+
+      // 2. Nhận diện cuộc thi thông minh:
+      // A. Nếu URL hiện tại khớp chính xác đường dẫn bài thi cụ thể (path match)
+      if (currentUrl) {
+        const lowerUrl = currentUrl.toLowerCase();
+        for (const c of installedValues) {
+          if (c.contest_url && c.contest_url.length > 25) {
+            try {
+              const cPath = new URL(c.contest_url).pathname.toLowerCase();
+              if (cPath && cPath !== "/" && lowerUrl.includes(cPath)) {
+                targetContest = c;
+                break;
+              }
+            } catch (err) {
+              if (lowerUrl.includes(c.contest_url.toLowerCase())) {
+                targetContest = c;
+                break;
+              }
+            }
+          }
+        }
       }
 
+      // B. Nếu đang ở trên trang thi (ví dụ danguyccqdanglamdong.vn) nhưng không phải link bài cũ cụ thể:
+      // PHẢI ưu tiên cuộc thi ghim đang diễn ra hôm nay (activeContest)
+      if (!targetContest && activeC && activeC.name) {
+        const matched = (installedList && installedList[activeC.id]) ? { ...installedList[activeC.id] } : {};
+        targetContest = {
+          ...matched,
+          id: activeC.id || matched.id,
+          name: activeC.name,
+          displayDate: activeC.date || matched.displayDate || matched.updated_at || "30/09/2026",
+          updated_at: activeC.date || matched.updated_at || matched.displayDate || "30/09/2026"
+        };
+      }
+
+      // C. Nếu không có activeContest, tìm cuộc thi có domain khớp và ngày mới nhất
+      if (!targetContest && currentUrl) {
+        const lowerUrl = currentUrl.toLowerCase();
+        const matchedByDomain = installedValues.filter(c =>
+          c.domain_match && c.domain_match !== "*" && lowerUrl.includes(c.domain_match.toLowerCase())
+        );
+        if (matchedByDomain.length > 0) {
+          matchedByDomain.sort((a, b) => {
+            const dateA = a.updated_at || a.displayDate || "";
+            const dateB = b.updated_at || b.displayDate || "";
+            return dateB.localeCompare(dateA);
+          });
+          targetContest = matchedByDomain[0];
+        }
+      }
+
+      // D. Cuối cùng: Lấy cuộc thi đầu tiên trong danh sách (sắp xếp theo ngày mới nhất)
+      if (!targetContest && installedValues.length > 0) {
+        const sorted = [...installedValues].sort((a, b) => {
+          const dateA = a.updated_at || a.displayDate || "";
+          const dateB = b.updated_at || b.displayDate || "";
+          return dateB.localeCompare(dateA);
+        });
+        targetContest = sorted[0];
+      }
+
+      // Cập nhật thông tin ngày hiển thị
       const lastUpdatedText = document.getElementById("last-updated-text");
       if (lastUpdatedText) {
-        if (targetContest) {
-          lastUpdatedText.innerText = targetContest.displayDate || targetContest.updated_at || "30/09/2026";
-        } else {
-          lastUpdatedText.innerText = (activeC && activeC.date) ? activeC.date : "30/09/2026";
-        }
+        const dateToShow = (targetContest && (targetContest.displayDate || targetContest.updated_at))
+          || (activeC && (activeC.date || activeC.updated_at))
+          || "30/09/2026";
+        lastUpdatedText.innerText = dateToShow;
       }
 
+      // Cập nhật tên cuộc thi hiển thị
       if (activeContestName) {
-        if (targetContest) {
-          activeContestName.innerText = targetContest.name || "Đã sẵn sàng hỗ trợ làm bài";
-          activeContestName.title = targetContest.name || "";
-        } else {
-          activeContestName.innerText = (activeC && activeC.name) ? activeC.name : "Đã sẵn sàng hỗ trợ làm bài";
-        }
+        const nameToShow = (targetContest && targetContest.name)
+          || (activeC && activeC.name)
+          || "Đã sẵn sàng hỗ trợ làm bài";
+        activeContestName.innerText = nameToShow;
+        activeContestName.title = nameToShow;
       }
     }
 

@@ -79,6 +79,7 @@ chrome.runtime.onStartup.addListener(async () => {
       await chrome.storage.local.set({ settings: data.settings });
     }
   }
+  await loadDefaultQuestionBank();
   syncLatestOnlineQuestions(true);
 });
 
@@ -356,7 +357,7 @@ async function installContestPackage(contest) {
     domain_match: contest.domain_match || "",
     contest_url: contest.contest_url || "",
     updatedAt: new Date().toISOString(),
-    displayDate: contest.updated_at || "27/08/2026",
+    displayDate: contest.updated_at || contest.date || "30/09/2026",
     totalQuestions: count
   };
 
