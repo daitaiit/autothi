@@ -1,14 +1,14 @@
 {
-    "version": "2.6.0",
-    "updated_at": "2026-09-30 15:50:00",
+    "version": "2.7.0",
+    "updated_at": "2026-10-16 14:43:41",
     "author": "Tafinex",
-    "announcement": "Đã cập nhật bộ đề Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026): 1C – 2A – 3C – 4B – 5C – 6A – 7A – 8A – 9A – 10A!",
+    "announcement": "Đã cập nhật bộ câu hỏi thu hoạch Hội nghị TW4 (16/10/2026): 1A – 2C – 3D – 4A – 5A – 6B – 7B – 8B – 9A – 10C!",
     "active_contest": {
-        "id": "hoi_nghi_bct_30092026",
-        "name": "Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026)",
-        "date": "30/09/2026",
+        "id": "hoi_nghi_tw4_16102026",
+        "name": "Hội nghị toàn quốc nghiên cứu, học tập, quán triệt và triển khai thực hiện Nghị quyết Hội nghị TW4 (16/10/2026)",
+        "date": "16/10/2026",
         "pinned": true,
-        "updated_at": "2026-09-30 15:50:00"
+        "updated_at": "2026-10-16 14:43:41"
     },
     "global_settings": {
         "autoNext": true,
@@ -25,6 +25,119 @@
         "updated_at": "2026-09-30 15:50:00"
     },
     "contests": [
+        {
+            "id": "hoi_nghi_tw4_16102026",
+            "name": "Hội nghị toàn quốc nghiên cứu, học tập, quán triệt và triển khai thực hiện Nghị quyết Hội nghị TW4 (16/10/2026)",
+            "organizer": "",
+            "domain_match": "",
+            "contest_url": "",
+            "version": 1,
+            "total_questions": 10,
+            "updated_at": "16/10/2026",
+            "description": "Câu hỏi thu hoạch: 10 câu hỏi và đáp án do người dùng cung cấp (1A – 2C – 3D – 4A – 5A – 6B – 7B – 8B – 9A – 10C).",
+            "questions": {
+                "nội dung của nghị quyết số 29-nq/tw, ngày 15/10/2026 của ban chấp hành trung ương?": {
+                    "question": "Nội dung của Nghị quyết số 29-NQ/TW, ngày 15/10/2026 của Ban Chấp hành Trung ương?",
+                    "correctAnswer": "Về tiếp tục đổi mới, hoàn thiện phương thức lãnh đạo, cầm quyền của Đảng trong kỷ nguyên mới.",
+                    "options": [
+                        "Về tiếp tục đổi mới, hoàn thiện phương thức lãnh đạo, cầm quyền của Đảng trong kỷ nguyên mới.",
+                        "Tiếp tục đổi mới và hoàn thiện phương thức lãnh đạo, cầm quyền của Đảng,",
+                        "Tiếp tục hoàn thiện phương thức lãnh đạo, cầm quyền của Đảng,",
+                        "Đổi mới phương thức lãnh đạo, cầm quyền của Đảng, bảo đảm phát huy vai trò, tính chủ động và trách nhiệm của các chủ thể trong hệ thống chính trị;"
+                    ]
+                },
+                "nghị quyết số 29-nq/tw, ngày 15/10/2026 của ban chấp hành trung ương về tiếp tục đổi mới, hoàn thiện phương thức lãnh đạo, cầm quyền của đảng trong kỷ nguyên mới, đề ra bao nhiêu nhóm nhiệm vụ, giải pháp?": {
+                    "question": "Nghị quyết số 29-NQ/TW, ngày 15/10/2026 của Ban Chấp hành Trung ương về tiếp tục đổi mới, hoàn thiện phương thức lãnh đạo, cầm quyền của Đảng trong kỷ nguyên mới, đề ra bao nhiêu nhóm nhiệm vụ, giải pháp?",
+                    "correctAnswer": "07",
+                    "options": [
+                        "05",
+                        "06",
+                        "07",
+                        "08"
+                    ]
+                },
+                "nghị quyết số 30-nq/tw, ngày 15/10/2026 của ban chấp hành trung ương về tiếp tục xây dựng đội ngũ cán bộ các cấp và đổi mới căn bản, toàn diện công tác cán bộ đáp ứng yêu cầu phát triển đất nước trong kỷ nguyên mới có bao nhiêu nhóm nhiệm vụ, giải pháp chủ yếu, với những mục tiêu cụ thể đến năm 2030, tầm nhìn đến năm 2045?": {
+                    "question": "Nghị quyết số 30-NQ/TW, ngày 15/10/2026 của Ban Chấp hành Trung ương về tiếp tục xây dựng đội ngũ cán bộ các cấp và đổi mới căn bản, toàn diện công tác cán bộ đáp ứng yêu cầu phát triển đất nước trong kỷ nguyên mới có bao nhiêu nhóm nhiệm vụ, giải pháp chủ yếu, với những mục tiêu cụ thể đến năm 2030, tầm nhìn đến năm 2045?",
+                    "correctAnswer": "08",
+                    "options": [
+                        "05",
+                        "06",
+                        "07",
+                        "08"
+                    ]
+                },
+                "đâu là yêu cầu thường xuyên, xuất phát từ chính nhu cầu phát triển của đảng được nêu trong nghị quyết số 31-nq/tw, ngày 15/10/2026 của ban chấp hành trung ương về tăng cường xây dựng, chỉnh đốn đảng và hệ thống chính trị trong sạch, vững mạnh toàn diện, đáp ứng yêu cầu phát triển của đất nước trong kỷ nguyên mới?": {
+                    "question": "Đâu là yêu cầu thường xuyên, xuất phát từ chính nhu cầu phát triển của Đảng được nêu trong Nghị quyết số 31-NQ/TW, ngày 15/10/2026 của Ban Chấp hành Trung ương về tăng cường xây dựng, chỉnh đốn Đảng và hệ thống chính trị trong sạch, vững mạnh toàn diện, đáp ứng yêu cầu phát triển của đất nước trong kỷ nguyên mới?",
+                    "correctAnswer": "Nâng cao năng lực tự đổi mới, tự chỉnh đốn, tự hoàn thiện của Đảng",
+                    "options": [
+                        "Nâng cao năng lực tự đổi mới, tự chỉnh đốn, tự hoàn thiện của Đảng",
+                        "Nâng cao năng lực cầm quyền và năng lực tổ chức thực hiện của Đảng.",
+                        "Nâng cao năng lực tự đổi mới gắn với đổi mới phương thức lãnh đạo, cầm quyền.",
+                        "Nâng cao năng lực xây dựng Đảng và hệ thống chính trị trong sạch"
+                    ]
+                },
+                "đâu là nội dung quan điểm chỉ đạo tại quy định số 224-qđ/tw, ngày 14/10/2026 của ban chấp hành trung ương đảng khóa xiv về đảng viên tham gia hoạt động đầu tư, kinh doanh?": {
+                    "question": "Đâu là nội dung quan điểm chỉ đạo tại Quy định số 224-QĐ/TW, ngày 14/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV về đảng viên tham gia hoạt động đầu tư, kinh doanh?",
+                    "correctAnswer": "Bảo đảm đồng bộ giữa quy định của Đảng và pháp luật của Nhà nước, có các quy định về chuyển tiếp phù hợp",
+                    "options": [
+                        "Bảo đảm đồng bộ giữa quy định của Đảng và pháp luật của Nhà nước, có các quy định về chuyển tiếp phù hợp",
+                        "Bảo đảm giữa quy định của Đảng",
+                        "Bảo đảm đồng bộ giữa quy định của Đảng và điều lệ doanh nghiệp",
+                        "Bảo đảm phù hợp giữa quy định của Đảng và bổ sung các quy đinh về kiểm tra, giám sát."
+                    ]
+                },
+                "theo quy định số 224-qđ/tw, ngày 14/10/2026 của ban chấp hành trung ương đảng khóa xiv về đảng viên tham gia hoạt động đầu tư, kinh doanh, đảng viên tham gia hoạt động đầu tư kinh doanh phải đảm bảo bao nhiêu nguyên tắc?": {
+                    "question": "Theo Quy định số 224-QĐ/TW, ngày 14/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV về đảng viên tham gia hoạt động đầu tư, kinh doanh, Đảng viên tham gia hoạt động đầu tư kinh doanh phải đảm bảo bao nhiêu nguyên tắc?",
+                    "correctAnswer": "05",
+                    "options": [
+                        "04",
+                        "05",
+                        "06",
+                        "07"
+                    ]
+                },
+                "kết luận số 105-kl/tw, hội nghị lần thứ tư ban chấp hành trung ương đảng khóa xiv về thu hút và trọng dụng nhân tài trong các ngành, lĩnh vực mũi nhọn, phục vụ đất nước phát triển nhanh, bền vững, mục tiêu phấn đấu đến năm 2045 việt nam thuộc nhóm bao nhiêu quốc gia dẫn đầu về chỉ số năng lực cạnh tranh nhân tài toàn cầu?": {
+                    "question": "Kết luận số 105-KL/TW, Hội nghị lần thứ tư Ban Chấp hành Trung ương Đảng khóa XIV về thu hút và trọng dụng nhân tài trong các ngành, lĩnh vực mũi nhọn, phục vụ đất nước phát triển nhanh, bền vững, mục tiêu phấn đấu đến năm 2045 Việt Nam thuộc nhóm bao nhiêu quốc gia dẫn đầu về Chỉ số năng lực cạnh tranh nhân tài toàn cầu?",
+                    "correctAnswer": "20",
+                    "options": [
+                        "15",
+                        "20",
+                        "25",
+                        "30"
+                    ]
+                },
+                "kết luận số 105-kl/tw, hội nghị lần thứ tư ban chấp hành trung ương đảng khóa xiv về thu hút và trọng dụng nhân tài trong các ngành, lĩnh vực mũi nhọn, phục vụ đất nước phát triển nhanh, bền vững xác định bao nhiêu quan điểm chỉ đạo?": {
+                    "question": "Kết luận số 105-KL/TW, Hội nghị lần thứ tư Ban Chấp hành Trung ương Đảng khóa XIV về thu hút và trọng dụng nhân tài trong các ngành, lĩnh vực mũi nhọn, phục vụ đất nước phát triển nhanh, bền vững xác định bao nhiêu quan điểm chỉ đạo?",
+                    "correctAnswer": "05",
+                    "options": [
+                        "04",
+                        "05",
+                        "06",
+                        "07"
+                    ]
+                },
+                "theo báo cáo đánh giá tình hình phát triển kinh tế - xã hội, thực hiện ngân sách nhà nước năm 2026; dự kiến kế hoạch phát triển kinh tế - xã hội, dự toán ngân sách nhà nước năm 2027, tăng trưởng kinh tế được đánh giá như thế nào?": {
+                    "question": "Theo Báo cáo đánh giá tình hình phát triển kinh tế - xã hội, thực hiện ngân sách nhà nước năm 2026; dự kiến kế hoạch phát triển kinh tế - xã hội, dự toán ngân sách nhà nước năm 2027, tăng trưởng kinh tế được đánh giá như thế nào?",
+                    "correctAnswer": "Tăng trưởng kinh tế cao, kinh tế vĩ mô ổn định, lạm phát được kiểm soát, các cân đối lớn cơ bản được bảo đảm",
+                    "options": [
+                        "Tăng trưởng kinh tế cao, kinh tế vĩ mô ổn định, lạm phát được kiểm soát, các cân đối lớn cơ bản được bảo đảm",
+                        "Tăng trưởng kinh tế khá, kinh tế vĩ mô cơ bản ổn định, lạm phát được kiểm soát,",
+                        "Kinh tế vĩ mô ổn định, lạm phát cơ bản được kiểm soát,",
+                        "Tăng trưởng kinh tế ổn định, kinh tế vĩ mô được bảo đảm"
+                    ]
+                },
+                "theo báo cáo đánh giá tình hình phát triển kinh tế - xã hội, thực hiện ngân sách nhà nước năm 2026; dự kiến kế hoạch phát triển kinh tế - xã hội, dự toán ngân sách nhà nước năm 2027, trung ương thống nhất bao nhiêu chỉ tiêu chủ yếu năm 2027?": {
+                    "question": "Theo Báo cáo đánh giá tình hình phát triển kinh tế - xã hội, thực hiện ngân sách nhà nước năm 2026; dự kiến kế hoạch phát triển kinh tế - xã hội, dự toán ngân sách nhà nước năm 2027, Trung ương thống nhất bao nhiêu chỉ tiêu chủ yếu năm 2027?",
+                    "correctAnswer": "45",
+                    "options": [
+                        "35",
+                        "40",
+                        "45",
+                        "50"
+                    ]
+                }
+            }
+        },
         {
             "id": "hoi_nghi_bct_30092026",
             "name": "Hội nghị toàn tỉnh nghiên cứu, học tập, quán triệt và triển khai thực hiện một số Nghị quyết, Chỉ thị của Bộ Chính trị (30/9/2026)",
