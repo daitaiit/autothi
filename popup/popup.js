@@ -30,40 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     let pendingContest = null;
 
     // 1. Load Stored Data
-    const storage = await chrome.storage.local.get(["settings", "questionBank", "installedContests", "activeContest", "globalSettings", "announcement"]);
+    const storage = await chrome.storage.local.get(["settings", "questionBank", "installedContests", "activeContest", "globalSettings"]);
     const settings = storage.settings || {};
     const questionBank = storage.questionBank || {};
     const installed = storage.installedContests || {};
     const activeContest = storage.activeContest || null;
-
-    // Announcement Banner
-    const annBanner = document.getElementById("announcement-banner");
-    const annText = document.getElementById("announcement-text");
-    const btnCloseAnn = document.getElementById("btn-close-announcement");
-
-    function renderAnnouncement(msg) {
-      if (!annBanner || !annText) return;
-      // Chỉ hiển thị thông báo phát thanh thực tế do Quản trị viên nhập từ Web Admin
-      if (typeof msg === "string" && msg.trim() && !msg.toLowerCase().includes("ngoại tuyến") && !msg.toLowerCase().includes("offline")) {
-        annText.innerText = msg.trim();
-        annBanner.classList.remove("hidden");
-      } else {
-        annBanner.classList.add("hidden");
-        annText.innerText = "";
-        // Nếu bộ nhớ trình duyệt còn vướng thông báo kỹ thuật cũ, tự động dọn sạch
-        if (typeof msg === "string" && (msg.toLowerCase().includes("ngoại tuyến") || msg.toLowerCase().includes("offline"))) {
-          chrome.storage.local.set({ announcement: "" });
-        }
-      }
-    }
-
-    renderAnnouncement(storage.announcement);
-
-    if (btnCloseAnn) {
-      btnCloseAnn.addEventListener("click", () => {
-        if (annBanner) annBanner.classList.add("hidden");
-      });
-    }
 
     // Setup initial UI states
     currentMode = settings.mode || "auto";
@@ -382,14 +353,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function checkForOnlineUpdates() {
       try {
         chrome.runtime.sendMessage({ action: "CHECK_ONLINE_UPDATES" }, async response => {
-          const st = await chrome.storage.local.get(["questionBank", "installedContests", "activeContest", "settings", "announcement"]);
+          const st = await chrome.storage.local.get(["questionBank", "installedContests", "activeContest", "settings"]);
           await updateBankUI(st.questionBank, st.installedContests, st.activeContest);
-
-          // Cập nhật thông báo hệ thống (nếu có thông báo từ server hoặc từ local storage)
-          const latestAnn = (response && response.data && response.data.announcement !== undefined)
-            ? response.data.announcement
-            : (st.announcement || "");
-          renderAnnouncement(latestAnn);
 
           // Cập nhật lại các toggle nếu có cài đặt mới từ admin
           if (st.settings) {
