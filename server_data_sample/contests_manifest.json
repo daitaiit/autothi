@@ -1,14 +1,14 @@
 {
-    "version": "2.7.0",
-    "updated_at": "2026-10-16 14:43:41",
+    "version": "2.8.0",
+    "updated_at": "2026-10-30 20:47:26",
     "author": "Tafinex",
-    "announcement": "Đã cập nhật bộ câu hỏi thu hoạch Hội nghị TW4 (16/10/2026): 1A – 2C – 3D – 4A – 5A – 6B – 7B – 8B – 9A – 10C!",
+    "announcement": "Đã cập nhật 19 câu hỏi thu hoạch Hội nghị TW4 ngày 30/10/2026.",
     "active_contest": {
-        "id": "hoi_nghi_tw4_16102026",
-        "name": "Hội nghị toàn quốc nghiên cứu, học tập, quán triệt và triển khai thực hiện Nghị quyết Hội nghị TW4 (16/10/2026)",
-        "date": "16/10/2026",
+        "id": "hoi_nghi_tw4_30102026",
+        "name": "Bộ câu hỏi thu hoạch Hội nghị TW4 (30/10/2026)",
+        "date": "30/10/2026",
         "pinned": true,
-        "updated_at": "2026-10-16 14:43:41"
+        "updated_at": "2026-10-30 20:47:26"
     },
     "global_settings": {
         "autoNext": true,
@@ -25,6 +25,190 @@
         "updated_at": "2026-09-30 15:50:00"
     },
     "contests": [
+        {
+            "id": "hoi_nghi_tw4_30102026",
+            "name": "Bộ câu hỏi thu hoạch Hội nghị TW4 (30/10/2026)",
+            "organizer": "",
+            "domain_match": "hoctapnghiquyet.lamdongtructuyen.vn",
+            "contest_url": "https://hoctapnghiquyet.lamdongtructuyen.vn/exam/take/cbcb5293-2ab8-47a3-b2fe-b7f1931abcd0",
+            "version": 1,
+            "total_questions": 19,
+            "updated_at": "30/10/2026",
+            "description": "19 câu hỏi và đáp án từ file Câu hỏi ngày 30.10.xlsx do người dùng cung cấp.",
+            "questions": {
+                "theo nghị quyết số 31-nq/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv, việc khuyến khích, bảo vệ cán bộ dám nghĩ, dám làm, dám chịu trách nhiệm vì lợi ích chung phải tuân theo nguyên tắc nào?": {
+                    "question": "Theo Nghị quyết số 31-NQ/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, việc khuyến khích, bảo vệ cán bộ dám nghĩ, dám làm, dám chịu trách nhiệm vì lợi ích chung phải tuân theo nguyên tắc nào?",
+                    "correctAnswer": "Phân biệt sai phạm do vụ lợi, cố ý làm trái với rủi ro phát sinh trong đổi mới sáng tạo; việc bảo vệ phải căn cứ động cơ trong sáng, vì lợi ích chung, đúng thẩm quyền và có kiểm soát, không bao che hoặc miễn trừ trách nhiệm.",
+                    "options": [
+                        "Phân biệt sai phạm do vụ lợi, cố ý làm trái với rủi ro phát sinh trong đổi mới sáng tạo; việc bảo vệ phải căn cứ động cơ trong sáng, vì lợi ích chung, đúng thẩm quyền và có kiểm soát, không bao che hoặc miễn trừ trách nhiệm.",
+                        "Ưu tiên bảo vệ người có sáng kiến và có động cơ tích cực; chỉ xem xét trách nhiệm khi chứng minh được mục đích vụ lợi.",
+                        "Chỉ bảo vệ các quyết định sáng tạo đã đạt kết quả dự kiến; trường hợp chưa đạt kết quả phải xử lý trách nhiệm như các vi phạm thông thường."
+                    ]
+                },
+                "theo nghị quyết số 31-nq/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv, đâu là điểm nâng tầm cốt lõi của yêu cầu “tự đổi mới, tự chỉnh đốn, tự hoàn thiện” đối với một đảng cầm quyền?": {
+                    "question": "Theo Nghị quyết số 31-NQ/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, đâu là điểm nâng tầm cốt lõi của yêu cầu “tự đổi mới, tự chỉnh đốn, tự hoàn thiện” đối với một đảng cầm quyền?",
+                    "correctAnswer": "Tạo chuyển biến sâu sắc về nhận thức và hành động trong toàn Đảng và hệ thống chính trị về xây dựng, chỉnh đốn Đảng là quy luật phát triển, nhu cầu tự thân, thường xuyên của Đảng.",
+                    "options": [
+                        "Tăng tần suất kiểm điểm, đánh giá và sơ kết để các cấp ủy sớm nhận diện và khắc phục khuyết điểm.",
+                        "Tăng cường sự giám sát từ cơ quan cấp trên và các chủ thể bên ngoài đề kịp thời phát hiện sai phạm.",
+                        "Tạo chuyển biến sâu sắc về nhận thức và hành động trong toàn Đảng và hệ thống chính trị về xây dựng, chỉnh đốn Đảng là quy luật phát triển, nhu cầu tự thân, thường xuyên của Đảng."
+                    ]
+                },
+                "theo nghị quyết số 29-nq/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv, mục tiêu tổng quát về đổi mới phương thức lãnh đạo, cầm quyền của đảng được xác định theo hướng nào?": {
+                    "question": "Theo Nghị quyết số 29-NQ/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, Mục tiêu tổng quát về đổi mới phương thức lãnh đạo, cầm quyền của Đảng được xác định theo hướng nào?",
+                    "correctAnswer": "Khoa học, dân chủ, pháp quyền, hiện đại, vì lợi ích quốc gia - dân tộc và vì Nhân dân.",
+                    "options": [
+                        "Tập trung thống nhất mọi hoạt động quản lý, điều hành vào cấp ủy để bảo đảm sự lãnh đạo toàn diện.",
+                        "Khoa học, dân chủ, pháp quyền, hiện đại, vì lợi ích quốc gia - dân tộc và vì Nhân dân.",
+                        "Ưu tiên hoàn thiện tổ chức bộ máy trước, việc đổi mới phương thức lãnh đạo được thực hiện sau khi bộ máy ổn định."
+                    ]
+                },
+                "theo nghị quyết số 29-nq/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv, việc vận hành thực chất cơ chế “đảng lãnh đạo, nhà nước quản lý, nhân dân làm chủ” đòi hỏi điều gì?": {
+                    "question": "Theo Nghị quyết số 29-NQ/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, việc vận hành thực chất cơ chế “Đảng lãnh đạo, Nhà nước quản lý, Nhân dân làm chủ” đòi hỏi điều gì?",
+                    "correctAnswer": "Đảng xác định đường lối, định hướng chiến lược, quyết định vấn đề lớn theo thẩm quyền; Nhà nước kịp thời thể chế hóa, quản lý, điều hành, kiến tạo phát triển; Nhân dân thực hiện quyền làm chủ, tham gia xây dựng Đảng, xây dựng Nhà nước, giám sát hoạt động của hệ thống chính trị và thụ hưởng thành quả phát triển.",
+                    "options": [
+                        "Đảng xác định đường lối, định hướng chiến lược, quyết định vấn đề lớn theo thẩm quyền; Nhà nước kịp thời thể chế hóa, quản lý, điều hành, kiến tạo phát triển; Nhân dân thực hiện quyền làm chủ, tham gia xây dựng Đảng, xây dựng Nhà nước, giám sát hoạt động của hệ thống chính trị và thụ hưởng thành quả phát triển.",
+                        "Đảng trực tiếp thực hiện các công việc quản lý, điều hành; Nhà nước chủ yếu làm nhiệm vụ tham mưu và báo cáo.",
+                        "Mặt trận Tổ quốc Việt Nam thay cơ quan nhà nước tổ chức thực hiện chính sách và giải quyết công việc hành chính cho Nhân dân."
+                    ]
+                },
+                "theo nghị quyết số 30-nq/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv, việc đổi mới nội dung đánh giá cán bộ phải bảo đảm nguyên tắc nào?": {
+                    "question": "Theo Nghị quyết số 30-NQ/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, việc đổi mới nội dung đánh giá cán bộ phải bảo đảm nguyên tắc nào?",
+                    "correctAnswer": "Bảo đảm toàn diện, thực chất về phẩm chất chính trị, tư tưởng, đạo đức, liêm chính, kỷ luật; năng lực thực tiễn, sản phẩm, kết quả, hiệu quả, mức độ cống hiến, uy tín trong tổ chức và trước Nhân dân.",
+                    "options": [
+                        "Phẩm chất chính trị, tư tưởng, đạo đức, liêm chính, kỷ luật.",
+                        "Năng lực thực tiễn, sản phẩm, kết quả, hiệu quả, mức độ cống hiến.",
+                        "Bảo đảm toàn diện, thực chất về phẩm chất chính trị, tư tưởng, đạo đức, liêm chính, kỷ luật; năng lực thực tiễn, sản phẩm, kết quả, hiệu quả, mức độ cống hiến, uy tín trong tổ chức và trước Nhân dân."
+                    ]
+                },
+                "về hoàn thiện đồng bộ chức danh, nhiệm vụ, vị trí việc làm, nghị quyết số 30-nq/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv yêu cầu phải bảo đảm đồng thời hai mặt nào?": {
+                    "question": "Về hoàn thiện đồng bộ chức danh, nhiệm vụ, vị trí việc làm, Nghị quyết số 30-NQ/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV yêu cầu phải bảo đảm đồng thời hai mặt nào?",
+                    "correctAnswer": "Cơ cấu chức danh và tiêu chuẩn cán bộ. Không vì cơ cấu mà hạ thấp tiêu chuẩn; không đặt ra tiêu chuẩn hình thức làm thu hẹp nguồn cán bộ.",
+                    "options": [
+                        "Cơ cấu chức danh và tiêu chuẩn cán bộ. Không vì cơ cấu mà hạ thấp tiêu chuẩn; không đặt ra tiêu chuẩn hình thức làm thu hẹp nguồn cán bộ.",
+                        "Không hạ thấp tiêu chuẩn về bằng cấp, đồng thời nâng cao tiêu chuẩn về kinh nghiệm thực tiễn.",
+                        "Bảo đảm tiêu chuẩn chung của Đảng, đồng thời cho phép mỗi cấp ủy quy định thêm tiêu chuẩn riêng phù hợp đặc thù."
+                    ]
+                },
+                "theo chương trình hành động số 47-ctr/tw, việc triển khai thực hiện các nghị quyết của ban chấp hành trung ương khóa xiv cần bảo đảm yêu cầu nào sau đây?": {
+                    "question": "Theo Chương trình hành động số 47-CTr/TW, việc triển khai thực hiện các nghị quyết của Ban Chấp hành Trung ương khóa XIV cần bảo đảm yêu cầu nào sau đây?",
+                    "correctAnswer": "Tổ chức thực hiện đồng bộ, quyết liệt, hiệu quả; cụ thể hóa các nghị quyết thành nhiệm vụ, giải pháp, chương trình, kế hoạch phù hợp với chức năng, nhiệm vụ và điều kiện thực tiễn của từng cơ quan, đơn vị.",
+                    "options": [
+                        "Tổ chức thực hiện đồng bộ, quyết liệt, hiệu quả; cụ thể hóa các nghị quyết thành nhiệm vụ, giải pháp, chương trình, kế hoạch phù hợp với chức năng, nhiệm vụ và điều kiện thực tiễn của từng cơ quan, đơn vị.",
+                        "Tập trung ban hành văn bản chỉ đạo chung, giao các cơ quan tự triển khai mà không cần xác định rõ nhiệm vụ và trách nhiệm.",
+                        "Ưu tiên thực hiện những nhiệm vụ thuận lợi trước, chưa cần gắn việc triển khai với tiến độ, kết quả và trách nhiệm của cơ quan chủ trì."
+                    ]
+                },
+                "quy định số 224-qđ/tw điều chỉnh việc tham gia hoạt động đầu tư kinh doanh đối với nhóm đảng viên nào?": {
+                    "question": "Quy định số 224-QĐ/TW điều chỉnh việc tham gia hoạt động đầu tư kinh doanh đối với nhóm đảng viên nào?",
+                    "correctAnswer": "Đảng viên trong và ngoài khu vực công, với quyền và giới hạn tương ứng theo chức danh, vị trí, nhiệm vụ.",
+                    "options": [
+                        "Đảng viên trong và ngoài khu vực công, với quyền và giới hạn tương ứng theo chức danh, vị trí, nhiệm vụ.",
+                        "Chỉ đảng viên là viên chức.",
+                        "Chỉ đảng viên ngoài khu vực công."
+                    ]
+                },
+                "theo quy định số 224-qđ/tw, nhận định nào đúng đối với đảng viên ngoài khu vực công khi được giao thực hiện nhiệm vụ công?": {
+                    "question": "Theo Quy định số 224-QĐ/TW, nhận định nào đúng đối với đảng viên ngoài khu vực công khi được giao thực hiện nhiệm vụ công?",
+                    "correctAnswer": "Không được lợi dụng tư cách đảng viên, chức vụ trong Đảng hoặc quan hệ với người có thẩm quyền để tạo lợi thế bất bình đẳng, tác động trái quy định, phục vụ lợi ích riêng, lợi ích nhóm; không được xử lý công việc, nhiệm vụ có xung đột lợi ích chưa được kiểm soát hoặc làm ảnh hưởng tiêu cực đến việc thực hiện nhiệm vụ công được giao.",
+                    "options": [
+                        "Phải xin chấp thuận của tổ chức đảng trước mọi khoản đầu tư kinh doanh hợp pháp.",
+                        "Không được lợi dụng tư cách đảng viên, chức vụ trong Đảng hoặc quan hệ với người có thẩm quyền để tạo lợi thế bất bình đẳng, tác động trái quy định, phục vụ lợi ích riêng, lợi ích nhóm; không được xử lý công việc, nhiệm vụ có xung đột lợi ích chưa được kiểm soát hoặc làm ảnh hưởng tiêu cực đến việc thực hiện nhiệm vụ công được giao.",
+                        "Được tự mình tiếp tục xử lý công việc có xung đột lợi ích chưa được kiểm soát."
+                    ]
+                },
+                "theo kết luận số 105-kl/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv, nhân tài được nhận thức như thế nào?": {
+                    "question": "Theo Kết luận số 105-KL/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, nhân tài được nhận thức như thế nào?",
+                    "correctAnswer": "Là người có phẩm chất, tố chất, năng lực nổi trội và tư duy sáng tạo; có sản phẩm, thành tích hoặc đóng góp đặc biệt, có tính đột phá, tạo ra giá trị và tác động tích cực; có khả năng đảm nhiệm, giải quyết hiệu quả nhiệm vụ quan trọng, mới, khó, phức tạp.",
+                    "options": [
+                        "Là người có phẩm chất, tố chất, năng lực nổi trội và tư duy sáng tạo; có sản phẩm, thành tích hoặc đóng góp đặc biệt, có tính đột phá, tạo ra giá trị và tác động tích cực; có khả năng đảm nhiệm, giải quyết hiệu quả nhiệm vụ quan trọng, mới, khó, phức tạp.",
+                        "Là người có bằng cấp cao, học hàm, học vị và nhiều năm giữ chức vụ lãnh đạo, quản lý trong cơ quan nhà nước.",
+                        "Là người được cơ quan có thẩm quyền tuyển dụng vào biên chế và xếp ở ngạch chuyên môn cao nhất."
+                    ]
+                },
+                "theo quan điểm của kết luậnsố 105-kl/tw ngày 15/10/2026 của ban chấp hành trung ương đảng khóa xiv, đâu là khâu then chốt và đâu là nhiệm vụ căn bản, lâu dài trong công tác nhân tài?": {
+                    "question": "Theo quan điểm của Kết luậnsố 105-KL/TW ngày 15/10/2026 của Ban Chấp hành Trung ương Đảng khóa XIV, đâu là khâu then chốt và đâu là nhiệm vụ căn bản, lâu dài trong công tác nhân tài?",
+                    "correctAnswer": "Trọng dụng là khâu then chốt; tạo nguồn nhân tài là nhiệm vụ căn bản, lâu dài",
+                    "options": [
+                        "Đãi ngộ là khâu then chốt; thu hút từ nước ngoài là nhiệm vụ căn bản, lâu dài.",
+                        "Tuyển dụng là khâu then chốt; đánh giá hằng năm là nhiệm vụ căn bản, lâu dài.",
+                        "Trọng dụng là khâu then chốt; tạo nguồn nhân tài là nhiệm vụ căn bản, lâu dài"
+                    ]
+                },
+                "theo kết luận số 106-kl/tw ngày 15/10/2026 của hội nghị lần thứ tư ban chấp hành trung ương đảng khóa xiv xác định năm 2027 là năm như thế nào?": {
+                    "question": "Theo Kết luận số 106-KL/TW ngày 15/10/2026 của Hội nghị lần thứ tư Ban Chấp hành Trung ương Đảng khóa XIV xác định năm 2027 là năm như thế nào?",
+                    "correctAnswer": "Năm tăng tốc, bứt phá, tạo đà, tạo thế, tạo lực để thực hiện thắng lợi Nghị quyêt Đại hội XIV của Đảng.",
+                    "options": [
+                        "Năm bản lề, tạo nền tảng cho cả giai đoạn phát triển 2026 - 2030.",
+                        "Năm tăng tốc, bứt phá, tạo đà, tạo thế, tạo lực để thực hiện thắng lợi Nghị quyêt Đại hội XIV của Đảng.",
+                        "Năm củng cố, ổn định, tạo tiền đề cho giai đoạn tăng tốc từ năm 2028"
+                    ]
+                },
+                "theo kết luận số 106-kl/tw ngày 15/10/2026 của hội nghị lần thứ tư ban chấp hành trung ương đảng khóa xiv, trung ương xác định những yếu tố nào được lấy làm thước đo cho sự phát triển?": {
+                    "question": "Theo Kết luận số 106-KL/TW ngày 15/10/2026 của Hội nghị lần thứ tư Ban Chấp hành Trung ương Đảng khóa XIV, Trung ương xác định những yếu tố nào được lấy làm thước đo cho sự phát triển?",
+                    "correctAnswer": "Hiệu quả thực chất, năng suất và đời sống của Nhân dân.",
+                    "options": [
+                        "Hiệu quả thực chất, năng suất và đời sống của Nhân dân.",
+                        "Quy mô GDP, tốc độ tăng thu ngân sách nhà nước và tỷ lệ giải ngân vốn đầu tư công.",
+                        "Số dự án đầu tư được phê duyệt, tổng vốn đầu tư toàn xã hội và kim ngạch xuất khẩu."
+                    ]
+                },
+                "theo chỉ thị số 15-ct/tw ngày 15/10/2026 của bộ chính trị, lực lượng nào giữ vai trò nòng cốt trong tham mưu, tổ chức thực hiện nhiệm vụ bảo đảm an ninh môi trường?": {
+                    "question": "Theo Chỉ thị số 15-CT/TW ngày 15/10/2026 của Bộ Chính trị, lực lượng nào giữ vai trò nòng cốt trong tham mưu, tổ chức thực hiện nhiệm vụ bảo đảm an ninh môi trường?",
+                    "correctAnswer": "Công an nhân dân.",
+                    "options": [
+                        "Công an nhân dân.",
+                        "Quân đội nhân dân.",
+                        "Lực lượng Kiểm lâm."
+                    ]
+                },
+                "theo quy định số 212-qđ/tw, nguyên tắc xử lý kỷ luật đối với tổ chức đảng và đảng viên được quy định như thế nào?": {
+                    "question": "Theo Quy định số 212-QĐ/TW, nguyên tắc xử lý kỷ luật đối với tổ chức đảng và đảng viên được quy định như thế nào?",
+                    "correctAnswer": "Tất cả tổ chức đảng và đảng viên bình đẳng trước kỷ luật của Đảng. Tổ chức đảng và đảng viên vi phạm chủ trương, quy định của Đảng, pháp luật của Nhà nước đều phải xem xét thi hành kỷ luật công minh, chính xác, kịp thời.",
+                    "options": [
+                        "Tất cả tổ chức đảng và đảng viên bình đẳng trước kỷ luật của Đảng. Tổ chức đảng và đảng viên vi phạm chủ trương, quy định của Đảng, pháp luật của Nhà nước đều phải xem xét thi hành kỷ luật công minh, chính xác, kịp thời.",
+                        "Tổ chức đảng và đảng viên chỉ bị xem xét kỷ luật khi gây hậu quả nghiêm trọng.",
+                        "Việc xử lý kỷ luật căn cứ chủ yếu vào kết quả tự kiểm điểm của tổ chức đảng và đảng viên."
+                    ]
+                },
+                "theo quy định số 225-qđ/tw, trường hợp tổ chức đảng hoặc đảng viên khiếu nại kỷ luật đảng được mời làm việc hai lần nhưng không đến mà không có lý do chính đáng thì xử lý như thế nào?": {
+                    "question": "Theo Quy định số 225-QĐ/TW, trường hợp tổ chức đảng hoặc đảng viên khiếu nại kỷ luật đảng được mời làm việc hai lần nhưng không đến mà không có lý do chính đáng thì xử lý như thế nào?",
+                    "correctAnswer": "Tổ chức đảng có thẩm quyền giải quyết khiếu nại lập biên bản, không xem xét, giải quyết khiếu nại, lưu hồ sơ kết thúc.",
+                    "options": [
+                        "Tiếp tục giải quyết khiếu nại và quyết định trên cơ sở hồ sơ hiện có.",
+                        "Tạm dừng giải quyết khiếu nại cho đến khi tổ chức đảng hoặc đảng viên đến làm việc.",
+                        "Tổ chức đảng có thẩm quyền giải quyết khiếu nại lập biên bản, không xem xét, giải quyết khiếu nại, lưu hồ sơ kết thúc."
+                    ]
+                },
+                "theo kết luận số 107-kl/tw, khi xác định nhu cầu nhân lực và xây dựng phương án biên chế, các cơ quan, đơn vị cần thực hiện như thế nào?": {
+                    "question": "Theo Kết luận số 107-KL/TW, khi xác định nhu cầu nhân lực và xây dựng phương án biên chế, các cơ quan, đơn vị cần thực hiện như thế nào?",
+                    "correctAnswer": "Căn cứ vào khối lượng công việc, sản phẩm đầu ra và yêu cầu thực hiện nhiệm vụ; đồng thời xem xét khả năng bố trí lại, điều chuyển, đào tạo, bồi dưỡng và sử dụng hiệu quả nhân lực hiện có trước khi đề xuất điều chỉnh biên chế.",
+                    "options": [
+                        "Căn cứ vào số lượng nhiệm vụ được giao để đề xuất tăng biên chế tương ứng, bảo đảm hoàn thành công việc.",
+                        "Ưu tiên giữ nguyên nhân lực hiện có, không thực hiện điều chuyển hoặc cơ cấu lại đội ngũ giữa các vị trí việc làm.",
+                        "Căn cứ vào khối lượng công việc, sản phẩm đầu ra và yêu cầu thực hiện nhiệm vụ; đồng thời xem xét khả năng bố trí lại, điều chuyển, đào tạo, bồi dưỡng và sử dụng hiệu quả nhân lực hiện có trước khi đề xuất điều chỉnh biên chế."
+                    ]
+                },
+                "theo quy định số 220-qđ/tw, có bao nhiêu nguyên tắc tôn vinh, trọng dụng và bảo vệ cán bộ dám đổi mới, dám nghĩ, dám làm, dám chịu trách nhiệm vì lợi ích chung?": {
+                    "question": "Theo Quy định số 220-QĐ/TW, có bao nhiêu nguyên tắc tôn vinh, trọng dụng và bảo vệ cán bộ dám đổi mới, dám nghĩ, dám làm, dám chịu trách nhiệm vì lợi ích chung?",
+                    "correctAnswer": "6",
+                    "options": [
+                        "4",
+                        "6",
+                        "8"
+                    ]
+                },
+                "theo quy định số 221-qđ/tw, đảng viên đang công tác có quyền và trách nhiệm gì?": {
+                    "question": "Theo Quy định số 221-QĐ/TW, đảng viên đang công tác có quyền và trách nhiệm gì?",
+                    "correctAnswer": "Cả hai đáp án A và B",
+                    "options": [
+                        "Gần gũi, gắn bó với Nhân dân; nắm bắt tâm tư, nguyện vọng của Nhân dân và kịp thời phản ánh với tổ chức đảng nơi mình đang công tác và cư trú; khắc phục những biểu hiện sống xa dân, thiếu trách nhiệm trong các công việc của Nhân dân nơi cư trú; củng cố mối quan hệ mật thiết giữa Đảng với Nhân dân.",
+                        "Không lợi dụng vị trí công tác để can thiệp vào công việc của địa phương nơi cư trú.",
+                        "Cả hai đáp án A và B"
+                    ]
+                }
+            }
+        },
         {
             "id": "hoi_nghi_tw4_16102026",
             "name": "Hội nghị toàn quốc nghiên cứu, học tập, quán triệt và triển khai thực hiện Nghị quyết Hội nghị TW4 (16/10/2026)",

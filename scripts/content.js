@@ -226,6 +226,17 @@
   function findQuestionsOnPage() {
     const questions = [];
 
+    if (location.hostname === 'hoctapnghiquyet.lamdongtructuyen.vn') {
+      // Trang Angular dùng thẻ đáp án có sự kiện click, không dùng input radio.
+      return Array.from(document.querySelectorAll('.exam-workspace article.question-card')).map((container, index) => {
+        const questionText = container.querySelector('.q-content')?.textContent.trim();
+        const options = Array.from(container.querySelectorAll('.q-options-list .option-card')).map((element, index) => ({
+          element, inputElement: null, text: element.querySelector('.opt-text')?.textContent.trim() || '', index
+        }));
+        return questionText && options.length >= 2 ? {container, questionText, options, index} : null;
+      }).filter(Boolean);
+    }
+
     // Common selectors for online quiz platforms in Vietnam (cuocthi.vn, myaloha, vnedu, azota, etc.)
     const containerSelectors = [
       ".question-item",
@@ -463,6 +474,13 @@
 
   async function processNextStep(mode) {
     if (!isRunning) return;
+
+    if (location.hostname === 'hoctapnghiquyet.lamdongtructuyen.vn' &&
+        (!document.querySelector('.exam-workspace') || document.querySelector('.badge-type-multi'))) {
+      log('Hãy mở bài thi trắc nghiệm một đáp án trước khi bắt đầu AutoThi.', 'warn');
+      stopSolving();
+      return;
+    }
 
     const questions = findQuestionsOnPage();
     if (questions.length === 0) {
@@ -741,6 +759,12 @@
   }
 
   function findModalConfirmButton() {
+    if (location.hostname === 'hoctapnghiquyet.lamdongtructuyen.vn') {
+      const dialog = document.querySelector('app-confirm-dialog .cd-dialog');
+      if (!dialog || !/nộp\s+bài/i.test(dialog.querySelector('.cd-message')?.textContent || '')) return null;
+      const confirm = dialog.querySelector('.cd-btn-primary');
+      return confirm && isVisible(confirm) ? confirm : null;
+    }
     const modalButtons = Array.from(document.querySelectorAll('.swal2-confirm, .modal .btn-primary, .modal .btn-success, .btn-confirm, .confirm, button.ok, .bootbox-accept'));
     const confirmTexts = ["đồng ý", "xác nhận", "nộp bài", "chấp nhận", "ok", "yes", "có", "có"];
 
@@ -920,6 +944,10 @@
     const cleanTarget = cleanString(targetAnswerText);
     const targetWords = new Set(cleanTarget.split(" ").filter(w => w.length > 0));
 
+    // Ưu tiên đáp án đầy đủ trước phương án chỉ trùng một phần nội dung.
+    const exactIndex = options.findIndex(opt => cleanString(opt.text) === cleanTarget);
+    if (exactIndex !== -1) return exactIndex;
+
     let bestIdx = -1;
     let maxScore = 0;
 
@@ -1011,6 +1039,7 @@
 
   function triggerClick(el) {
     if (!el) return;
+    if (location.hostname === 'hoctapnghiquyet.lamdongtructuyen.vn') {el.click();return;}
     if (el.tagName === "INPUT" && (el.type === "radio" || el.type === "checkbox")) {
       el.checked = true;
     }

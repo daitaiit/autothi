@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AutoThi AI - Trợ Lý Tự Động Làm Bài Thi & Trắc Nghiệm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Tafinex",
   "homepage_url": "https://github.com/daitaiit/autothi",
   "description": "Tự động phân tích, giải đề và chọn đáp án trắc nghiệm chính xác bằng AI & Ngân hàng đề thông minh. Phát triển bởi Tafinex.",
