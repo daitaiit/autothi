@@ -636,6 +636,17 @@
   }
 
   async function displayScoreNotice() {
+    if (location.hostname === 'hoctapnghiquyet.lamdongtructuyen.vn') {
+      const card=document.querySelector('.result-overlay .result-card');
+      if(!card || !isVisible(card))return;
+      const score=card.querySelector('.score-number .score-val')?.textContent.trim() || '';
+      const max=(card.querySelector('.score-number .score-max')?.textContent || '').replace(/^\s*\/\s*/,'').trim();
+      const number=/^\d+(?:[.,]\d+)?$/;
+      const valid=number.test(score) && number.test(max) && Number(max.replace(',','.'))>0 && Number(score.replace(',','.'))<=Number(max.replace(',','.'));
+      smoothScrollTo(card,'center');
+      showAutoThiScoreBanner(valid?score+'/'+max:'');
+      return;
+    }
     // 1. Thử cuộn tới phần tử bảng điểm trên trang
     const scoreSelectors = [
       '#quiz-result-card',
